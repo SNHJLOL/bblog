@@ -1,0 +1,9 @@
+{
+  "buildCommand": "npm install hexo-renderer-pug hexo-renderer-stylus --save && node node_modules/hexo/bin/hexo clean && node node_modules/hexo/bin/hexo generate",
+  "outputDirectory": "public",
+  "installCommand": "npm install --force --legacy-peer-deps",
+  "environment": {
+    "NODE_OPTIONS": "--openssl-legacy-provider",
+    "NPM_CONFIG_FORCE": "true"
+  }
+}
