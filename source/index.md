@@ -1,3 +1,10 @@
+---
+title: index
+date: 2026-02-25 17:54:32
+layout: false
+type: "index"
+comments: false
+---
 <!-- 自定义主页核心内容 -->
 <!DOCTYPE html>
 <html lang="zh-CN">
@@ -72,7 +79,7 @@
         <!-- 头像（替换为你的图片地址） -->
         <img src="/images/avatar.jpg" alt="头像" class="avatar">
         <!-- 昵称 -->
-        <div class="nickname">你的昵称</div>
+        <div class="nickname">喜</div>
         <!-- 个人简介 -->
         <div class="intro">
             欢迎来到我的个人博客！<br>
