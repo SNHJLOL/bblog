@@ -102,3 +102,23 @@ theme: next
 ## Docs: https://hexo.io/docs/one-command-deployment
 deploy:
   type: ''
+
+# 新增：hexo-generator-json-content 插件配置
+jsonContent:
+  meta: false       # 不生成站点元数据
+  pages: false      # 不生成页面数据
+  posts:            # 只生成文章数据
+    title: true     # 包含文章标题
+    date: true      # 包含发布时间
+    path: true      # 包含文章路径
+    text: false     # 不包含文章正文（节省空间）
+    raw: false
+    content: false
+    slug: false
+    updated: false
+    comments: false
+    link: false
+    permalink: false
+    excerpt: false
+    categories: false
+    tags: false

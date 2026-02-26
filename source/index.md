@@ -14,70 +14,194 @@ comments: false
     <title>你的博客名称 - 首页</title>
     <!-- 引入主题默认样式（保留全局风格） -->
     <link rel="stylesheet" href="/css/main.css">
-    <!-- 自定义样式（可根据喜好修改） -->
+    <!-- 自定义样式（炫酷版） -->
     <style>
-        /* 主页容器 */
+        /* 全局背景渐变 + 粒子感 */
+        body {
+            margin: 0;
+            padding: 0;
+            background: linear-gradient(135deg, #1a1a2e, #16213e, #0f3460);
+            min-height: 100vh;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            overflow-x: hidden;
+        }
+        /* 粒子背景装饰 */
+        body::before {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: radial-gradient(circle at 20% 80%, rgba(120, 119, 198, 0.1) 0%, transparent 50%),
+                        radial-gradient(circle at 80% 20%, rgba(255, 119, 198, 0.1) 0%, transparent 50%),
+                        radial-gradient(circle at 40% 40%, rgba(119, 198, 255, 0.1) 0%, transparent 50%);
+            z-index: -1;
+        }
+        /* 主页容器 - 玻璃拟态 + 阴影 */
         .home-container {
             max-width: 800px;
-            margin: 0 auto;
-            padding: 40px 20px;
+            margin: 60px auto;
+            padding: 50px 30px;
             text-align: center;
+            background: rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(15px);
+            border-radius: 20px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
+            position: relative;
         }
-        /* 头像样式 */
+        /* 容器装饰光效 */
+        .home-container::after {
+            content: '';
+            position: absolute;
+            top: -2px;
+            left: -2px;
+            right: -2px;
+            bottom: -2px;
+            background: linear-gradient(45deg, #ff00cc, #3333ff, #00ccff);
+            border-radius: 22px;
+            z-index: -1;
+            animation: glow 3s linear infinite alternate;
+            opacity: 0.7;
+        }
+        @keyframes glow {
+            0% { background-position: 0% 50%; }
+            100% { background-position: 100% 50%; }
+        }
+        /* 头像样式 - 旋转 hover + 光影 */
         .avatar {
             width: 150px;
             height: 150px;
             border-radius: 50%;
-            border: 4px solid #eee;
-            margin-bottom: 20px;
+            border: 4px solid rgba(255, 255, 255, 0.2);
+            margin-bottom: 25px;
+            box-shadow: 0 0 25px rgba(120, 119, 198, 0.5);
+            transition: all 0.5s ease;
+            object-fit: cover;
         }
-        /* 昵称/标题 */
+        .avatar:hover {
+            transform: rotate(5deg) scale(1.05);
+            box-shadow: 0 0 40px rgba(120, 119, 198, 0.8);
+            border-color: rgba(255, 255, 255, 0.4);
+        }
+        /* 昵称/标题 - 渐变文字 + 发光 */
         .nickname {
-            font-size: 28px;
-            font-weight: bold;
-            color: #333;
-            margin-bottom: 10px;
+            font-size: 36px;
+            font-weight: 700;
+            background: linear-gradient(90deg, #ff7eb3, #7e7eff, #7effd4);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+            margin-bottom: 15px;
+            text-shadow: 0 0 10px rgba(120, 119, 198, 0.3);
+            letter-spacing: 2px;
         }
-        /* 简介 */
+        /* 简介 - 柔和发光文字 */
         .intro {
-            font-size: 16px;
-            color: #666;
-            line-height: 1.6;
-            margin-bottom: 30px;
+            font-size: 18px;
+            color: #e0e0ff;
+            line-height: 1.8;
+            margin-bottom: 40px;
+            text-shadow: 0 0 8px rgba(120, 119, 198, 0.2);
+            max-width: 600px;
+            margin-left: auto;
+            margin-right: auto;
         }
-        /* 导航按钮 */
+        /* 导航按钮容器 */
         .nav-buttons {
             display: flex;
             justify-content: center;
-            gap: 15px;
+            gap: 20px;
             flex-wrap: wrap;
-            margin-bottom: 40px;
+            margin-bottom: 50px;
         }
+        /* 导航按钮 - 渐变 + 3D 按压 + 动态 hover */
         .nav-btn {
-            padding: 10px 20px;
-            background: #4285f4;
+            padding: 12px 28px;
+            background: linear-gradient(45deg, #4285f4, #7e7eff);
             color: white;
-            border-radius: 8px;
+            border-radius: 12px;
             text-decoration: none;
-            transition: background 0.3s;
+            transition: all 0.3s ease;
+            font-weight: 600;
+            letter-spacing: 1px;
+            box-shadow: 0 4px 15px rgba(66, 133, 244, 0.3);
+            position: relative;
+            overflow: hidden;
+            border: none;
+        }
+        /* 按钮高光效果 */
+        .nav-btn::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+            transition: all 0.5s ease;
         }
         .nav-btn:hover {
-            background: #3367d6;
+            background: linear-gradient(45deg, #3367d6, #6a6aff);
+            transform: translateY(-3px);
+            box-shadow: 0 8px 20px rgba(66, 133, 244, 0.5);
+        }
+        .nav-btn:hover::before {
+            left: 100%;
+        }
+        .nav-btn:active {
+            transform: translateY(1px);
+            box-shadow: 0 4px 10px rgba(66, 133, 244, 0.3);
         }
         /* 统计模块 */
         .stats {
             display: flex;
             justify-content: center;
-            gap: 30px;
-            color: #888;
-            font-size: 14px;
+            gap: 40px;
+            color: #b0b0ff;
+            font-size: 16px;
+            padding-top: 20px;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        /* 统计项 hover 效果 */
+        .stats > div {
+            transition: all 0.3s ease;
+            padding: 8px 15px;
+            border-radius: 8px;
+        }
+        .stats > div:hover {
+            color: #ffffff;
+            background: rgba(255, 255, 255, 0.05);
+            transform: scale(1.05);
+        }
+        /* 响应式适配 */
+        @media (max-width: 600px) {
+            .home-container {
+                margin: 30px 20px;
+                padding: 40px 20px;
+            }
+            .nickname {
+                font-size: 28px;
+            }
+            .nav-buttons {
+                gap: 15px;
+            }
+            .nav-btn {
+                padding: 10px 20px;
+                font-size: 14px;
+            }
+            .stats {
+                flex-direction: column;
+                gap: 15px;
+            }
         }
     </style>
 </head>
 <body>
     <div class="home-container">
         <!-- 头像（替换为你的图片地址） -->
-        <img src="/images/avatar.jpg" alt="头像" class="avatar">
+        <img src="./images/avatar.jpg" alt="头像" class="avatar">
         <!-- 昵称 -->
         <div class="nickname">喜</div>
         <!-- 个人简介 -->
@@ -92,11 +216,49 @@ comments: false
             <a href="/tags/" class="nav-btn">标签</a>
             <a href="/about/" class="nav-btn">关于我</a>
         </div>
-        <!-- 简单统计（可选） -->
+        <!-- 简单统计（动态渲染） -->
         <div class="stats">
-            <div>文章数：XX</div>
-            <div>建站时间：2026.02</div>
+            <div id="article-count">文章数：加载中...</div>
+            <div id="current-time">当前时间：加载中...</div>
         </div>
     </div>
+    <script>
+ // 1. 动态展示当前时间（实时更新）
+        function updateCurrentTime() {
+            const now = new Date();
+            // 格式化时间：年.月.日 时:分:秒
+            const year = now.getFullYear();
+            const month = String(now.getMonth() + 1).padStart(2, '0'); // 月份从0开始，补0
+            const day = String(now.getDate()).padStart(2, '0');
+            const hours = String(now.getHours()).padStart(2, '0');
+            const minutes = String(now.getMinutes()).padStart(2, '0');
+            const seconds = String(now.getSeconds()).padStart(2, '0');
+            const timeStr = `${year}.${month}.${day} ${hours}:${minutes}:${seconds}`;
+            document.getElementById('current-time').textContent = `当前时间：${timeStr}`;
+        }
+        // 自动获取文章数（读取插件生成的content.json）
+        function getArticleCount() {
+            fetch('/content.json') // 插件生成的文件路径
+                .then(res => {
+                    if (res.ok) return res.json();
+                    // 接口失败时降级为手动数字
+                    throw new Error('接口失败');
+                })
+                .then(data => {
+                    // data.posts.length 就是自动统计的文章数
+                    document.getElementById('article-count').innerText = `文章数：${data.posts.length}`;
+                })
+                .catch(() => {
+                    // 兜底：如果插件没生效，还是显示手动数字
+                    document.getElementById('article-count').innerText = '文章数：8';
+                });
+        }
+        // 初始化执行
+        updateCurrentTime();
+        getArticleCount();
+        // 每秒更新一次时间
+        setInterval(updateCurrentTime, 1000);
+</script>
+    
 </body>
 </html>
