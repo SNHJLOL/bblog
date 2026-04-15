@@ -101,12 +101,13 @@
         const unit = '{{ theme.weather.temperature_unit }}';
         
         // 先通过地理编码API获取城市名
-        fetch(`https://my487tqyq4.re.qweatherapi.com/v7/location/reverse?location=${lon},${lat}&key=${apiKey}`)
+        fetch(`https://my487tqyq4.re.qweatherapi.com/geo/v2/city/lookup?gzip=n&location=${lon},${lat}&key=${apiKey}`)
           .then(response => response.json())
           .then(locationData => {
             let city = '{{ theme.weather.default_city }}';
             if (locationData.code === '200' && locationData.location && locationData.location.length > 0) {
-              city = locationData.location[0].name;
+              const location = locationData.location[0];
+              city = `${location.adm1}${location.adm2}${location.name}`;
             }
             
             // 先显示城市名和加载状态
@@ -140,7 +141,7 @@
                 <div class="weather-info">
                   <div class="weather-city">${city}</div>
                   <div class="weather-main">
-                    <img src="https://cdn.qweather.com/icons/${icon}${iconStyle}.png" alt="${condition}">
+                    <img src="/icons/${icon}.svg" alt="${condition}">
                     <div class="weather-temp">${temp}°${unit.toUpperCase()}</div>
                   </div>
                   <div class="weather-desc">${condition}</div>
@@ -163,7 +164,7 @@
           })
           .catch(error => {
             console.error('Weather API error:', error);
-            weatherContent.innerHTML = `<div class="weather-error">获取天气失败，请检查网络连接</div>`;
+            weatherContent.innerHTML = `<div class="weather-error">获取天气失败: ${error.message}</div>`;
           });
       }
       
@@ -171,7 +172,7 @@
         const defaultCity = '{{ theme.weather.default_city }}';
         const apiKey = '{{ theme.weather.api_key }}';
         
-        fetch(`https://my487tqyq4.re.qweatherapi.com/v7/location/search?keywords=${defaultCity}&key=${apiKey}`)
+        fetch(`https://my487tqyq4.re.qweatherapi.com/v7/location/search?gzip=n&keywords=${defaultCity}&key=${apiKey}`)
           .then(response => response.json())
           .then(data => {
             if (data.code === '200' && data.location && data.location.length > 0) {
