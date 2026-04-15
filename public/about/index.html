@@ -185,10 +185,10 @@
         const iconStyle = 3;
         const unit = 'c';
         
-        fetch(`https://devapi.qweather.com/v7/weather/now?location=${lon},${lat}&key=${apiKey}`)
+        fetch(`https://my487tqyq4.re.qweatherapi.com/v7/weather/now?location=${lon},${lat}&key=${apiKey}`)
           .then(response => response.json())
           .then(data => {
-            if (data.code === '200') {
+            if (data.code === '200' && data.now) {
               const weather = data.now;
               const city = data.location ? data.location.name : 'Beijing';
               const temp = weather.temp;
@@ -214,7 +214,8 @@
                 </div>
               `;
             } else {
-              weatherContent.innerHTML = `<div class="weather-error">获取天气失败: ${data.code}</div>`;
+              const errorCode = data.code || '未知错误';
+              weatherContent.innerHTML = `<div class="weather-error">获取天气失败: ${errorCode}</div>`;
             }
           })
           .catch(error => {
@@ -227,14 +228,15 @@
         const defaultCity = 'Beijing';
         const apiKey = 'cd2881ae1f584ba2a11b77136fb610ec';
         
-        fetch(`https://devapi.qweather.com/v7/location/search?keywords=${defaultCity}&key=${apiKey}`)
+        fetch(`https://my487tqyq4.re.qweatherapi.com/v7/location/search?keywords=${defaultCity}&key=${apiKey}`)
           .then(response => response.json())
           .then(data => {
             if (data.code === '200' && data.location && data.location.length > 0) {
               const location = data.location[0];
               getWeather(location.lat, location.lon);
             } else {
-              weatherContent.innerHTML = `<div class="weather-error">无法获取默认城市天气</div>`;
+              const errorCode = data.code || '未知错误';
+              weatherContent.innerHTML = `<div class="weather-error">无法获取默认城市天气: ${errorCode}</div>`;
             }
           })
           .catch(error => {
