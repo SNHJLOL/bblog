@@ -105,7 +105,7 @@
 
 
 <nav class="site-nav">
-  <ul class="main-menu menu"><li class="menu-item menu-item-home"><a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a></li><li class="menu-item menu-item-about"><a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>关于</a></li><li class="menu-item menu-item-tags"><a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签</a></li>
+  <ul class="main-menu menu"><li class="menu-item menu-item-home"><a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a></li><li class="menu-item menu-item-about"><a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>关于</a></li><li class="menu-item menu-item-tags"><a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签</a></li><li class="menu-item menu-item-archives"><a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档</a></li>
   </ul>
 </nav>
 
@@ -221,21 +221,63 @@
               const windDir = weather.windDir;
               const windScale = weather.windScale;
               
-              weatherContent.innerHTML = `
-                <div class="weather-info">
-                  <div class="weather-city">${city}</div>
-                  <div class="weather-main">
-                    <img src="/icons/${icon}.svg" alt="${condition}">
-                    <div class="weather-temp">${temp}°${unit.toUpperCase()}</div>
-                  </div>
-                  <div class="weather-desc">${condition}</div>
-                  <div class="weather-details">
-                    <span>湿度: ${humidity}%</span>
-                    <span>风向: ${windDir}</span>
-                    <span>风力: ${windScale}级</span>
-                  </div>
-                </div>
-              `;
+              // 获取未来三天天气预报
+              fetch(`https://my487tqyq4.re.qweatherapi.com/v7/weather/3d?gzip=n&location=${lon},${lat}&key=${apiKey}`)
+                .then(response => response.json())
+                .then(forecastData => {
+                  let forecastHtml = '';
+                  if (forecastData.code === '200' && forecastData.daily) {
+                    // 只显示未来三天的预报
+                    const threeDayForecast = forecastData.daily.slice(0, 3);
+                    forecastHtml = `
+                      <div class="weather-forecast">
+                        ${threeDayForecast.map(day => `
+                          <div class="forecast-item">
+                            <div class="forecast-date">${day.fxDate.substring(5)}</div>
+                            <div class="forecast-condition">${day.textDay}</div>
+                            <img class="forecast-icon" src="/icon/${day.iconDay}.svg" alt="${day.textDay}">
+                            <div class="forecast-temp">${day.tempMin}°/${day.tempMax}°</div>
+                          </div>
+                        `).join('')}
+                      </div>
+                    `;
+                  }
+                  
+                  weatherContent.innerHTML = `
+                    <div class="weather-info">
+                      <div class="weather-city">${city}</div>
+                      <div class="weather-main">
+                        <div class="weather-desc">${condition}</div>
+                        <div class="weather-temp">${temp}°${unit.toUpperCase()}</div>
+                      </div>
+                      <div class="weather-details">
+                        <span>湿度: ${humidity}%</span>
+                        <span>风向: ${windDir}</span>
+                        <span>风力: ${windScale}级</span>
+                      </div>
+                      ${forecastHtml}
+                    </div>
+                  `;
+                })
+                .catch(error => {
+                  console.error('Forecast API error:', error);
+                  // 即使获取预报失败，也要显示当前天气
+                  weatherContent.innerHTML = `
+                    <div class="weather-info">
+                      <div class="weather-city">${city}</div>
+                      <div class="weather-main">
+                        <div class="weather-desc">${condition}</div>
+                        <div class="weather-temp">${temp}°${unit.toUpperCase()}</div>
+                      </div>
+                      <div class="weather-details">
+                        <span>湿度: ${humidity}%</span>
+                        <span>风向: ${windDir}</span>
+                        <span>风力: ${windScale}级</span>
+                      </div>
+                      <div class="weather-error">获取天气预报失败: ${error.message}</div>
+                    </div>
+                  `;
+                });
             } else {
               const errorCode = weatherData.code || '未知错误';
               weatherContent.innerHTML = `
@@ -323,6 +365,7 @@
       align-items: center;
       justify-content: center;
       margin-bottom: 10px;
+      text-align: center;
     }
     .weather-main img {
       width: 50px;
@@ -333,11 +376,14 @@
       font-size: 24px;
       font-weight: bold;
       color: #333;
+      flex-shrink: 0;
+      margin-left: 10px;
     }
     .weather-desc {
-      font-size: 14px;
-      margin-bottom: 10px;
-      color: #666;
+      font-size: 24px;
+      color: #333;
+      flex-shrink: 0;
+      margin-right:10px
     }
     .weather-details {
       font-size: 12px;
@@ -346,6 +392,50 @@
     }
     .weather-details span {
       display: block;
+    }
+    
+    .weather-forecast {
+      margin-top: 15px;
+      border-top: 1px solid rgba(255, 255, 255, 0.1);
+      padding-top: 15px;
+    }
+    
+    .forecast-item {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 8px 0;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+    }
+    
+    .forecast-item:last-child {
+      border-bottom: none;
+    }
+    
+    .forecast-date {
+      width: 40px;
+      font-size: 12px;
+      color: #666;
+    }
+    
+    .forecast-condition {
+      flex: 1;
+      font-size: 12px;
+      color: #333;
+      text-align: center;
+    }
+    
+    .forecast-icon {
+      width: 24px;
+      height: 24px;
+      margin: 0 5px;
+    }
+    
+    .forecast-temp {
+      width: 70px;
+      font-size: 12px;
+      color: #666;
+      text-align: right;
     }
   </style>
 
