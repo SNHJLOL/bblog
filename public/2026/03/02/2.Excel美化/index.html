@@ -1,0 +1,529 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<meta name="theme-color" content="#222" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#222" media="(prefers-color-scheme: dark)"><meta name="generator" content="Hexo 7.3.0">
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Sans+SC:ital,wght@0,300;0,400;0,700;1,300;1,400;1,700&family=Noto+Serif+SC:ital,wght@0,300;0,400;0,700;1,300;1,400;1,700&family=Fira+Code:ital,wght@0,300;0,400;0,700;1,300;1,400;1,700&display=swap&subset=latin,latin-ext">
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/7.0.0/css/all.min.css" integrity="sha256-VHqXKFhhMxcpubYf9xiWdCiojEbY9NexQ4jh8AxbvcM=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
+
+<script class="next-config" data-name="main" type="application/json">{"hostname":"example.com","root":"/","images":"/images","scheme":"Gemini","darkmode":true,"version":"8.27.0","exturl":false,"sidebar":{"position":"left","width_expanded":320,"width_dual_column":240,"display":"post","padding":18,"offset":12},"hljswrap":true,"codeblock":{"theme":{"light":"default","dark":"stackoverflow-dark"},"prism":{"light":"prism","dark":"prism-dark"},"copy_button":{"enable":true,"style":"mac"},"fold":{"enable":false,"height":500},"language":true},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":true,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":false,"duration":400,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"i18n":{"placeholder":"搜索...","empty":"没有找到任何搜索结果：${query}","hits_time":"找到 ${hits} 个搜索结果（用时 ${time} 毫秒）","hits":"找到 ${hits} 个搜索结果"}}</script><script src="/js/config.js" defer></script>
+
+    <meta name="description" content="打造Excel 报表：Python 自动化美化在上一篇文章中，我们分享了如何用 Python 完成 Excel 数据的清洗与合并，今天我们聚焦于更能体现专业性的环节 ——Excel 报表的自动化美化。手动调整 Excel 样式不仅耗时耗力，还容易出现格式不统一的问题，通过 Python 的 openpyxl 库结合 pandas，我们可以一键生成格式规范、视觉美观的专业报表，彻底告别重复的手工操作">
+<meta property="og:type" content="article">
+<meta property="og:title" content="2.打造Excel 报表：Python 自动化美化">
+<meta property="og:url" content="http://example.com/2026/03/02/2.Excel%E7%BE%8E%E5%8C%96/index.html">
+<meta property="og:site_name" content="-喜-">
+<meta property="og:description" content="打造Excel 报表：Python 自动化美化在上一篇文章中，我们分享了如何用 Python 完成 Excel 数据的清洗与合并，今天我们聚焦于更能体现专业性的环节 ——Excel 报表的自动化美化。手动调整 Excel 样式不仅耗时耗力，还容易出现格式不统一的问题，通过 Python 的 openpyxl 库结合 pandas，我们可以一键生成格式规范、视觉美观的专业报表，彻底告别重复的手工操作">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="http://example.com/images/blog_image/image-20260303164043241.png">
+<meta property="og:image" content="http://example.com/images/blog_image/image-20260303163929719.png">
+<meta property="article:published_time" content="2026-03-02T07:30:00.000Z">
+<meta property="article:modified_time" content="2026-03-07T10:00:00.000Z">
+<meta property="article:author" content="J-L">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="http://example.com/images/blog_image/image-20260303164043241.png">
+
+
+<link rel="canonical" href="http://example.com/2026/03/02/2.Excel%E7%BE%8E%E5%8C%96/">
+
+
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"zh-CN","comments":true,"permalink":"http://example.com/2026/03/02/2.Excel%E7%BE%8E%E5%8C%96/","path":"2026/03/02/2.Excel美化/","title":"2.打造Excel 报表：Python 自动化美化"}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">""</script>
+<title>2.打造Excel 报表：Python 自动化美化 | -喜-</title>
+  
+
+
+
+
+
+
+
+
+  
+  <script size="300" alpha="0.6" zIndex="-1" src="https://cdnjs.cloudflare.com/ajax/libs/ribbon.js/1.0.2/ribbon.min.js" defer></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous" defer></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/medium-zoom/1.1.0/medium-zoom.min.js" integrity="sha256-ZgMyDAIYDYGxbcpJcfUnYwNevG/xi9OHKaR/8GK+jWc=" crossorigin="anonymous" defer></script>
+<script src="/js/utils.js" defer></script><script src="/js/motion.js" defer></script><script src="/js/sidebar.js" defer></script><script src="/js/next-boot.js" defer></script>
+
+  
+
+
+
+
+
+
+  
+
+
+
+
+
+  <noscript>
+    <link rel="stylesheet" href="/css/noscript.css">
+  </noscript>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <div class="column">
+      <header class="header" itemscope itemtype="http://schema.org/WPHeader"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏" role="button">
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <p class="site-title">-喜-</p>
+      <i class="logo-line"></i>
+    </a>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger" aria-label="搜索" role="button">
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu"><li class="menu-item menu-item-home"><a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a></li><li class="menu-item menu-item-about"><a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>关于</a></li><li class="menu-item menu-item-tags"><a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签</a></li>
+  </ul>
+</nav>
+
+
+
+
+</header>
+        
+  
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#%E6%89%93%E9%80%A0Excel-%E6%8A%A5%E8%A1%A8%EF%BC%9APython-%E8%87%AA%E5%8A%A8%E5%8C%96%E7%BE%8E%E5%8C%96"><span class="nav-number">1.</span> <span class="nav-text">打造Excel 报表：Python 自动化美化</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E9%9C%80%E6%B1%82"><span class="nav-number">1.0.1.</span> <span class="nav-text">需求</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%B8%80%E3%80%81%E6%A0%B8%E5%BF%83%E9%9C%80%E6%B1%82%E5%88%86%E6%9E%90"><span class="nav-number">1.1.</span> <span class="nav-text">一、核心需求分析</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%BA%8C%E3%80%81%E6%8A%80%E6%9C%AF%E9%80%89%E5%9E%8B"><span class="nav-number">1.2.</span> <span class="nav-text">二、技术选型</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%B8%89%E3%80%81%E6%A0%B8%E5%BF%83%E4%BB%A3%E7%A0%81%E5%AE%9E%E7%8E%B0%E4%B8%8E%E8%A7%A3%E6%9E%90"><span class="nav-number">1.3.</span> <span class="nav-text">三、核心代码实现与解析</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#1-%E5%87%BD%E6%95%B0%E5%B0%81%E8%A3%85%E4%B8%8E%E6%96%87%E4%BB%B6%E6%A0%A1%E9%AA%8C"><span class="nav-number">1.3.1.</span> <span class="nav-text">1. 函数封装与文件校验</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-%E6%A0%B7%E5%BC%8F%E6%A8%A1%E6%9D%BF%E5%AE%9A%E4%B9%89"><span class="nav-number">1.3.2.</span> <span class="nav-text">2. 样式模板定义</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#3-%E8%A1%A8%E5%A4%B4%E6%A0%B7%E5%BC%8F%E8%AE%BE%E7%BD%AE"><span class="nav-number">1.3.3.</span> <span class="nav-text">3. 表头样式设置</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#4-%E6%95%B0%E6%8D%AE%E8%A1%8C%E6%A0%B7%E5%BC%8F%E7%B2%BE%E7%BB%86%E5%8C%96%E6%8E%A7%E5%88%B6"><span class="nav-number">1.3.4.</span> <span class="nav-text">4. 数据行样式精细化控制</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#%EF%BC%881%EF%BC%89%E6%95%B0%E5%80%BC-%E6%96%87%E6%9C%AC%E5%88%97%E5%AF%B9%E9%BD%90%E5%8C%BA%E5%88%86"><span class="nav-number">1.3.4.1.</span> <span class="nav-text">（1）数值 &#x2F; 文本列对齐区分</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%EF%BC%882%EF%BC%89%E5%85%B3%E9%94%AE%E5%88%97%E6%A0%87%E8%89%B2%E7%AA%81%E5%87%BA"><span class="nav-number">1.3.4.2.</span> <span class="nav-text">（2）关键列标色突出</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#5-%E7%89%B9%E6%AE%8A%E5%88%97%E6%A0%BC%E5%BC%8F%E5%A4%84%E7%90%86%EF%BC%88%E9%9A%BE%E7%82%B9%EF%BC%89"><span class="nav-number">1.3.5.</span> <span class="nav-text">5. 特殊列格式处理（难点）</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#%EF%BC%881%EF%BC%89%E6%97%A5%E6%9C%9F%E5%88%97%E7%BB%9F%E4%B8%80%E6%A0%BC%E5%BC%8F"><span class="nav-number">1.3.5.1.</span> <span class="nav-text">（1）日期列统一格式</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%EF%BC%882%EF%BC%89skuId-%E9%81%BF%E5%85%8D%E7%A7%91%E5%AD%A6%E8%AE%A1%E6%95%B0%E6%B3%95"><span class="nav-number">1.3.5.2.</span> <span class="nav-text">（2）skuId 避免科学计数法</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#6-%E5%88%97%E5%AE%BD%E8%87%AA%E9%80%82%E5%BA%94%EF%BC%88%E9%9A%BE%E7%82%B9%EF%BC%89"><span class="nav-number">1.3.6.</span> <span class="nav-text">6. 列宽自适应（难点）</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#7-%E5%87%BD%E6%95%B0%E8%B0%83%E7%94%A8%E7%A4%BA%E4%BE%8B"><span class="nav-number">1.3.7.</span> <span class="nav-text">7. 函数调用示例</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%9B%9B%E3%80%81%E6%9C%80%E7%BB%88%E6%95%88%E6%9E%9C%E4%B8%8E%E4%BB%B7%E5%80%BC"><span class="nav-number">1.4.</span> <span class="nav-text">四、最终效果与价值</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#1-%E8%A7%86%E8%A7%89%E6%95%88%E6%9E%9C"><span class="nav-number">1.4.1.</span> <span class="nav-text">1. 视觉效果</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-%E6%A0%B8%E5%BF%83%E4%BB%B7%E5%80%BC"><span class="nav-number">1.4.2.</span> <span class="nav-text">2. 核心价值</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%BA%94%E3%80%81%E6%89%A9%E5%B1%95%E4%B8%8E%E4%BC%98%E5%8C%96%E5%BB%BA%E8%AE%AE"><span class="nav-number">1.5.</span> <span class="nav-text">五、扩展与优化建议</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%80%BB%E7%BB%93"><span class="nav-number">1.6.</span> <span class="nav-text">总结</span></a></li></ol></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="J-L"
+      src="/images/avatar.jpg">
+  <p class="site-author-name" itemprop="name">J-L</p>
+  <div class="site-description" itemprop="description"></div>
+</div>
+<div class="site-state-wrap animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+        <a href="/archives/">
+          <span class="site-state-item-count">16</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author animated">
+      <span class="links-of-author-item">
+        <a href="https://github.com/yourname" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;yourname" rel="noopener me" target="_blank"><i class="fab fa-github fa-fw"></i>GitHub</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="mailto:yourname@gmail.com" title="E-Mail → mailto:yourname@gmail.com" rel="noopener me" target="_blank"><i class="fa fa-envelope fa-fw"></i>E-Mail</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="https://weibo.com/yourname" title="Weibo → https:&#x2F;&#x2F;weibo.com&#x2F;yourname" rel="noopener me" target="_blank"><i class="fab fa-weibo fa-fw"></i>Weibo</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="https://twitter.com/yourname" title="Twitter → https:&#x2F;&#x2F;twitter.com&#x2F;yourname" rel="noopener me" target="_blank"><i class="fab fa-twitter fa-fw"></i>Twitter</a>
+      </span>
+  </div>
+  <div class="weather-widget animated">
+    <div class="weather-title">
+      <i class="fa fa-cloud"></i> 天气
+    </div>
+    <div id="weather-content">
+      <div class="weather-loading">
+        <i class="fa fa-spinner fa-spin"></i> 加载中...
+      </div>
+    </div>
+  </div>
+  <script>
+    document.addEventListener('DOMContentLoaded', function() {
+      const weatherContent = document.getElementById('weather-content');
+      
+      function getWeather(lat, lon) {
+        const apiKey = 'cd2881ae1f584ba2a11b77136fb610ec';
+        const iconStyle = 3;
+        const unit = 'c';
+        
+        fetch(`https://devapi.qweather.com/v7/weather/now?location=${lon},${lat}&key=${apiKey}`)
+          .then(response => response.json())
+          .then(data => {
+            if (data.code === '200') {
+              const weather = data.now;
+              const city = data.location ? data.location.name : 'Beijing';
+              const temp = weather.temp;
+              const condition = weather.text;
+              const icon = weather.icon;
+              const humidity = weather.humidity;
+              const windDir = weather.windDir;
+              const windScale = weather.windScale;
+              
+              weatherContent.innerHTML = `
+                <div class="weather-info">
+                  <div class="weather-city">${city}</div>
+                  <div class="weather-main">
+                    <img src="https://cdn.qweather.com/icons/${icon}${iconStyle}.png" alt="${condition}">
+                    <div class="weather-temp">${temp}°${unit.toUpperCase()}</div>
+                  </div>
+                  <div class="weather-desc">${condition}</div>
+                  <div class="weather-details">
+                    <span>湿度: ${humidity}%</span>
+                    <span>风向: ${windDir}</span>
+                    <span>风力: ${windScale}级</span>
+                  </div>
+                </div>
+              `;
+            } else {
+              weatherContent.innerHTML = `<div class="weather-error">获取天气失败: ${data.code}</div>`;
+            }
+          })
+          .catch(error => {
+            console.error('Weather API error:', error);
+            weatherContent.innerHTML = `<div class="weather-error">获取天气失败，请检查网络连接</div>`;
+          });
+      }
+      
+      function getDefaultWeather() {
+        const defaultCity = 'Beijing';
+        const apiKey = 'cd2881ae1f584ba2a11b77136fb610ec';
+        
+        fetch(`https://devapi.qweather.com/v7/location/search?keywords=${defaultCity}&key=${apiKey}`)
+          .then(response => response.json())
+          .then(data => {
+            if (data.code === '200' && data.location && data.location.length > 0) {
+              const location = data.location[0];
+              getWeather(location.lat, location.lon);
+            } else {
+              weatherContent.innerHTML = `<div class="weather-error">无法获取默认城市天气</div>`;
+            }
+          })
+          .catch(error => {
+            console.error('Location API error:', error);
+            weatherContent.innerHTML = `<div class="weather-error">获取默认城市天气失败</div>`;
+          });
+      }
+      
+      if (navigator.geolocation) {
+        navigator.geolocation.getCurrentPosition(
+          position => {
+            getWeather(position.coords.latitude, position.coords.longitude);
+          },
+          error => {
+            console.error('Geolocation error:', error);
+            getDefaultWeather();
+          }
+        );
+      } else {
+        getDefaultWeather();
+      }
+    });
+  </script>
+  <style>
+    .weather-widget {
+      margin-top: 20px;
+      padding: 15px;
+      background: rgba(255, 255, 255, 0.1);
+      border-radius: 8px;
+    }
+    .weather-title {
+      font-size: 16px;
+      font-weight: bold;
+      margin-bottom: 10px;
+      color: #333;
+    }
+    .weather-loading {
+      text-align: center;
+      padding: 20px 0;
+    }
+    .weather-error {
+      text-align: center;
+      padding: 20px 0;
+      color: #ff4d4f;
+    }
+    .weather-info {
+      text-align: center;
+    }
+    .weather-city {
+      font-size: 14px;
+      margin-bottom: 10px;
+      color: #666;
+    }
+    .weather-main {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-bottom: 10px;
+    }
+    .weather-main img {
+      width: 50px;
+      height: 50px;
+      margin-right: 10px;
+    }
+    .weather-temp {
+      font-size: 24px;
+      font-weight: bold;
+      color: #333;
+    }
+    .weather-desc {
+      font-size: 14px;
+      margin-bottom: 10px;
+      color: #666;
+    }
+    .weather-details {
+      font-size: 12px;
+      color: #999;
+      line-height: 1.5;
+    }
+    .weather-details span {
+      display: block;
+    }
+  </style>
+
+        </div>
+      </div>
+    </div>
+
+    
+  </aside>
+
+
+    </div>
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2026/03/02/2.Excel%E7%BE%8E%E5%8C%96/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.jpg">
+      <meta itemprop="name" content="J-L">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="-喜-">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="2.打造Excel 报表：Python 自动化美化 | -喜-">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          2.打造Excel 报表：Python 自动化美化
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">发表于</span>
+
+      <time title="创建时间：2026-03-02 15:30:00" itemprop="dateCreated datePublished" datetime="2026-03-02T15:30:00+08:00">2026-03-02</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar-check"></i>
+      </span>
+      <span class="post-meta-item-text">更新于</span>
+      <time title="修改时间：2026-03-07 18:00:00" itemprop="dateModified" datetime="2026-03-07T18:00:00+08:00">2026-03-07</time>
+    </span>
+
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody"><h1 id="打造Excel-报表：Python-自动化美化"><a href="#打造Excel-报表：Python-自动化美化" class="headerlink" title="打造Excel 报表：Python 自动化美化"></a>打造Excel 报表：Python 自动化美化</h1><p>在上一篇文章中，我们分享了如何用 Python 完成 Excel 数据的清洗与合并，今天我们聚焦于更能体现专业性的环节 ——Excel 报表的自动化美化。手动调整 Excel 样式不仅耗时耗力，还容易出现格式不统一的问题，通过 Python 的 openpyxl 库结合 pandas，我们可以一键生成格式规范、视觉美观的专业报表，彻底告别重复的手工操作。</p>
+<h3 id="需求"><a href="#需求" class="headerlink" title="需求"></a>需求</h3><p>下图为上篇文章生成的文件，可以看见只是把这些文件合并起来了，但每一列宽度都一样，遮挡了很多内容，而且样式不好看</p>
+<p><img src="/./../images/blog_image/image-20260303164043241.png" alt="image-20260303164043241"></p>
+<p>下图为本篇文章后做成的效果（可以高度自定义）</p>
+<p><img src="/./../images/blog_image/image-20260303163929719.png" alt="image-20260303163929719"></p>
+<h2 id="一、核心需求分析"><a href="#一、核心需求分析" class="headerlink" title="一、核心需求分析"></a>一、核心需求分析</h2><p>一份专业的 Excel 报表，需要满足这些样式要求：</p>
+<ol>
+<li>表头醒目：统一的字体、背景色、对齐方式</li>
+<li>数据规范：数值列居中、文本列左对齐，关键列标色区分</li>
+<li>格式正确：日期列统一格式、skuId 避免科学计数法</li>
+<li>布局合理：列宽自适应，兼顾中英文字符显示</li>
+<li>边框完整：所有单元格添加细边框，提升整洁度</li>
+</ol>
+<h2 id="二、技术选型"><a href="#二、技术选型" class="headerlink" title="二、技术选型"></a>二、技术选型</h2><ul>
+<li>pandas：读取 &#x2F; 写入 Excel 数据，快速处理列索引</li>
+<li>openpyxl：精细化设置 Excel 单元格样式（字体、颜色、对齐、格式、边框）</li>
+<li>os：校验文件路径有效性</li>
+</ul>
+<h2 id="三、核心代码实现与解析"><a href="#三、核心代码实现与解析" class="headerlink" title="三、核心代码实现与解析"></a>三、核心代码实现与解析</h2><h3 id="1-函数封装与文件校验"><a href="#1-函数封装与文件校验" class="headerlink" title="1. 函数封装与文件校验"></a>1. 函数封装与文件校验</h3><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> pandas <span class="keyword">as</span> pd</span><br><span class="line"><span class="keyword">import</span> os</span><br><span class="line"><span class="keyword">from</span> openpyxl.styles <span class="keyword">import</span> Font, PatternFill, Border, Side, Alignment</span><br><span class="line"><span class="keyword">from</span> openpyxl.utils <span class="keyword">import</span> get_column_letter</span><br><span class="line"></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">beautify_excel</span>(<span class="params">input_excel, output_excel</span>):</span><br><span class="line">    <span class="string">&quot;&quot;&quot;</span></span><br><span class="line"><span class="string">    给Excel报表添加专业样式美化（含列宽自适应）</span></span><br><span class="line"><span class="string">    :param input_excel: 清洗后Excel文件路径</span></span><br><span class="line"><span class="string">    :param output_excel: 美化后的Excel文件路径</span></span><br><span class="line"><span class="string">    &quot;&quot;&quot;</span></span><br><span class="line">    <span class="comment"># 校验输入文件</span></span><br><span class="line">    <span class="keyword">if</span> <span class="keyword">not</span> os.path.exists(input_excel):</span><br><span class="line">        <span class="built_in">print</span>(<span class="string">f&quot;错误：未找到输入文件 <span class="subst">&#123;input_excel&#125;</span>&quot;</span>)</span><br><span class="line">        <span class="keyword">return</span></span><br><span class="line"></span><br><span class="line">    <span class="keyword">try</span>:</span><br><span class="line">        df = pd.read_excel(input_excel, engine=<span class="string">&#x27;openpyxl&#x27;</span>)</span><br><span class="line">    <span class="keyword">except</span> Exception <span class="keyword">as</span> e:</span><br><span class="line">        <span class="built_in">print</span>(<span class="string">f&quot;读取文件失败：<span class="subst">&#123;<span class="built_in">str</span>(e)&#125;</span>&quot;</span>)</span><br><span class="line">        <span class="keyword">return</span></span><br></pre></td></tr></table></figure>
+
+<h3 id="2-样式模板定义"><a href="#2-样式模板定义" class="headerlink" title="2. 样式模板定义"></a>2. 样式模板定义</h3><p>提前定义好各类样式模板，便于统一管理和修改，符合 “一次定义、多处复用” 的原则：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 写入Excel并设置样式</span></span><br><span class="line"><span class="keyword">with</span> pd.ExcelWriter(output_excel, engine=<span class="string">&#x27;openpyxl&#x27;</span>) <span class="keyword">as</span> writer:</span><br><span class="line">    df.to_excel(writer, sheet_name=<span class="string">&#x27;清洗合并数据&#x27;</span>, index=<span class="literal">False</span>)</span><br><span class="line">    workbook = writer.book</span><br><span class="line">    worksheet = writer.sheets[<span class="string">&#x27;清洗合并数据&#x27;</span>]</span><br><span class="line"></span><br><span class="line">    <span class="comment"># 定义样式模板</span></span><br><span class="line">    header_font = Font(name=<span class="string">&#x27;微软雅黑&#x27;</span>, size=<span class="number">12</span>, bold=<span class="literal">True</span>, color=<span class="string">&quot;000000&quot;</span>) <span class="comment"># 表头字体</span></span><br><span class="line">    header_fill = PatternFill(start_color=<span class="string">&quot;2F5496&quot;</span>, end_color=<span class="string">&#x27;2F5496&#x27;</span>, fill_type=<span class="string">&#x27;solid&#x27;</span>) <span class="comment"># 表头背景色（深蓝色）</span></span><br><span class="line">    header_align = Alignment(horizontal=<span class="string">&#x27;center&#x27;</span>, vertical=<span class="string">&#x27;center&#x27;</span>, wrap_text=<span class="literal">True</span>) <span class="comment"># 表头对齐方式</span></span><br><span class="line">    <span class="comment"># 细边框样式（全局统一）</span></span><br><span class="line">    thin_border = Border(</span><br><span class="line">        left=Side(style=<span class="string">&#x27;thin&#x27;</span>, color=<span class="string">&#x27;000000&#x27;</span>),</span><br><span class="line">        right=Side(style=<span class="string">&#x27;thin&#x27;</span>, color=<span class="string">&#x27;000000&#x27;</span>),</span><br><span class="line">        top=Side(style=<span class="string">&#x27;thin&#x27;</span>, color=<span class="string">&#x27;000000&#x27;</span>),</span><br><span class="line">        bottom=Side(style=<span class="string">&#x27;thin&#x27;</span>, color=<span class="string">&#x27;000000&#x27;</span>)</span><br><span class="line">    )</span><br><span class="line">    key_col_fill = PatternFill(start_color=<span class="string">&#x27;E7F0FF&#x27;</span>, end_color=<span class="string">&#x27;E7F0FF&#x27;</span>, fill_type=<span class="string">&#x27;solid&#x27;</span>) <span class="comment"># 关键列背景色（浅蓝色）</span></span><br><span class="line">    num_align = Alignment(horizontal=<span class="string">&#x27;center&#x27;</span>, vertical=<span class="string">&#x27;center&#x27;</span>) <span class="comment"># 数值列对齐</span></span><br><span class="line">    text_align = Alignment(horizontal=<span class="string">&#x27;left&#x27;</span>, vertical=<span class="string">&#x27;center&#x27;</span>) <span class="comment"># 文本列对齐</span></span><br></pre></td></tr></table></figure>
+
+<h3 id="3-表头样式设置"><a href="#3-表头样式设置" class="headerlink" title="3. 表头样式设置"></a>3. 表头样式设置</h3><p>给表头行应用预设的样式模板，让表头醒目且统一：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 设置表头样式</span></span><br><span class="line"><span class="keyword">for</span> col <span class="keyword">in</span> worksheet.iter_cols(min_row=<span class="number">1</span>, max_row=<span class="number">1</span>):</span><br><span class="line">    <span class="keyword">for</span> cell <span class="keyword">in</span> col:</span><br><span class="line">        cell.font = header_font</span><br><span class="line">        cell.fill = header_fill</span><br><span class="line">        cell.alignment = header_align</span><br><span class="line">        cell.border = thin_border</span><br></pre></td></tr></table></figure>
+
+<h3 id="4-数据行样式精细化控制"><a href="#4-数据行样式精细化控制" class="headerlink" title="4. 数据行样式精细化控制"></a>4. 数据行样式精细化控制</h3><h4 id="（1）数值-文本列对齐区分"><a href="#（1）数值-文本列对齐区分" class="headerlink" title="（1）数值 &#x2F; 文本列对齐区分"></a>（1）数值 &#x2F; 文本列对齐区分</h4><p>根据列类型自动设置对齐方式，数值列居中、文本列左对齐，符合阅读习惯：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 定义列类型</span></span><br><span class="line">max_row = worksheet.max_row</span><br><span class="line">max_col = worksheet.max_column</span><br><span class="line">num_cols = [<span class="string">&#x27;加购件数&#x27;</span>, <span class="string">&#x27;支付金额&#x27;</span>, <span class="string">&#x27;支付买家数&#x27;</span>,<span class="string">&#x27;支付件数&#x27;</span>]</span><br><span class="line"></span><br><span class="line"><span class="comment"># 设置数据行样式</span></span><br><span class="line"><span class="keyword">for</span> row <span class="keyword">in</span> worksheet.iter_rows(min_row=<span class="number">2</span>, max_row=max_row, min_col=<span class="number">1</span>, max_col=max_col):</span><br><span class="line">    <span class="keyword">for</span> cell <span class="keyword">in</span> row:</span><br><span class="line">        cell.border = thin_border</span><br><span class="line">        col_name = df.columns[cell.column - <span class="number">1</span>]</span><br><span class="line">        <span class="comment"># 数值列居中，文本列左对齐</span></span><br><span class="line">        <span class="keyword">if</span> col_name <span class="keyword">in</span> num_cols:</span><br><span class="line">                    cell.alignment = num_align</span><br><span class="line">                <span class="keyword">else</span>:</span><br><span class="line">                    cell.alignment = text_align</span><br></pre></td></tr></table></figure>
+
+<h4 id="（2）关键列标色突出"><a href="#（2）关键列标色突出" class="headerlink" title="（2）关键列标色突出"></a>（2）关键列标色突出</h4><p>给日期、skuId 核心列添加浅蓝色背景，快速定位关键信息：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">key_cols = [<span class="string">&#x27;日期&#x27;</span>, <span class="string">&#x27;skuId&#x27;</span>]</span><br><span class="line"><span class="comment"># 关键列标色</span></span><br><span class="line"><span class="keyword">for</span> col <span class="keyword">in</span> worksheet.iter_cols(min_row=<span class="number">2</span>, max_row=max_row, min_col=<span class="number">1</span>, max_col=max_col):</span><br><span class="line">    col_name = df.columns[col[<span class="number">0</span>].column - <span class="number">1</span>]</span><br><span class="line">    <span class="keyword">if</span> col_name <span class="keyword">in</span> key_cols:</span><br><span class="line">        <span class="keyword">for</span> cell <span class="keyword">in</span> col:</span><br><span class="line">            cell.fill = key_col_fill</span><br></pre></td></tr></table></figure>
+
+<h3 id="5-特殊列格式处理（难点）"><a href="#5-特殊列格式处理（难点）" class="headerlink" title="5. 特殊列格式处理（难点）"></a>5. 特殊列格式处理（难点）</h3><h4 id="（1）日期列统一格式"><a href="#（1）日期列统一格式" class="headerlink" title="（1）日期列统一格式"></a>（1）日期列统一格式</h4><p>确保日期列以<code>yyyy-mm-dd</code>格式显示，避免格式混乱：</p>
+<p><strong>不设置的话会导致日期和时间都显示</strong></p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">if</span> <span class="string">&#x27;日期&#x27;</span> <span class="keyword">in</span> df.columns:</span><br><span class="line">    date_col_idx = df.columns.get_loc(<span class="string">&#x27;日期&#x27;</span>) + <span class="number">1</span></span><br><span class="line">    <span class="keyword">for</span> cell <span class="keyword">in</span> worksheet.iter_cols(min_col=date_col_idx, max_col=date_col_idx, min_row=<span class="number">2</span>, max_row=max_row):</span><br><span class="line">        <span class="keyword">for</span> c <span class="keyword">in</span> cell:</span><br><span class="line">            c.number_format = <span class="string">&#x27;yyyy-mm-dd&#x27;</span></span><br></pre></td></tr></table></figure>
+
+<h4 id="（2）skuId-避免科学计数法"><a href="#（2）skuId-避免科学计数法" class="headerlink" title="（2）skuId 避免科学计数法"></a>（2）skuId 避免科学计数法</h4><p>skuId 作为标识列，设置为文本格式，防止长数字被自动转为科学计数法：</p>
+<p><strong>这里需要设置格式为自定义的0格式，只设置成文本的话，还是显示成科学计数法</strong></p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">if</span> <span class="string">&#x27;skuId&#x27;</span> <span class="keyword">in</span> df.columns:</span><br><span class="line">    sku_col_idx = df.columns.get_loc(<span class="string">&#x27;skuId&#x27;</span>) + <span class="number">1</span></span><br><span class="line">    <span class="comment"># 设置该列的单元格格式为文本</span></span><br><span class="line">    <span class="keyword">for</span> row <span class="keyword">in</span> <span class="built_in">range</span>(<span class="number">2</span>, max_row + <span class="number">1</span>):</span><br><span class="line">        cell = worksheet.cell(row=row, column=sku_col_idx)</span><br><span class="line">        cell.number_format = <span class="string">&#x27;0&#x27;</span></span><br><span class="line">        cell.alignment = Alignment(horizontal=<span class="string">&#x27;left&#x27;</span>, vertical=<span class="string">&#x27;center&#x27;</span>)</span><br><span class="line">        cell.border = thin_border</span><br></pre></td></tr></table></figure>
+
+<h3 id="6-列宽自适应（难点）"><a href="#6-列宽自适应（难点）" class="headerlink" title="6. 列宽自适应（难点）"></a>6. 列宽自适应（难点）</h3><p>通过计算单元格内容长度（区分中英文字符），实现列宽自动适配：</p>
+<p><strong>需要考虑中英文字符，而且日期列读取的还是为长日期，需要做单独的处理</strong></p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 列宽自适应（考虑中英文字符宽度和日期格式）</span></span><br><span class="line">date_column_letter = <span class="literal">None</span></span><br><span class="line"><span class="keyword">if</span> df <span class="keyword">is</span> <span class="keyword">not</span> <span class="literal">None</span> <span class="keyword">and</span> <span class="string">&#x27;日期&#x27;</span> <span class="keyword">in</span> df.columns:</span><br><span class="line">    date_col_idx = df.columns.get_loc(<span class="string">&#x27;日期&#x27;</span>) + <span class="number">1</span></span><br><span class="line">    date_column_letter = worksheet.cell(row=<span class="number">1</span>, column=date_col_idx).column_letter</span><br><span class="line"></span><br><span class="line"><span class="keyword">for</span> col <span class="keyword">in</span> worksheet.columns:</span><br><span class="line">    max_length = <span class="number">0</span></span><br><span class="line">    column_letter = col[<span class="number">0</span>].column_letter</span><br><span class="line">    </span><br><span class="line">    <span class="keyword">for</span> cell <span class="keyword">in</span> col:</span><br><span class="line">        <span class="keyword">if</span> cell.value <span class="keyword">is</span> <span class="literal">None</span>:</span><br><span class="line">            cell_length = <span class="number">0</span></span><br><span class="line">        <span class="keyword">else</span>:</span><br><span class="line">            <span class="comment"># 特殊处理日期列：按格式化后的显示长度计算</span></span><br><span class="line">            <span class="keyword">if</span> column_letter == date_column_letter <span class="keyword">and</span> <span class="built_in">isinstance</span>(cell.value, pd.Timestamp):</span><br><span class="line">                cell_content = cell.value.strftime(<span class="string">&#x27;%Y-%m-%d&#x27;</span>)</span><br><span class="line">                cell_length = <span class="built_in">len</span>(cell_content)  <span class="comment"># 固定为10</span></span><br><span class="line">            <span class="keyword">else</span>:</span><br><span class="line">                <span class="comment"># 普通单元格：区分中英文计算长度（中文占2个字符，英文占1个）</span></span><br><span class="line">                cell_content = <span class="built_in">str</span>(cell.value)</span><br><span class="line">                cell_length = <span class="number">0</span></span><br><span class="line">                <span class="keyword">for</span> char <span class="keyword">in</span> cell_content:</span><br><span class="line">                    <span class="keyword">if</span> <span class="string">&#x27;\u4e00&#x27;</span> &lt;= char &lt;= <span class="string">&#x27;\u9fff&#x27;</span>:</span><br><span class="line">                        cell_length += <span class="number">2</span></span><br><span class="line">                    <span class="keyword">else</span>:</span><br><span class="line">                        cell_length += <span class="number">1</span></span><br><span class="line">        </span><br><span class="line">        <span class="keyword">if</span> cell_length &gt; max_length:</span><br><span class="line">            max_length = cell_length</span><br><span class="line">    </span><br><span class="line">    <span class="comment"># 调整列宽（预留3个字符的边距）</span></span><br><span class="line">    adjusted_width = max_length + <span class="number">3</span></span><br><span class="line">    worksheet.column_dimensions[column_letter].width = adjusted_width</span><br><span class="line">    <span class="built_in">print</span>(<span class="string">f&quot;列 <span class="subst">&#123;column_letter&#125;</span> 最终调整宽度：<span class="subst">&#123;adjusted_width&#125;</span>（最大内容长度：<span class="subst">&#123;max_length&#125;</span>）&quot;</span>)</span><br></pre></td></tr></table></figure>
+
+<h3 id="7-函数调用示例"><a href="#7-函数调用示例" class="headerlink" title="7. 函数调用示例"></a>7. 函数调用示例</h3><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">if</span> __name__ == <span class="string">&quot;__main__&quot;</span>:</span><br><span class="line">    <span class="comment"># 请修改为实际的文件路径</span></span><br><span class="line">    input_file = <span class="string">&quot;C:/Users/xx/Downloads/清洗后的合并数据.xlsx&quot;</span></span><br><span class="line">    output_file = <span class="string">&quot;C:/Users/xx/Downloads/带样式_清洗后的合并数据.xlsx&quot;</span></span><br><span class="line">    beautify_excel(input_file, output_file)</span><br></pre></td></tr></table></figure>
+
+<h2 id="四、最终效果与价值"><a href="#四、最终效果与价值" class="headerlink" title="四、最终效果与价值"></a>四、最终效果与价值</h2><h3 id="1-视觉效果"><a href="#1-视觉效果" class="headerlink" title="1. 视觉效果"></a>1. 视觉效果</h3><ul>
+<li>表头：深蓝色背景 + 微软雅黑加粗字体，居中对齐</li>
+<li>数据：数值列居中、文本列左对齐，关键列浅蓝色标色</li>
+<li>格式：日期统一为<code>yyyy-mm-dd</code>，skuId 无科学计数法</li>
+<li>布局：列宽自适应，无内容截断 &#x2F; 留白过多问题</li>
+</ul>
+<h3 id="2-核心价值"><a href="#2-核心价值" class="headerlink" title="2. 核心价值"></a>2. 核心价值</h3><ul>
+<li>效率提升：一键完成所有样式设置，替代数十分钟的手工操作</li>
+<li>格式统一：避免多人操作导致的样式不一致问题</li>
+<li>可复用性：修改样式模板即可适配不同业务的报表需求</li>
+<li>容错性：包含文件校验、异常处理，降低使用门槛</li>
+</ul>
+<h2 id="五、扩展与优化建议"><a href="#五、扩展与优化建议" class="headerlink" title="五、扩展与优化建议"></a>五、扩展与优化建议</h2><ol>
+<li>样式配置化：将字体、颜色等样式参数抽离到配置文件，无需修改代码即可调整样式</li>
+<li>多 sheet 支持：扩展函数以支持多个工作表的批量美化</li>
+<li>条件格式：添加数值预警（如支付金额低于阈值标红）等条件格式</li>
+<li>批量处理：遍历文件夹实现多 Excel 文件的批量美化</li>
+<li>样式预览：生成样式预览图，确认效果后再输出文件</li>
+</ol>
+<h2 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h2><p>通过 Python 结合 pandas 和 openpyxl，我们不仅能完成数据的清洗处理，还能实现 Excel 报表的 “工业化” 美化。这份自动化脚本可以作为数据分析的通用工具，将分析师从重复的手工操作中解放出来，把精力聚焦在数据解读和业务洞察上。下一篇我们将分享如何把这些脚本封装为可视化工具，让非技术人员也能轻松使用！</p>
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/2026/03/01/1.Excel%E5%90%88%E5%B9%B6%E4%B8%8E%E6%95%B0%E6%8D%AE%E6%B8%85%E6%B4%97/" rel="prev" title="1.Excel 文件批量合并与数据清洗工具使用说明">
+                  <i class="fa fa-angle-left"></i> 1.Excel 文件批量合并与数据清洗工具使用说明
+                </a>
+            </div>
+            <div class="post-nav-item">
+                <a href="/2026/03/03/3.%E5%8F%AF%E8%A7%86%E5%8C%96%E7%BE%8E%E5%8C%96%E5%B7%A5%E5%85%B7/" rel="next" title="3.Excel 自动化终极篇：打造可复用的批量美化工具（附可视化操作界面）">
+                  3.Excel 自动化终极篇：打造可复用的批量美化工具（附可视化操作界面） <i class="fa fa-angle-right"></i>
+                </a>
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+  <div class="copyright">
+    &copy; 
+    <span itemprop="copyrightYear">2026</span>
+    <span class="with-love">
+      <i class="fa fa-heart"></i>
+    </span>
+    <span class="author" itemprop="copyrightHolder">J-L</span>
+  </div>
+  <div class="powered-by">喜 | 马上发财
+  </div>
+
+    </div>
+  </footer>
+
+  
+  <div class="toggle sidebar-toggle" role="button">
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+  </div>
+  <div class="sidebar-dimmer"></div>
+  <div class="back-to-top" role="button" aria-label="返回顶部">
+    <i class="fa fa-arrow-up fa-lg"></i>
+    <span>0%</span>
+  </div>
+  <div class="reading-progress-bar"></div>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+</body>
+</html>

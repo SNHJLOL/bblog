@@ -1,0 +1,548 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<meta name="theme-color" content="#222" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#222" media="(prefers-color-scheme: dark)"><meta name="generator" content="Hexo 7.3.0">
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Sans+SC:ital,wght@0,300;0,400;0,700;1,300;1,400;1,700&family=Noto+Serif+SC:ital,wght@0,300;0,400;0,700;1,300;1,400;1,700&family=Fira+Code:ital,wght@0,300;0,400;0,700;1,300;1,400;1,700&display=swap&subset=latin,latin-ext">
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/7.0.0/css/all.min.css" integrity="sha256-VHqXKFhhMxcpubYf9xiWdCiojEbY9NexQ4jh8AxbvcM=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
+
+<script class="next-config" data-name="main" type="application/json">{"hostname":"example.com","root":"/","images":"/images","scheme":"Gemini","darkmode":true,"version":"8.27.0","exturl":false,"sidebar":{"position":"left","width_expanded":320,"width_dual_column":240,"display":"post","padding":18,"offset":12},"hljswrap":true,"codeblock":{"theme":{"light":"default","dark":"stackoverflow-dark"},"prism":{"light":"prism","dark":"prism-dark"},"copy_button":{"enable":true,"style":"mac"},"fold":{"enable":false,"height":500},"language":true},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":true,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":false,"duration":400,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"i18n":{"placeholder":"搜索...","empty":"没有找到任何搜索结果：${query}","hits_time":"找到 ${hits} 个搜索结果（用时 ${time} 毫秒）","hits":"找到 ${hits} 个搜索结果"}}</script><script src="/js/config.js" defer></script>
+
+    <meta name="description" content="Excel 文件批量合并与数据清洗工具使用说明需求在工作中经常有很多从系统上下载导出的文件，很零散，而且平台没办法合并导出，有些导出了格式和文件类型都不一样，需要把这些用Python自动合并起来处理。如下图。  每个表大致的内容  合并后效果:  ​	 一、工具介绍本工具基于 Python 的 pandas 库开发，可实现指定文件夹下所有 Excel 文件（.xls&#x2F;.xlsx）的批量读">
+<meta property="og:type" content="article">
+<meta property="og:title" content="1.Excel 文件批量合并与数据清洗工具使用说明">
+<meta property="og:url" content="http://example.com/2026/03/01/1.Excel%E5%90%88%E5%B9%B6%E4%B8%8E%E6%95%B0%E6%8D%AE%E6%B8%85%E6%B4%97/index.html">
+<meta property="og:site_name" content="-喜-">
+<meta property="og:description" content="Excel 文件批量合并与数据清洗工具使用说明需求在工作中经常有很多从系统上下载导出的文件，很零散，而且平台没办法合并导出，有些导出了格式和文件类型都不一样，需要把这些用Python自动合并起来处理。如下图。  每个表大致的内容  合并后效果:  ​	 一、工具介绍本工具基于 Python 的 pandas 库开发，可实现指定文件夹下所有 Excel 文件（.xls&#x2F;.xlsx）的批量读">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="http://example.com/images/blog_image/image-20260302162239694.png">
+<meta property="og:image" content="http://example.com/images/blog_image/image-20260302162044665.png">
+<meta property="og:image" content="http://example.com/images/blog_image/image-20260302162505307.png">
+<meta property="og:image" content="http://example.com/images/blog_image/image-20260302162356720.png">
+<meta property="og:image" content="http://example.com/images/blog_image/image-20260302161859830.png">
+<meta property="article:published_time" content="2026-03-01T07:30:00.000Z">
+<meta property="article:modified_time" content="2026-03-07T10:00:00.000Z">
+<meta property="article:author" content="J-L">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="http://example.com/images/blog_image/image-20260302162239694.png">
+
+
+<link rel="canonical" href="http://example.com/2026/03/01/1.Excel%E5%90%88%E5%B9%B6%E4%B8%8E%E6%95%B0%E6%8D%AE%E6%B8%85%E6%B4%97/">
+
+
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"zh-CN","comments":true,"permalink":"http://example.com/2026/03/01/1.Excel%E5%90%88%E5%B9%B6%E4%B8%8E%E6%95%B0%E6%8D%AE%E6%B8%85%E6%B4%97/","path":"2026/03/01/1.Excel合并与数据清洗/","title":"1.Excel 文件批量合并与数据清洗工具使用说明"}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">""</script>
+<title>1.Excel 文件批量合并与数据清洗工具使用说明 | -喜-</title>
+  
+
+
+
+
+
+
+
+
+  
+  <script size="300" alpha="0.6" zIndex="-1" src="https://cdnjs.cloudflare.com/ajax/libs/ribbon.js/1.0.2/ribbon.min.js" defer></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous" defer></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/medium-zoom/1.1.0/medium-zoom.min.js" integrity="sha256-ZgMyDAIYDYGxbcpJcfUnYwNevG/xi9OHKaR/8GK+jWc=" crossorigin="anonymous" defer></script>
+<script src="/js/utils.js" defer></script><script src="/js/motion.js" defer></script><script src="/js/sidebar.js" defer></script><script src="/js/next-boot.js" defer></script>
+
+  
+
+
+
+
+
+
+  
+
+
+
+
+
+  <noscript>
+    <link rel="stylesheet" href="/css/noscript.css">
+  </noscript>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <div class="column">
+      <header class="header" itemscope itemtype="http://schema.org/WPHeader"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏" role="button">
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <p class="site-title">-喜-</p>
+      <i class="logo-line"></i>
+    </a>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger" aria-label="搜索" role="button">
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu"><li class="menu-item menu-item-home"><a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a></li><li class="menu-item menu-item-about"><a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>关于</a></li><li class="menu-item menu-item-tags"><a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签</a></li>
+  </ul>
+</nav>
+
+
+
+
+</header>
+        
+  
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#Excel-%E6%96%87%E4%BB%B6%E6%89%B9%E9%87%8F%E5%90%88%E5%B9%B6%E4%B8%8E%E6%95%B0%E6%8D%AE%E6%B8%85%E6%B4%97%E5%B7%A5%E5%85%B7%E4%BD%BF%E7%94%A8%E8%AF%B4%E6%98%8E"><span class="nav-number">1.</span> <span class="nav-text">Excel 文件批量合并与数据清洗工具使用说明</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E9%9C%80%E6%B1%82"><span class="nav-number">1.0.1.</span> <span class="nav-text">需求</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%B8%80%E3%80%81%E5%B7%A5%E5%85%B7%E4%BB%8B%E7%BB%8D"><span class="nav-number">1.1.</span> <span class="nav-text">一、工具介绍</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%BA%8C%E3%80%81%E5%8A%9F%E8%83%BD%E7%89%B9%E6%80%A7"><span class="nav-number">1.2.</span> <span class="nav-text">二、功能特性</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%B8%89%E3%80%81%E7%8E%AF%E5%A2%83%E5%87%86%E5%A4%87"><span class="nav-number">1.3.</span> <span class="nav-text">三、环境准备</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#1-%E5%AE%89%E8%A3%85-Python%E5%92%8CIDE"><span class="nav-number">1.3.1.</span> <span class="nav-text">1. 安装 Python和IDE</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-%E5%AE%89%E8%A3%85%E4%BE%9D%E8%B5%96%E5%BA%93"><span class="nav-number">1.3.2.</span> <span class="nav-text">2. 安装依赖库</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%9B%9B%E3%80%81%E4%BD%BF%E7%94%A8%E6%AD%A5%E9%AA%A4"><span class="nav-number">1.4.</span> <span class="nav-text">四、使用步骤</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#1-%E4%BB%A3%E7%A0%81%E4%BF%AE%E6%94%B9"><span class="nav-number">1.4.1.</span> <span class="nav-text">1. 代码修改</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-%E6%94%BE%E7%BD%AE%E5%BE%85%E5%A4%84%E7%90%86%E6%96%87%E4%BB%B6"><span class="nav-number">1.4.2.</span> <span class="nav-text">2. 放置待处理文件</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#3-%E8%BF%90%E8%A1%8C%E4%BB%A3%E7%A0%81"><span class="nav-number">1.4.3.</span> <span class="nav-text">3. 运行代码</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E6%96%B9%E5%BC%8F-1%EF%BC%9A%E5%91%BD%E4%BB%A4%E8%A1%8C%E8%BF%90%E8%A1%8C"><span class="nav-number">1.4.3.1.</span> <span class="nav-text">方式 1：命令行运行</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E6%96%B9%E5%BC%8F-2%EF%BC%9AIDE-%E8%BF%90%E8%A1%8C"><span class="nav-number">1.4.3.2.</span> <span class="nav-text">方式 2：IDE 运行</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#4-%E6%9F%A5%E7%9C%8B%E7%BB%93%E6%9E%9C"><span class="nav-number">1.4.4.</span> <span class="nav-text">4. 查看结果</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%BA%94%E3%80%81%E6%A0%B8%E5%BF%83%E4%BB%A3%E7%A0%81%E8%A7%A3%E6%9E%90"><span class="nav-number">1.5.</span> <span class="nav-text">五、核心代码解析</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#1-%E4%B8%BB%E5%87%BD%E6%95%B0%E5%AE%9A%E4%B9%89"><span class="nav-number">1.5.1.</span> <span class="nav-text">1. 主函数定义</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-%E9%81%8D%E5%8E%86%E8%AF%BB%E5%8F%96-Excel-%E6%96%87%E4%BB%B6"><span class="nav-number">1.5.2.</span> <span class="nav-text">2. 遍历读取 Excel 文件</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#3-%E6%95%B0%E6%8D%AE%E5%90%88%E5%B9%B6%E4%B8%8E%E5%9F%BA%E7%A1%80%E6%B8%85%E6%B4%97"><span class="nav-number">1.5.3.</span> <span class="nav-text">3. 数据合并与基础清洗</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#4-%E9%AB%98%E7%BA%A7%E6%95%B0%E6%8D%AE%E6%B8%85%E6%B4%97"><span class="nav-number">1.5.4.</span> <span class="nav-text">4. 高级数据清洗</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#5-%E7%BB%93%E6%9E%9C%E4%BF%9D%E5%AD%98"><span class="nav-number">1.5.5.</span> <span class="nav-text">5. 结果保存</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%85%AD%E3%80%81%E6%B3%A8%E6%84%8F%E4%BA%8B%E9%A1%B9"><span class="nav-number">1.6.</span> <span class="nav-text">六、注意事项</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%B8%83%E3%80%81%E5%B8%B8%E8%A7%81%E9%97%AE%E9%A2%98%E8%A7%A3%E5%86%B3"><span class="nav-number">1.7.</span> <span class="nav-text">七、常见问题解决</span></a></li></ol></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="J-L"
+      src="/images/avatar.jpg">
+  <p class="site-author-name" itemprop="name">J-L</p>
+  <div class="site-description" itemprop="description"></div>
+</div>
+<div class="site-state-wrap animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+        <a href="/archives/">
+          <span class="site-state-item-count">16</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author animated">
+      <span class="links-of-author-item">
+        <a href="https://github.com/yourname" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;yourname" rel="noopener me" target="_blank"><i class="fab fa-github fa-fw"></i>GitHub</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="mailto:yourname@gmail.com" title="E-Mail → mailto:yourname@gmail.com" rel="noopener me" target="_blank"><i class="fa fa-envelope fa-fw"></i>E-Mail</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="https://weibo.com/yourname" title="Weibo → https:&#x2F;&#x2F;weibo.com&#x2F;yourname" rel="noopener me" target="_blank"><i class="fab fa-weibo fa-fw"></i>Weibo</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="https://twitter.com/yourname" title="Twitter → https:&#x2F;&#x2F;twitter.com&#x2F;yourname" rel="noopener me" target="_blank"><i class="fab fa-twitter fa-fw"></i>Twitter</a>
+      </span>
+  </div>
+  <div class="weather-widget animated">
+    <div class="weather-title">
+      <i class="fa fa-cloud"></i> 天气
+    </div>
+    <div id="weather-content">
+      <div class="weather-loading">
+        <i class="fa fa-spinner fa-spin"></i> 加载中...
+      </div>
+    </div>
+  </div>
+  <script>
+    document.addEventListener('DOMContentLoaded', function() {
+      const weatherContent = document.getElementById('weather-content');
+      
+      function getWeather(lat, lon) {
+        const apiKey = 'cd2881ae1f584ba2a11b77136fb610ec';
+        const iconStyle = 3;
+        const unit = 'c';
+        
+        fetch(`https://devapi.qweather.com/v7/weather/now?location=${lon},${lat}&key=${apiKey}`)
+          .then(response => response.json())
+          .then(data => {
+            if (data.code === '200') {
+              const weather = data.now;
+              const city = data.location ? data.location.name : 'Beijing';
+              const temp = weather.temp;
+              const condition = weather.text;
+              const icon = weather.icon;
+              const humidity = weather.humidity;
+              const windDir = weather.windDir;
+              const windScale = weather.windScale;
+              
+              weatherContent.innerHTML = `
+                <div class="weather-info">
+                  <div class="weather-city">${city}</div>
+                  <div class="weather-main">
+                    <img src="https://cdn.qweather.com/icons/${icon}${iconStyle}.png" alt="${condition}">
+                    <div class="weather-temp">${temp}°${unit.toUpperCase()}</div>
+                  </div>
+                  <div class="weather-desc">${condition}</div>
+                  <div class="weather-details">
+                    <span>湿度: ${humidity}%</span>
+                    <span>风向: ${windDir}</span>
+                    <span>风力: ${windScale}级</span>
+                  </div>
+                </div>
+              `;
+            } else {
+              weatherContent.innerHTML = `<div class="weather-error">获取天气失败: ${data.code}</div>`;
+            }
+          })
+          .catch(error => {
+            console.error('Weather API error:', error);
+            weatherContent.innerHTML = `<div class="weather-error">获取天气失败，请检查网络连接</div>`;
+          });
+      }
+      
+      function getDefaultWeather() {
+        const defaultCity = 'Beijing';
+        const apiKey = 'cd2881ae1f584ba2a11b77136fb610ec';
+        
+        fetch(`https://devapi.qweather.com/v7/location/search?keywords=${defaultCity}&key=${apiKey}`)
+          .then(response => response.json())
+          .then(data => {
+            if (data.code === '200' && data.location && data.location.length > 0) {
+              const location = data.location[0];
+              getWeather(location.lat, location.lon);
+            } else {
+              weatherContent.innerHTML = `<div class="weather-error">无法获取默认城市天气</div>`;
+            }
+          })
+          .catch(error => {
+            console.error('Location API error:', error);
+            weatherContent.innerHTML = `<div class="weather-error">获取默认城市天气失败</div>`;
+          });
+      }
+      
+      if (navigator.geolocation) {
+        navigator.geolocation.getCurrentPosition(
+          position => {
+            getWeather(position.coords.latitude, position.coords.longitude);
+          },
+          error => {
+            console.error('Geolocation error:', error);
+            getDefaultWeather();
+          }
+        );
+      } else {
+        getDefaultWeather();
+      }
+    });
+  </script>
+  <style>
+    .weather-widget {
+      margin-top: 20px;
+      padding: 15px;
+      background: rgba(255, 255, 255, 0.1);
+      border-radius: 8px;
+    }
+    .weather-title {
+      font-size: 16px;
+      font-weight: bold;
+      margin-bottom: 10px;
+      color: #333;
+    }
+    .weather-loading {
+      text-align: center;
+      padding: 20px 0;
+    }
+    .weather-error {
+      text-align: center;
+      padding: 20px 0;
+      color: #ff4d4f;
+    }
+    .weather-info {
+      text-align: center;
+    }
+    .weather-city {
+      font-size: 14px;
+      margin-bottom: 10px;
+      color: #666;
+    }
+    .weather-main {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-bottom: 10px;
+    }
+    .weather-main img {
+      width: 50px;
+      height: 50px;
+      margin-right: 10px;
+    }
+    .weather-temp {
+      font-size: 24px;
+      font-weight: bold;
+      color: #333;
+    }
+    .weather-desc {
+      font-size: 14px;
+      margin-bottom: 10px;
+      color: #666;
+    }
+    .weather-details {
+      font-size: 12px;
+      color: #999;
+      line-height: 1.5;
+    }
+    .weather-details span {
+      display: block;
+    }
+  </style>
+
+        </div>
+      </div>
+    </div>
+
+    
+  </aside>
+
+
+    </div>
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2026/03/01/1.Excel%E5%90%88%E5%B9%B6%E4%B8%8E%E6%95%B0%E6%8D%AE%E6%B8%85%E6%B4%97/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.jpg">
+      <meta itemprop="name" content="J-L">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="-喜-">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="1.Excel 文件批量合并与数据清洗工具使用说明 | -喜-">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          1.Excel 文件批量合并与数据清洗工具使用说明
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">发表于</span>
+
+      <time title="创建时间：2026-03-01 15:30:00" itemprop="dateCreated datePublished" datetime="2026-03-01T15:30:00+08:00">2026-03-01</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar-check"></i>
+      </span>
+      <span class="post-meta-item-text">更新于</span>
+      <time title="修改时间：2026-03-07 18:00:00" itemprop="dateModified" datetime="2026-03-07T18:00:00+08:00">2026-03-07</time>
+    </span>
+
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody"><h1 id="Excel-文件批量合并与数据清洗工具使用说明"><a href="#Excel-文件批量合并与数据清洗工具使用说明" class="headerlink" title="Excel 文件批量合并与数据清洗工具使用说明"></a>Excel 文件批量合并与数据清洗工具使用说明</h1><h3 id="需求"><a href="#需求" class="headerlink" title="需求"></a>需求</h3><p>在工作中经常有很多从系统上下载导出的文件，很零散，而且平台没办法合并导出，有些导出了格式和文件类型都不一样，需要把这些用Python自动合并起来处理。如下图。</p>
+<p><img src="/./../images/blog_image/image-20260302162239694.png" alt="image-20260302162239694"></p>
+<p>每个表大致的内容</p>
+<p><img src="/./../images/blog_image/image-20260302162044665.png" alt="image-20260302162044665"></p>
+<p>合并后效果:</p>
+<p><img src="/./../images/blog_image/image-20260302162505307.png" alt="image-20260302162505307"></p>
+<p>​	<img src="/./../images/blog_image/image-20260302162356720.png" alt="image-20260302162356720"></p>
+<h2 id="一、工具介绍"><a href="#一、工具介绍" class="headerlink" title="一、工具介绍"></a>一、工具介绍</h2><p>本工具基于 Python 的 pandas 库开发，可实现指定文件夹下所有 Excel 文件（.xls&#x2F;.xlsx）的批量读取、合并，并完成一系列自动化的数据清洗操作，最终输出清洗后的合并 Excel 文件。适用于需要定期处理多份结构相似的 Excel 数据、统一数据格式和过滤无效信息的场景。</p>
+<h2 id="二、功能特性"><a href="#二、功能特性" class="headerlink" title="二、功能特性"></a>二、功能特性</h2><ol>
+<li><p><strong>多文件批量读取</strong>：自动遍历指定文件夹，筛选出有效 Excel 文件（跳过临时文件），支持.xls 和.xlsx 格式；</p>
+</li>
+<li><p><strong>数据溯源</strong>：为每条数据添加 “来源文件” 列，便于追溯数据原始文件；</p>
+</li>
+<li><p><strong>智能合并</strong>：自动对齐不同文件的列结构，缺失列填充 NaN；</p>
+</li>
+<li><p><strong>数据清洗（可自定义）</strong></p>
+<ul>
+<li>填充缺失值为 0；</li>
+<li>删除全空行和重复行；</li>
+<li>处理日期格式（从文件名提取日期并标准化）；</li>
+<li>过滤无效数据（如加购件数为负数的记录）；</li>
+<li>调整列显示顺序（日期列置顶）；</li>
+<li>优化 skuId 格式（转成字符串，去除末尾.0，避免科学计数法）；</li>
+</ul>
+</li>
+<li><p><strong>结果保存</strong>：将清洗后的合并数据保存为新的 Excel 文件。</p>
+</li>
+</ol>
+<h2 id="三、环境准备"><a href="#三、环境准备" class="headerlink" title="三、环境准备"></a>三、环境准备</h2><h3 id="1-安装-Python和IDE"><a href="#1-安装-Python和IDE" class="headerlink" title="1. 安装 Python和IDE"></a>1. 安装 Python和IDE</h3><p>确保本地已安装 Python 环境（我使用的是3.13.1），可从<a target="_blank" rel="noopener" href="https://www.python.org/downloads/">Python 官网</a>下载安装。</p>
+<p>IDE我选择的是VS code。</p>
+<p><img src="/./../images/blog_image/image-20260302161859830.png" alt="image-20260302161859830"></p>
+<h3 id="2-安装依赖库"><a href="#2-安装依赖库" class="headerlink" title="2. 安装依赖库"></a>2. 安装依赖库</h3><p>打开命令提示符（CMD）或终端，执行以下命令安装所需库：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">pip install pandas openpyxl xlrd</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>pandas：核心数据处理库（我使用的是2.2.3）；</li>
+<li>openpyxl：支持.xlsx 文件的读写（我使用的是3.1.5）；</li>
+<li>xlrd：支持.xls 文件的读取（我使用的是2.0.1）。</li>
+</ul>
+<h2 id="四、使用步骤"><a href="#四、使用步骤" class="headerlink" title="四、使用步骤"></a>四、使用步骤</h2><h3 id="1-代码修改"><a href="#1-代码修改" class="headerlink" title="1. 代码修改"></a>1. 代码修改</h3><p>注：计算机名字隐藏为<code>xxx</code></p>
+<p>打开代码文件（建议命名为 merge.py），根据实际需求调整以下参数：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">if</span> __name__ == <span class="string">&quot;__main__&quot;</span>:</span><br><span class="line">    input_folder = <span class="string">&quot;C:/Users/xxx/Downloads/data&quot;</span>  <span class="comment"># 待处理Excel文件夹路径，修改为你的文件夹路径</span></span><br><span class="line">    output_excel = <span class="string">&quot;C:/Users/xxx/Downloads/清洗后的合并数据.xlsx&quot;</span>  <span class="comment"># 输出文件路径，可自定义</span></span><br><span class="line">    merge_excel_files(input_folder, output_excel)</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li><code>input_folder</code>：存放待处理 Excel 文件的文件夹绝对路径；</li>
+<li><code>output_excel</code>：清洗后合并文件的保存路径及文件名。</li>
+</ul>
+<h3 id="2-放置待处理文件"><a href="#2-放置待处理文件" class="headerlink" title="2. 放置待处理文件"></a>2. 放置待处理文件</h3><p>将需要合并的 Excel 文件统一放入上述<code>input_folder</code>指定的文件夹中，确保文件为.xls 或.xlsx 格式。</p>
+<h3 id="3-运行代码"><a href="#3-运行代码" class="headerlink" title="3. 运行代码"></a>3. 运行代码</h3><h4 id="方式-1：命令行运行"><a href="#方式-1：命令行运行" class="headerlink" title="方式 1：命令行运行"></a>方式 1：命令行运行</h4><p>打开命令提示符（CMD），切换到代码所在目录，执行：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">python merge.py</span><br></pre></td></tr></table></figure>
+
+<h4 id="方式-2：IDE-运行"><a href="#方式-2：IDE-运行" class="headerlink" title="方式 2：IDE 运行"></a>方式 2：IDE 运行</h4><p>在 PyCharm、VS Code 等 Python IDE 中直接运行 merge.py 文件。</p>
+<h3 id="4-查看结果"><a href="#4-查看结果" class="headerlink" title="4. 查看结果"></a>4. 查看结果</h3><p>运行完成后，控制台会输出各步骤日志（如读取的文件、合并 &#x2F; 清洗后的数据行数），最终在<code>output_excel</code>指定路径下生成清洗后的合并 Excel 文件。</p>
+<h2 id="五、核心代码解析"><a href="#五、核心代码解析" class="headerlink" title="五、核心代码解析"></a>五、核心代码解析</h2><h3 id="1-主函数定义"><a href="#1-主函数定义" class="headerlink" title="1. 主函数定义"></a>1. 主函数定义</h3><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> pandas <span class="keyword">as</span> pd</span><br><span class="line"><span class="keyword">import</span> os</span><br><span class="line"></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">merge_excel_files</span>(<span class="params">folder_path, output_file</span>):</span><br><span class="line">    <span class="string">&quot;&quot;&quot;</span></span><br><span class="line"><span class="string">    批量读取文件夹下的Excel文件(.xls 和 .xlsx)并做数据清洗</span></span><br><span class="line"><span class="string">    :param folder_path: 存放Excel文件的文件夹路径</span></span><br><span class="line"><span class="string">    :param output_file: 清洗后输出的Excel文件路径</span></span><br><span class="line"><span class="string">    &quot;&quot;&quot;</span></span><br><span class="line">    <span class="comment"># 初始化空列表，存放所有读取的DataFrame</span></span><br><span class="line">    all_data = []</span><br></pre></td></tr></table></figure>
+
+<p>导入依赖库并定义主函数，接收文件夹路径和输出文件路径两个参数。</p>
+<h3 id="2-遍历读取-Excel-文件"><a href="#2-遍历读取-Excel-文件" class="headerlink" title="2. 遍历读取 Excel 文件"></a>2. 遍历读取 Excel 文件</h3><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">for</span> filename <span class="keyword">in</span> os.listdir(folder_path):</span><br><span class="line">    <span class="keyword">if</span> (filename.endswith(<span class="string">&#x27;.xls&#x27;</span>) <span class="keyword">or</span> filename.endswith(<span class="string">&#x27;.xlsx&#x27;</span>)) <span class="keyword">and</span> <span class="keyword">not</span> filename.startswith(<span class="string">&#x27;~$&#x27;</span>):</span><br><span class="line">        file_path = os.path.join(folder_path, filename)</span><br><span class="line">        <span class="built_in">print</span>(<span class="string">f&quot;正在读取文件：<span class="subst">&#123;file_path&#125;</span>&quot;</span>)</span><br><span class="line">        <span class="keyword">try</span>:</span><br><span class="line">            df = pd.read_excel(file_path,skiprows=<span class="number">5</span>)  <span class="comment"># 跳过前5行（可根据实际调整）</span></span><br><span class="line">            df[<span class="string">&#x27;来源文件&#x27;</span>] = filename  <span class="comment"># 添加来源文件列</span></span><br><span class="line">            all_data.append(df)</span><br><span class="line">        <span class="keyword">except</span> Exception <span class="keyword">as</span> e:</span><br><span class="line">            <span class="built_in">print</span>(<span class="string">f&quot;读取文件 <span class="subst">&#123;filename&#125;</span> 失败：<span class="subst">&#123;<span class="built_in">str</span>(e)&#125;</span>&quot;</span>)</span><br><span class="line">            <span class="keyword">continue</span></span><br></pre></td></tr></table></figure>
+
+<p>遍历文件夹，筛选有效 Excel 文件，读取文件并添加溯源列，异常文件跳过并打印错误信息。</p>
+<p>我的文件导出后前五行需要排除</p>
+<h3 id="3-数据合并与基础清洗"><a href="#3-数据合并与基础清洗" class="headerlink" title="3. 数据合并与基础清洗"></a>3. 数据合并与基础清洗</h3><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">if</span> <span class="keyword">not</span> all_data:</span><br><span class="line">    <span class="built_in">print</span>(<span class="string">&quot;未找到有效Excel文件！&quot;</span>)</span><br><span class="line">    <span class="keyword">return</span></span><br><span class="line">combined_df = pd.concat(all_data, ignore_index=<span class="literal">True</span>)  <span class="comment"># 合并所有DataFrame</span></span><br><span class="line">combined_df = combined_df.fillna(<span class="number">0</span>)  <span class="comment"># 缺失值填充为0</span></span><br><span class="line"></span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<p>合并所有读取的数据（concat），填充缺失值。</p>
+<h3 id="4-高级数据清洗"><a href="#4-高级数据清洗" class="headerlink" title="4. 高级数据清洗"></a>4. 高级数据清洗</h3><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><span class="line">    <span class="comment"># 优化skuId格式</span></span><br><span class="line"><span class="keyword">if</span> <span class="string">&#x27;skuId&#x27;</span> <span class="keyword">in</span> combined_df.columns:</span><br><span class="line">    combined_df[<span class="string">&#x27;skuId&#x27;</span>] = combined_df[<span class="string">&#x27;skuId&#x27;</span>].astype(<span class="built_in">str</span>).<span class="built_in">str</span>.replace(<span class="string">r&#x27;\.0$&#x27;</span>, <span class="string">&#x27;&#x27;</span>, regex=<span class="literal">True</span>)</span><br><span class="line"><span class="comment"># 删除全空行和重复行</span></span><br><span class="line">combined_df = combined_df.dropna(how=<span class="string">&#x27;all&#x27;</span>)</span><br><span class="line">combined_df = combined_df.drop_duplicates()</span><br><span class="line"></span><br><span class="line"><span class="comment"># 从文件名提取日期并标准化</span></span><br><span class="line"><span class="keyword">if</span> <span class="string">&#x27;来源文件&#x27;</span> <span class="keyword">in</span> combined_df.columns:</span><br><span class="line">    combined_df[<span class="string">&#x27;文件名前缀&#x27;</span>] = combined_df[<span class="string">&#x27;来源文件&#x27;</span>].<span class="built_in">str</span>.rsplit(<span class="string">&#x27;.&#x27;</span>, n=<span class="number">1</span>).<span class="built_in">str</span>[<span class="number">0</span>]</span><br><span class="line">    combined_df[<span class="string">&#x27;日期&#x27;</span>] = combined_df[<span class="string">&#x27;文件名前缀&#x27;</span>].<span class="built_in">str</span>[-<span class="number">10</span>:]</span><br><span class="line">    combined_df = combined_df.drop(columns=[<span class="string">&#x27;文件名前缀&#x27;</span>])</span><br><span class="line">    combined_df[<span class="string">&#x27;日期&#x27;</span>] = pd.to_datetime(combined_df[<span class="string">&#x27;日期&#x27;</span>], errors=<span class="string">&#x27;coerce&#x27;</span>)</span><br><span class="line">    combined_df[<span class="string">&#x27;日期&#x27;</span>] = combined_df[<span class="string">&#x27;日期&#x27;</span>].dt.date</span><br><span class="line">    combined_df[<span class="string">&#x27;日期&#x27;</span>] = combined_df[<span class="string">&#x27;日期&#x27;</span>].fillna(<span class="string">&quot;未知&quot;</span>)</span><br><span class="line"></span><br><span class="line"><span class="comment"># 过滤加购件数负数</span></span><br><span class="line"><span class="keyword">if</span> <span class="string">&#x27;加购件数&#x27;</span> <span class="keyword">in</span> combined_df.columns:</span><br><span class="line">    combined_df = combined_df[combined_df[<span class="string">&#x27;加购件数&#x27;</span>] &gt;= <span class="number">0</span>]</span><br><span class="line"></span><br><span class="line"><span class="comment"># 日期列放第一</span></span><br><span class="line"><span class="keyword">if</span> <span class="string">&#x27;日期&#x27;</span> <span class="keyword">in</span> combined_df.columns:</span><br><span class="line">    cols = combined_df.columns.tolist()</span><br><span class="line">    cols.insert(<span class="number">0</span>, cols.pop(cols.index(<span class="string">&#x27;日期&#x27;</span>)))</span><br><span class="line">    combined_df = combined_df[cols]</span><br></pre></td></tr></table></figure>
+
+<p>优化 skuId 显示格式，避免出现科学计数法，完成空行 &#x2F; 重复行删除、日期提取与格式化、无效数据过滤、列顺序调整等核心清洗操作（可以根据实际情况进行自定义）。</p>
+<h3 id="5-结果保存"><a href="#5-结果保存" class="headerlink" title="5. 结果保存"></a>5. 结果保存</h3><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">combined_df.to_excel(output_file, index=<span class="literal">False</span>)</span><br><span class="line"><span class="built_in">print</span>(<span class="string">f&quot;清洗完成！结果已保存至：<span class="subst">&#123;output_file&#125;</span>&quot;</span>)</span><br></pre></td></tr></table></figure>
+
+<p>将清洗后的数据保存为 Excel 文件，不保留索引列。</p>
+<h2 id="六、注意事项"><a href="#六、注意事项" class="headerlink" title="六、注意事项"></a>六、注意事项</h2><ol>
+<li>文件路径：Windows 系统路径建议使用双反斜杠（\\），或正斜杠（&#x2F;），避免路径错误；</li>
+<li>跳过行数：代码中<code>skiprows=5</code>表示读取 Excel 时跳过前 5 行，需根据实际 Excel 表头结构调整；</li>
+<li>日期提取：日期提取逻辑假设文件名末尾包含 “YYYY-MM-DD” 格式的日期，若文件名格式不同，需修改<code>combined_df[&#39;日期&#39;] = combined_df[&#39;文件名前缀&#39;].str[-10:]</code>这一行的切片规则；</li>
+<li>列名适配：代码中针对 “skuId”“加购件数”“日期” 等列的处理，需根据实际业务数据的列名调整；</li>
+<li>异常处理：若部分 Excel 文件读取失败，控制台会打印错误信息，可根据提示检查文件是否损坏或格式异常。</li>
+</ol>
+<h2 id="七、常见问题解决"><a href="#七、常见问题解决" class="headerlink" title="七、常见问题解决"></a>七、常见问题解决</h2><ol>
+<li>**报错 “SyntaxWarning: invalid escape sequence ‘**：转义警告，可以在前面加上r，如replace(r’.0$’, ‘’, regex&#x3D;True)；</li>
+<li><strong>读取.xls 文件报错</strong>：xlrd 版本不适配，可根据提示调整</li>
+<li><strong>日期列全部显示 “未知”</strong>：文件名中无 “YYYY-MM-DD” 格式的日期，需检查文件名格式或修改日期提取逻辑；</li>
+<li><strong>数据合并后列缺失</strong>：不同 Excel 文件的列名不一致，pandas 会自动对齐，可检查源文件列名是否统一。</li>
+</ol>
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/2026/02/05/%E7%9B%AE%E5%BD%95/" rel="prev" title="Excel 文件批量合并与数据清洗工具使用说明">
+                  <i class="fa fa-angle-left"></i> Excel 文件批量合并与数据清洗工具使用说明
+                </a>
+            </div>
+            <div class="post-nav-item">
+                <a href="/2026/03/02/2.Excel%E7%BE%8E%E5%8C%96/" rel="next" title="2.打造Excel 报表：Python 自动化美化">
+                  2.打造Excel 报表：Python 自动化美化 <i class="fa fa-angle-right"></i>
+                </a>
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+  <div class="copyright">
+    &copy; 
+    <span itemprop="copyrightYear">2026</span>
+    <span class="with-love">
+      <i class="fa fa-heart"></i>
+    </span>
+    <span class="author" itemprop="copyrightHolder">J-L</span>
+  </div>
+  <div class="powered-by">喜 | 马上发财
+  </div>
+
+    </div>
+  </footer>
+
+  
+  <div class="toggle sidebar-toggle" role="button">
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+  </div>
+  <div class="sidebar-dimmer"></div>
+  <div class="back-to-top" role="button" aria-label="返回顶部">
+    <i class="fa fa-arrow-up fa-lg"></i>
+    <span>0%</span>
+  </div>
+  <div class="reading-progress-bar"></div>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+</body>
+</html>

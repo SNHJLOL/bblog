@@ -1,0 +1,502 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<meta name="theme-color" content="#222" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#222" media="(prefers-color-scheme: dark)"><meta name="generator" content="Hexo 7.3.0">
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Sans+SC:ital,wght@0,300;0,400;0,700;1,300;1,400;1,700&family=Noto+Serif+SC:ital,wght@0,300;0,400;0,700;1,300;1,400;1,700&family=Fira+Code:ital,wght@0,300;0,400;0,700;1,300;1,400;1,700&display=swap&subset=latin,latin-ext">
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/7.0.0/css/all.min.css" integrity="sha256-VHqXKFhhMxcpubYf9xiWdCiojEbY9NexQ4jh8AxbvcM=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
+
+<script class="next-config" data-name="main" type="application/json">{"hostname":"example.com","root":"/","images":"/images","scheme":"Gemini","darkmode":true,"version":"8.27.0","exturl":false,"sidebar":{"position":"left","width_expanded":320,"width_dual_column":240,"display":"post","padding":18,"offset":12},"hljswrap":true,"codeblock":{"theme":{"light":"default","dark":"stackoverflow-dark"},"prism":{"light":"prism","dark":"prism-dark"},"copy_button":{"enable":true,"style":"mac"},"fold":{"enable":false,"height":500},"language":true},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":true,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":false,"duration":400,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"i18n":{"placeholder":"搜索...","empty":"没有找到任何搜索结果：${query}","hits_time":"找到 ${hits} 个搜索结果（用时 ${time} 毫秒）","hits":"找到 ${hits} 个搜索结果"}}</script><script src="/js/config.js" defer></script>
+
+    <meta name="description" content="用 AirScript 实现 WPS 在线文档自动化：定时抓取数据并自动填充作为一名经常需要处理业务数据的职场人，每天手动从指定平台抓取数据、整理到 WPS 表格里的重复工作，不仅耗时还容易出错。最近我基于 WPS 在线文档的 AirScript 脚本能力，实现了一套自动化流程 —— 定时抓取指定日期范围的业务数据，自动提取关键指标并填充到表格指定单元格，彻底解放了重复劳动。今天就来分享这个实用的">
+<meta property="og:type" content="article">
+<meta property="og:title" content="-喜-">
+<meta property="og:url" content="http://example.com/2026/04/15/js/index.html">
+<meta property="og:site_name" content="-喜-">
+<meta property="og:description" content="用 AirScript 实现 WPS 在线文档自动化：定时抓取数据并自动填充作为一名经常需要处理业务数据的职场人，每天手动从指定平台抓取数据、整理到 WPS 表格里的重复工作，不仅耗时还容易出错。最近我基于 WPS 在线文档的 AirScript 脚本能力，实现了一套自动化流程 —— 定时抓取指定日期范围的业务数据，自动提取关键指标并填充到表格指定单元格，彻底解放了重复劳动。今天就来分享这个实用的">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2026-04-15T01:56:54.481Z">
+<meta property="article:modified_time" content="2026-04-15T01:56:54.724Z">
+<meta property="article:author" content="J-L">
+<meta name="twitter:card" content="summary">
+
+
+<link rel="canonical" href="http://example.com/2026/04/15/js/">
+
+
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"zh-CN","comments":true,"permalink":"http://example.com/2026/04/15/js/","path":"2026/04/15/js/","title":""}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">""</script>
+<title> | -喜-</title>
+  
+
+
+
+
+
+
+
+
+  
+  <script size="300" alpha="0.6" zIndex="-1" src="https://cdnjs.cloudflare.com/ajax/libs/ribbon.js/1.0.2/ribbon.min.js" defer></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous" defer></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/medium-zoom/1.1.0/medium-zoom.min.js" integrity="sha256-ZgMyDAIYDYGxbcpJcfUnYwNevG/xi9OHKaR/8GK+jWc=" crossorigin="anonymous" defer></script>
+<script src="/js/utils.js" defer></script><script src="/js/motion.js" defer></script><script src="/js/sidebar.js" defer></script><script src="/js/next-boot.js" defer></script>
+
+  
+
+
+
+
+
+
+  
+
+
+
+
+
+  <noscript>
+    <link rel="stylesheet" href="/css/noscript.css">
+  </noscript>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <div class="column">
+      <header class="header" itemscope itemtype="http://schema.org/WPHeader"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏" role="button">
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <p class="site-title">-喜-</p>
+      <i class="logo-line"></i>
+    </a>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger" aria-label="搜索" role="button">
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu"><li class="menu-item menu-item-home"><a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a></li><li class="menu-item menu-item-about"><a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>关于</a></li><li class="menu-item menu-item-tags"><a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签</a></li>
+  </ul>
+</nav>
+
+
+
+
+</header>
+        
+  
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#%E7%94%A8-AirScript-%E5%AE%9E%E7%8E%B0-WPS-%E5%9C%A8%E7%BA%BF%E6%96%87%E6%A1%A3%E8%87%AA%E5%8A%A8%E5%8C%96%EF%BC%9A%E5%AE%9A%E6%97%B6%E6%8A%93%E5%8F%96%E6%95%B0%E6%8D%AE%E5%B9%B6%E8%87%AA%E5%8A%A8%E5%A1%AB%E5%85%85"><span class="nav-number">1.</span> <span class="nav-text">用 AirScript 实现 WPS 在线文档自动化：定时抓取数据并自动填充</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%B8%80%E3%80%81%E9%9C%80%E6%B1%82%E8%83%8C%E6%99%AF"><span class="nav-number">1.1.</span> <span class="nav-text">一、需求背景</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%BA%8C%E3%80%81%E6%A0%B8%E5%BF%83%E5%AE%9E%E7%8E%B0%E6%80%9D%E8%B7%AF"><span class="nav-number">1.2.</span> <span class="nav-text">二、核心实现思路</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#1-%E6%97%B6%E9%97%B4%E5%A4%84%E7%90%86%EF%BC%9A%E8%87%AA%E5%8A%A8%E8%AE%A1%E7%AE%97%E6%97%A5%E6%9C%9F%E8%8C%83%E5%9B%B4"><span class="nav-number">1.2.1.</span> <span class="nav-text">1. 时间处理：自动计算日期范围</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-API-%E8%AF%B7%E6%B1%82%EF%BC%9A%E6%9E%84%E9%80%A0%E8%AF%B7%E6%B1%82%E5%8F%82%E6%95%B0%E5%B9%B6%E5%8F%91%E8%B5%B7%E8%AF%B7%E6%B1%82"><span class="nav-number">1.2.2.</span> <span class="nav-text">2. API 请求：构造请求参数并发起请求</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#3-%E6%95%B0%E6%8D%AE%E8%A7%A3%E6%9E%90%E4%B8%8E%E8%A1%A8%E6%A0%BC%E5%A1%AB%E5%85%85"><span class="nav-number">1.2.3.</span> <span class="nav-text">3. 数据解析与表格填充</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#4-%E5%BC%82%E5%B8%B8%E5%A4%84%E7%90%86"><span class="nav-number">1.2.4.</span> <span class="nav-text">4. 异常处理</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%B8%89%E3%80%81%E5%AE%9A%E6%97%B6%E4%BB%BB%E5%8A%A1%E9%85%8D%E7%BD%AE"><span class="nav-number">1.3.</span> <span class="nav-text">三、定时任务配置</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%9B%9B%E3%80%81%E8%B8%A9%E5%9D%91%E4%B8%8E%E4%BC%98%E5%8C%96"><span class="nav-number">1.4.</span> <span class="nav-text">四、踩坑与优化</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%BA%94%E3%80%81%E6%80%BB%E7%BB%93"><span class="nav-number">1.5.</span> <span class="nav-text">五、总结</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%85%B3%E9%94%AE%E7%82%B9%E5%9B%9E%E9%A1%BE"><span class="nav-number">1.5.1.</span> <span class="nav-text">关键点回顾</span></a></li></ol></li></ol></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="J-L"
+      src="/images/avatar.jpg">
+  <p class="site-author-name" itemprop="name">J-L</p>
+  <div class="site-description" itemprop="description"></div>
+</div>
+<div class="site-state-wrap animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+        <a href="/archives/">
+          <span class="site-state-item-count">16</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author animated">
+      <span class="links-of-author-item">
+        <a href="https://github.com/yourname" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;yourname" rel="noopener me" target="_blank"><i class="fab fa-github fa-fw"></i>GitHub</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="mailto:yourname@gmail.com" title="E-Mail → mailto:yourname@gmail.com" rel="noopener me" target="_blank"><i class="fa fa-envelope fa-fw"></i>E-Mail</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="https://weibo.com/yourname" title="Weibo → https:&#x2F;&#x2F;weibo.com&#x2F;yourname" rel="noopener me" target="_blank"><i class="fab fa-weibo fa-fw"></i>Weibo</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="https://twitter.com/yourname" title="Twitter → https:&#x2F;&#x2F;twitter.com&#x2F;yourname" rel="noopener me" target="_blank"><i class="fab fa-twitter fa-fw"></i>Twitter</a>
+      </span>
+  </div>
+  <div class="weather-widget animated">
+    <div class="weather-title">
+      <i class="fa fa-cloud"></i> 天气
+    </div>
+    <div id="weather-content">
+      <div class="weather-loading">
+        <i class="fa fa-spinner fa-spin"></i> 加载中...
+      </div>
+    </div>
+  </div>
+  <script>
+    document.addEventListener('DOMContentLoaded', function() {
+      const weatherContent = document.getElementById('weather-content');
+      
+      function getWeather(lat, lon) {
+        const apiKey = 'cd2881ae1f584ba2a11b77136fb610ec';
+        const iconStyle = 3;
+        const unit = 'c';
+        
+        fetch(`https://devapi.qweather.com/v7/weather/now?location=${lon},${lat}&key=${apiKey}`)
+          .then(response => response.json())
+          .then(data => {
+            if (data.code === '200') {
+              const weather = data.now;
+              const city = data.location ? data.location.name : 'Beijing';
+              const temp = weather.temp;
+              const condition = weather.text;
+              const icon = weather.icon;
+              const humidity = weather.humidity;
+              const windDir = weather.windDir;
+              const windScale = weather.windScale;
+              
+              weatherContent.innerHTML = `
+                <div class="weather-info">
+                  <div class="weather-city">${city}</div>
+                  <div class="weather-main">
+                    <img src="https://cdn.qweather.com/icons/${icon}${iconStyle}.png" alt="${condition}">
+                    <div class="weather-temp">${temp}°${unit.toUpperCase()}</div>
+                  </div>
+                  <div class="weather-desc">${condition}</div>
+                  <div class="weather-details">
+                    <span>湿度: ${humidity}%</span>
+                    <span>风向: ${windDir}</span>
+                    <span>风力: ${windScale}级</span>
+                  </div>
+                </div>
+              `;
+            } else {
+              weatherContent.innerHTML = `<div class="weather-error">获取天气失败: ${data.code}</div>`;
+            }
+          })
+          .catch(error => {
+            console.error('Weather API error:', error);
+            weatherContent.innerHTML = `<div class="weather-error">获取天气失败，请检查网络连接</div>`;
+          });
+      }
+      
+      function getDefaultWeather() {
+        const defaultCity = 'Beijing';
+        const apiKey = 'cd2881ae1f584ba2a11b77136fb610ec';
+        
+        fetch(`https://devapi.qweather.com/v7/location/search?keywords=${defaultCity}&key=${apiKey}`)
+          .then(response => response.json())
+          .then(data => {
+            if (data.code === '200' && data.location && data.location.length > 0) {
+              const location = data.location[0];
+              getWeather(location.lat, location.lon);
+            } else {
+              weatherContent.innerHTML = `<div class="weather-error">无法获取默认城市天气</div>`;
+            }
+          })
+          .catch(error => {
+            console.error('Location API error:', error);
+            weatherContent.innerHTML = `<div class="weather-error">获取默认城市天气失败</div>`;
+          });
+      }
+      
+      if (navigator.geolocation) {
+        navigator.geolocation.getCurrentPosition(
+          position => {
+            getWeather(position.coords.latitude, position.coords.longitude);
+          },
+          error => {
+            console.error('Geolocation error:', error);
+            getDefaultWeather();
+          }
+        );
+      } else {
+        getDefaultWeather();
+      }
+    });
+  </script>
+  <style>
+    .weather-widget {
+      margin-top: 20px;
+      padding: 15px;
+      background: rgba(255, 255, 255, 0.1);
+      border-radius: 8px;
+    }
+    .weather-title {
+      font-size: 16px;
+      font-weight: bold;
+      margin-bottom: 10px;
+      color: #333;
+    }
+    .weather-loading {
+      text-align: center;
+      padding: 20px 0;
+    }
+    .weather-error {
+      text-align: center;
+      padding: 20px 0;
+      color: #ff4d4f;
+    }
+    .weather-info {
+      text-align: center;
+    }
+    .weather-city {
+      font-size: 14px;
+      margin-bottom: 10px;
+      color: #666;
+    }
+    .weather-main {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-bottom: 10px;
+    }
+    .weather-main img {
+      width: 50px;
+      height: 50px;
+      margin-right: 10px;
+    }
+    .weather-temp {
+      font-size: 24px;
+      font-weight: bold;
+      color: #333;
+    }
+    .weather-desc {
+      font-size: 14px;
+      margin-bottom: 10px;
+      color: #666;
+    }
+    .weather-details {
+      font-size: 12px;
+      color: #999;
+      line-height: 1.5;
+    }
+    .weather-details span {
+      display: block;
+    }
+  </style>
+
+        </div>
+      </div>
+    </div>
+
+    
+  </aside>
+
+
+    </div>
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2026/04/15/js/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.jpg">
+      <meta itemprop="name" content="J-L">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="-喜-">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content=" | -喜-">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">发表于</span>
+
+      <time title="创建时间：2026-04-15 09:56:54" itemprop="dateCreated datePublished" datetime="2026-04-15T09:56:54+08:00">2026-04-15</time>
+    </span>
+
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody"><h1 id="用-AirScript-实现-WPS-在线文档自动化：定时抓取数据并自动填充"><a href="#用-AirScript-实现-WPS-在线文档自动化：定时抓取数据并自动填充" class="headerlink" title="用 AirScript 实现 WPS 在线文档自动化：定时抓取数据并自动填充"></a>用 AirScript 实现 WPS 在线文档自动化：定时抓取数据并自动填充</h1><p>作为一名经常需要处理业务数据的职场人，每天手动从指定平台抓取数据、整理到 WPS 表格里的重复工作，不仅耗时还容易出错。最近我基于 WPS 在线文档的 AirScript 脚本能力，实现了一套自动化流程 —— 定时抓取指定日期范围的业务数据，自动提取关键指标并填充到表格指定单元格，彻底解放了重复劳动。今天就来分享这个实用的自动化脚本开发过程。</p>
+<h2 id="一、需求背景"><a href="#一、需求背景" class="headerlink" title="一、需求背景"></a>一、需求背景</h2><p>日常工作中，每天都要从各大平台获取昨天的业绩，和昨日为止的当月业绩，填写到领导的在线表里</p>
+<p>1. </p>
+<h2 id="二、核心实现思路"><a href="#二、核心实现思路" class="headerlink" title="二、核心实现思路"></a>二、核心实现思路</h2><ol>
+<li>自动计算时间范围（当月 1 日至昨日）</li>
+<li>抓包并请求（或调用平台 API） 获取指定维度的订单数据</li>
+<li>根据响应回来的数据进行相应的处理</li>
+<li>填入相应单元格，并进行调试</li>
+<li>设置定时任务</li>
+</ol>
+<h3 id="1-时间处理：自动计算日期范围"><a href="#1-时间处理：自动计算日期范围" class="headerlink" title="1. 时间处理：自动计算日期范围"></a>1. 时间处理：自动计算日期范围</h3><p>这里以某SAAS平台后台距离</p>
+<p>首先要解决的是日期的自动计算，不需要手动修改日期参数：</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 获取当前时间戳减去一天的毫秒数，得到昨日日期</span></span><br><span class="line"><span class="keyword">const</span> yesterday = <span class="keyword">new</span> <span class="title class_">Date</span>(<span class="title class_">Date</span>.<span class="title function_">now</span>() - <span class="number">86400000</span>);</span><br><span class="line"><span class="comment">// 提取年、月、日并补零（确保两位数格式）</span></span><br><span class="line"><span class="keyword">const</span> year = yesterday.<span class="title function_">getFullYear</span>();</span><br><span class="line"><span class="keyword">const</span> month = <span class="title class_">String</span>(yesterday.<span class="title function_">getMonth</span>() + <span class="number">1</span>).<span class="title function_">padStart</span>(<span class="number">2</span>, <span class="string">&#x27;0&#x27;</span>);</span><br><span class="line"><span class="keyword">const</span> day = <span class="title class_">String</span>(yesterday.<span class="title function_">getDate</span>()).<span class="title function_">padStart</span>(<span class="number">2</span>, <span class="string">&#x27;0&#x27;</span>);</span><br><span class="line"><span class="comment">// 拼接成YYYY-MM-DD格式的昨日日期和当月1日</span></span><br><span class="line"><span class="keyword">const</span> pre = <span class="string">`<span class="subst">$&#123;year&#125;</span>-<span class="subst">$&#123;month&#125;</span>-<span class="subst">$&#123;day&#125;</span>`</span>;</span><br><span class="line"><span class="keyword">const</span> day1 = <span class="string">`<span class="subst">$&#123;year&#125;</span>-<span class="subst">$&#123;month&#125;</span>-01`</span>;</span><br></pre></td></tr></table></figure>
+
+<p>这里需要注意<code>getMonth()</code>返回的是 0-11 的数字，所以要加 1；<code>padStart(2, &#39;0&#39;)</code>确保月份和日期始终是两位数（比如 1 月转为 01）。</p>
+<h3 id="2-API-请求：构造请求参数并发起请求"><a href="#2-API-请求：构造请求参数并发起请求" class="headerlink" title="2. API 请求：构造请求参数并发起请求"></a>2. API 请求：构造请求参数并发起请求</h3><p>AirScript 内置了<code>HTTP.fetch</code>方法，可以直接发起网络请求。需要重点处理：</p>
+<ul>
+<li>请求头（headers）：完整复刻浏览器的请求头，确保接口鉴权通过</li>
+<li>请求体：按接口要求构造参数，并用<code>encodeURIComponent</code>处理 JSON 字符串</li>
+</ul>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 配置请求头（模拟浏览器请求）</span></span><br><span class="line"><span class="keyword">const</span> headers = &#123;</span><br><span class="line">  <span class="string">&quot;User-Agent&quot;</span>: <span class="string">&quot;Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 ...&quot;</span>,</span><br><span class="line">  <span class="string">&quot;Content-Type&quot;</span>: <span class="string">&quot;application/x-www-form-urlencoded;charset=UTF-8&quot;</span>,</span><br><span class="line">  <span class="string">&quot;Cookie&quot;</span>: <span class="string">&quot;JSESSIONID=xxx; CURRENT_ROLERELATION_ID=xxx...&quot;</span> <span class="comment">// 替换为实际有效Cookie</span></span><br><span class="line">  <span class="comment">// 其他必要请求头...</span></span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 构造查询参数</span></span><br><span class="line"><span class="keyword">const</span> queryParam = &#123;</span><br><span class="line">  <span class="string">&quot;dimensions&quot;</span>:[<span class="string">&quot;billDate&quot;</span>],</span><br><span class="line">  <span class="string">&quot;pageSize&quot;</span>:<span class="number">500</span>,</span><br><span class="line">  <span class="string">&quot;pageNum&quot;</span>:<span class="number">1</span>,</span><br><span class="line">  <span class="string">&quot;filters&quot;</span>:[</span><br><span class="line">    &#123;<span class="string">&quot;fieldCode&quot;</span>:<span class="string">&quot;order_source&quot;</span>,<span class="string">&quot;type&quot;</span>:<span class="number">25</span>,<span class="string">&quot;values&quot;</span>:[<span class="string">&quot;2&quot;</span>]&#125;, <span class="comment">// 指定渠道</span></span><br><span class="line">    &#123;<span class="string">&quot;fieldCode&quot;</span>:<span class="string">&quot;bill_date&quot;</span>,<span class="string">&quot;type&quot;</span>:<span class="number">20</span>,<span class="string">&quot;values&quot;</span>:[day1, pre]&#125; <span class="comment">// 时间范围</span></span><br><span class="line">  ],</span><br><span class="line">  <span class="string">&quot;boolFormat&quot;</span>:<span class="number">0</span>,</span><br><span class="line">  <span class="string">&quot;dashboardCode&quot;</span>:<span class="string">&quot;xxx&quot;</span>,</span><br><span class="line">  <span class="string">&quot;bizType&quot;</span>:<span class="string">&quot;M000000033&quot;</span></span><br><span class="line">&#125;;</span><br><span class="line"><span class="comment">// 构造符合接口要求的请求体</span></span><br><span class="line"><span class="keyword">const</span> requestBody = <span class="string">`menuId=xxx&amp;query=<span class="subst">$&#123;<span class="built_in">encodeURIComponent</span>(<span class="built_in">JSON</span>.stringify(queryParam))&#125;</span>`</span>;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 发起POST请求，设置10秒超时</span></span><br><span class="line"><span class="keyword">const</span> response = <span class="variable constant_">HTTP</span>.<span class="title function_">fetch</span>(postUrl, &#123;</span><br><span class="line">  <span class="attr">method</span>: <span class="string">&quot;POST&quot;</span>,</span><br><span class="line">  <span class="attr">headers</span>: headers,</span><br><span class="line">  <span class="attr">body</span>: requestBody,</span><br><span class="line">  <span class="attr">timeout</span>: <span class="number">10000</span>,</span><br><span class="line">  <span class="attr">httpVersion</span>: <span class="string">&quot;1.1&quot;</span></span><br><span class="line">&#125;);</span><br></pre></td></tr></table></figure>
+
+<h3 id="3-数据解析与表格填充"><a href="#3-数据解析与表格填充" class="headerlink" title="3. 数据解析与表格填充"></a>3. 数据解析与表格填充</h3><p>接口返回数据后，需要提取关键信息并写入 WPS 表格：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br></pre></td><td class="code"><pre><span class="line">// 解析响应数据</span><br><span class="line">const responseText = response.text();</span><br><span class="line">const responseData = JSON.parse(responseText);</span><br><span class="line">const datas = responseData?.resultObject?.datas || [];</span><br><span class="line">const sheet = Application.ActiveSheet;</span><br><span class="line"></span><br><span class="line">// 无数据时给出提示</span><br><span class="line">if (datas.length === 0) &#123;</span><br><span class="line">  sheet.Range(&quot;A1&quot;).Value2 = &quot;未提取到datas数据&quot;;</span><br><span class="line">  return;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">// 提取第三列的字段名</span><br><span class="line">const firstItem = datas[0];</span><br><span class="line">let thirdColumnKey = &quot;&quot;;</span><br><span class="line">if (typeof firstItem === &quot;object&quot; &amp;&amp; firstItem !== null) &#123;</span><br><span class="line">  const allKeys = Object.keys(firstItem);</span><br><span class="line">  thirdColumnKey = allKeys.length &gt;= 3 ? allKeys[2] : &quot;&quot;;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">// 提取最后一项的第三列数据，写入N8</span><br><span class="line">let lastItemThirdValue = &quot;&quot;;</span><br><span class="line">const lastItem = datas[datas.length - 1];</span><br><span class="line">if (thirdColumnKey &amp;&amp; typeof lastItem === &quot;object&quot; &amp;&amp; lastItem !== null) &#123;</span><br><span class="line">  lastItemThirdValue = lastItem[thirdColumnKey] || &quot;无数据&quot;;</span><br><span class="line">&#125; else &#123;</span><br><span class="line">  lastItemThirdValue = &quot;数据格式异常&quot;;</span><br><span class="line">&#125;</span><br><span class="line">sheet.Range(&quot;N8&quot;).Value2 = lastItemThirdValue;</span><br><span class="line"></span><br><span class="line">// 计算第三列数据总和，写入N11</span><br><span class="line">let totalSum = 0;</span><br><span class="line">datas.forEach(item =&gt; &#123;</span><br><span class="line">  if (thirdColumnKey &amp;&amp; typeof item === &quot;object&quot; &amp;&amp; item !== null) &#123;</span><br><span class="line">    const value = Number(item[thirdColumnKey]);</span><br><span class="line">    if (!isNaN(value)) &#123;</span><br><span class="line">      totalSum += value;</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;);</span><br><span class="line">sheet.Range(&quot;N11&quot;).Value2 = totalSum;</span><br><span class="line"></span><br><span class="line">// 写入昨日星期数（getDay()返回0-6，0是周日，所以+1转为1-7）</span><br><span class="line">sheet.Range(&quot;N23&quot;).Value2 = yesterday.getDay() + 1;</span><br></pre></td></tr></table></figure>
+
+<h3 id="4-异常处理"><a href="#4-异常处理" class="headerlink" title="4. 异常处理"></a>4. 异常处理</h3><p>用<code>try-catch</code>捕获整个流程中的异常，确保脚本执行失败时能给出明确提示：</p>
+<p>javascript</p>
+<p>运行</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">try &#123;</span><br><span class="line">  // 核心业务逻辑...</span><br><span class="line">&#125; catch (error) &#123;</span><br><span class="line">  Application.ActiveSheet.Range(&quot;A1&quot;).Value2 = &quot;执行失败：&quot; + error.message;</span><br><span class="line">  console.error(&quot;❌ 执行失败：&quot;, error.message);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h2 id="三、定时任务配置"><a href="#三、定时任务配置" class="headerlink" title="三、定时任务配置"></a>三、定时任务配置</h2><p>WPS 在线文档的 AirScript 支持设置定时任务，只需要：</p>
+<ol>
+<li>在脚本编辑器中完成代码编写并保存</li>
+<li>点击「定时执行」按钮，配置执行频率（比如每天早上 9 点）</li>
+<li>确认授权，脚本就会按设定时间自动运行</li>
+</ol>
+<h2 id="四、踩坑与优化"><a href="#四、踩坑与优化" class="headerlink" title="四、踩坑与优化"></a>四、踩坑与优化</h2><ol>
+<li><strong>Cookie 过期问题</strong>：接口依赖的 Cookie 会定期失效，需要定期更新 headers 中的 Cookie 值，后续可以考虑对接登录接口自动获取 Cookie</li>
+<li><strong>数据格式兼容</strong>：增加了<code>typeof</code>和<code>isNaN</code>判断，避免因接口返回数据格式变化导致脚本崩溃</li>
+<li><strong>超时设置</strong>：设置 10 秒超时时间，避免因网络问题导致脚本长时间阻塞</li>
+<li><strong>空值处理</strong>：对无数据、字段不存在等情况都做了兜底，确保表格不会写入空值或错误值</li>
+</ol>
+<h2 id="五、总结"><a href="#五、总结" class="headerlink" title="五、总结"></a>五、总结</h2><p>通过 AirScript，我把原本每天需要手动操作 10 分钟的工作，变成了全自动执行的流程，不仅节省了时间，还避免了手动操作的错误。其实 WPS AirScript 的能力远不止这些，它可以对接各种 API、操作表格 &#x2F; 文档、甚至联动其他办公软件，只要结合实际工作场景，就能实现很多重复性工作的自动化。</p>
+<p>对于职场人来说，不需要成为专业的程序员，只要掌握基础的脚本逻辑，就能用这些工具大幅提升工作效率。建议大家多尝试挖掘办公软件的自动化能力，把时间花在更有价值的事情上。</p>
+<h3 id="关键点回顾"><a href="#关键点回顾" class="headerlink" title="关键点回顾"></a>关键点回顾</h3><ol>
+<li>AirScript 可以通过<code>HTTP.fetch</code>发起网络请求，结合<code>Application</code>对象操作 WPS 表格，实现数据抓取 + 填充的自动化；</li>
+<li>日期处理要注意月份偏移（<code>getMonth()+1</code>）和补零操作，确保符合接口的日期格式要求；</li>
+<li>数据解析时要做好空值、格式异常的兜底处理，定时任务配置可实现脚本自动执行。</li>
+</ol>
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/2026/04/15/10.RPA%E2%80%94%E2%80%94%E6%89%8B%E6%9C%BA%E8%87%AA%E5%8A%A8%E5%8C%96%E5%B9%B6%E5%8F%91%E9%80%81%E6%8F%90%E7%A4%BA%E6%B6%88%E6%81%AF%E5%88%B0%E9%92%89%E9%92%89/" rel="prev" title="">
+                  <i class="fa fa-angle-left"></i> 
+                </a>
+            </div>
+            <div class="post-nav-item">
+                <a href="/2026/04/15/12.AI%E5%A4%A7%E6%A8%A1%E5%9E%8BAPI%E6%8E%A5%E5%85%A5%EF%BC%8C%E8%BD%BB%E6%9D%BE%E5%AE%9E%E7%8E%B0%E6%96%87%E6%9C%AC%E6%80%BB%E7%BB%93%E4%B8%8E%E5%88%86%E7%B1%BB/" rel="next" title="">
+                   <i class="fa fa-angle-right"></i>
+                </a>
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+  <div class="copyright">
+    &copy; 
+    <span itemprop="copyrightYear">2026</span>
+    <span class="with-love">
+      <i class="fa fa-heart"></i>
+    </span>
+    <span class="author" itemprop="copyrightHolder">J-L</span>
+  </div>
+  <div class="powered-by">喜 | 马上发财
+  </div>
+
+    </div>
+  </footer>
+
+  
+  <div class="toggle sidebar-toggle" role="button">
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+  </div>
+  <div class="sidebar-dimmer"></div>
+  <div class="back-to-top" role="button" aria-label="返回顶部">
+    <i class="fa fa-arrow-up fa-lg"></i>
+    <span>0%</span>
+  </div>
+  <div class="reading-progress-bar"></div>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+</body>
+</html>
