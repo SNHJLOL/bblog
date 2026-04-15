@@ -191,12 +191,25 @@
         const iconStyle = 3;
         const unit = 'c';
         
-        fetch(`https://my487tqyq4.re.qweatherapi.com/v7/weather/now?location=${lon},${lat}&key=${apiKey}`)
+        // 先通过地理编码API获取城市名
+        fetch(`https://my487tqyq4.re.qweatherapi.com/v7/location/reverse?location=${lon},${lat}&key=${apiKey}`)
           .then(response => response.json())
-          .then(data => {
-            if (data.code === '200' && data.now) {
-              const weather = data.now;
-              const city = data.location ? data.location.name : 'Beijing';
+          .then(locationData => {
+            let city = 'Beijing';
+            if (locationData.code === '200' && locationData.location && locationData.location.length > 0) {
+              city = locationData.location[0].name;
+            }
+            
+            // 再查询天气
+            return fetch(`https://my487tqyq4.re.qweatherapi.com/v7/weather/now?location=${lon},${lat}&key=${apiKey}`)
+              .then(response => response.json())
+              .then(weatherData => {
+                return { weatherData, city };
+              });
+          })
+          .then(({ weatherData, city }) => {
+            if (weatherData.code === '200' && weatherData.now) {
+              const weather = weatherData.now;
               const temp = weather.temp;
               const condition = weather.text;
               const icon = weather.icon;
@@ -220,7 +233,7 @@
                 </div>
               `;
             } else {
-              const errorCode = data.code || '未知错误';
+              const errorCode = weatherData.code || '未知错误';
               weatherContent.innerHTML = `<div class="weather-error">获取天气失败: ${errorCode}</div>`;
             }
           })

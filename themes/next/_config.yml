@@ -375,6 +375,8 @@ weather:
   icon_style: 3
   # Show temperature unit: c (Celsius) | f (Fahrenheit)
   temperature_unit: c
+  geo_location: true
+  use_geoip: true
 
 codeblock:
   # Code Highlight theme
