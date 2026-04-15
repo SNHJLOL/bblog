@@ -191,8 +191,18 @@
               city = locationData.location[0].name;
             }
             
+            // 先显示城市名和加载状态
+            weatherContent.innerHTML = `
+              <div class="weather-info">
+                <div class="weather-city">${city}</div>
+                <div class="weather-loading">
+                  <i class="fa fa-spinner fa-spin"></i> 获取天气信息中...
+                </div>
+              </div>
+            `;
+            
             // 再查询天气
-            return fetch(`https://my487tqyq4.re.qweatherapi.com/v7/weather/now?location=${lon},${lat}&key=${apiKey}`)
+            return fetch(`https://my487tqyq4.re.qweatherapi.com/v7/weather/now?gzip=n&location=${lon},${lat}&key=${apiKey}`)
               .then(response => response.json())
               .then(weatherData => {
                 return { weatherData, city };
@@ -225,7 +235,12 @@
               `;
             } else {
               const errorCode = weatherData.code || '未知错误';
-              weatherContent.innerHTML = `<div class="weather-error">获取天气失败: ${errorCode}</div>`;
+              weatherContent.innerHTML = `
+                <div class="weather-info">
+                  <div class="weather-city">${city}</div>
+                  <div class="weather-error">获取天气失败: ${errorCode}</div>
+                </div>
+              `;
             }
           })
           .catch(error => {
