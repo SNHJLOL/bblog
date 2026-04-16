@@ -80,146 +80,151 @@
 </div>
 
 <script>
-  document.addEventListener('DOMContentLoaded', function() {
-    const weatherWidget = document.getElementById('weather-widget');
-    const apiKey = 'cd2881ae1f584ba2a11b77136fb610ec';
-    const defaultCity = 'Beijing';
-    const unit = 'c';
+  // 全局变量，标记天气组件是否已经加载
+  if (!window.weatherWidgetLoaded) {
+    window.weatherWidgetLoaded = true;
+    
+    document.addEventListener('DOMContentLoaded', function() {
+      const weatherWidget = document.getElementById('weather-widget');
+      const apiKey = 'cd2881ae1f584ba2a11b77136fb610ec';
+      const defaultCity = 'Beijing';
+      const unit = 'c';
 
-    function getWeatherByLocation(lat, lon, cityName) {
-      weatherWidget.innerHTML = `
-        <div class="weather-info">
-          <div class="weather-city">${cityName}</div>
-          <div class="loading">
-            <i class="fas fa-spinner fa-spin"></i> 获取天气信息中...
+      function getWeatherByLocation(lat, lon, cityName) {
+        weatherWidget.innerHTML = `
+          <div class="weather-info">
+            <div class="weather-city">${cityName}</div>
+            <div class="loading">
+              <i class="fas fa-spinner fa-spin"></i> 获取天气信息中...
+            </div>
           </div>
-        </div>
-      `;
+        `;
 
-      const weatherUrl = `https://my487tqyq4.re.qweatherapi.com/v7/weather/now?gzip=n&location=${lon},${lat}&key=${apiKey}`;
+        const weatherUrl = `https://my487tqyq4.re.qweatherapi.com/v7/weather/now?gzip=n&location=${lon},${lat}&key=${apiKey}`;
 
-      fetch(weatherUrl)
-        .then(response => response.json())
-        .then(weatherData => {
-          if (weatherData.code === '200' && weatherData.now) {
-            const weather = weatherData.now;
-            const temp = weather.temp;
-            const condition = weather.text;
-            const humidity = weather.humidity;
-            const windDir = weather.windDir;
-            const windScale = weather.windScale;
+        fetch(weatherUrl)
+          .then(response => response.json())
+          .then(weatherData => {
+            if (weatherData.code === '200' && weatherData.now) {
+              const weather = weatherData.now;
+              const temp = weather.temp;
+              const condition = weather.text;
+              const humidity = weather.humidity;
+              const windDir = weather.windDir;
+              const windScale = weather.windScale;
 
-            fetch(`https://my487tqyq4.re.qweatherapi.com/v7/weather/3d?gzip=n&location=${lon},${lat}&key=${apiKey}`)
-              .then(response => response.json())
-              .then(forecastData => {
-                let forecastHtml = '';
-                if (forecastData.code === '200' && forecastData.daily) {
-                  const threeDayForecast = forecastData.daily.slice(0, 3);
-                  forecastHtml = `
-                    <div class="weather-forecast">
-                      ${threeDayForecast.map(day => `
-                        <div class="forecast-item">
-                          <div class="forecast-date">${day.fxDate.substring(5)}</div>
-                          <div class="forecast-condition">${day.textDay}</div>
-                          <div class="forecast-temp">${day.tempMin}°/${day.tempMax}°</div>
-                        </div>
-                      `).join('')}
+              fetch(`https://my487tqyq4.re.qweatherapi.com/v7/weather/3d?gzip=n&location=${lon},${lat}&key=${apiKey}`)
+                .then(response => response.json())
+                .then(forecastData => {
+                  let forecastHtml = '';
+                  if (forecastData.code === '200' && forecastData.daily) {
+                    const threeDayForecast = forecastData.daily.slice(0, 3);
+                    forecastHtml = `
+                      <div class="weather-forecast">
+                        ${threeDayForecast.map(day => `
+                          <div class="forecast-item">
+                            <div class="forecast-date">${day.fxDate.substring(5)}</div>
+                            <div class="forecast-condition">${day.textDay}</div>
+                            <div class="forecast-temp">${day.tempMin}°/${day.tempMax}°</div>
+                          </div>
+                        `).join('')}
+                      </div>
+                    `;
+                  }
+
+                  weatherWidget.innerHTML = `
+                    <div class="weather-info">
+                      <div class="weather-city">${cityName}</div>
+                      <div class="weather-main">
+                        <div class="weather-desc">${condition}</div>
+                        <div class="weather-temp">${temp}°${unit.toUpperCase()}</div>
+                      </div>
+                      <div class="weather-details">
+                        <span>湿度: ${humidity}%</span>
+                        <span>风向: ${windDir}</span>
+                        <span>风力: ${windScale}级</span>
+                      </div>
+                      ${forecastHtml}
                     </div>
                   `;
-                }
-
-                weatherWidget.innerHTML = `
-                  <div class="weather-info">
-                    <div class="weather-city">${cityName}</div>
-                    <div class="weather-main">
-                      <div class="weather-desc">${condition}</div>
-                      <div class="weather-temp">${temp}°${unit.toUpperCase()}</div>
+                })
+                .catch(error => {
+                  console.error('Forecast API error:', error);
+                  weatherWidget.innerHTML = `
+                    <div class="weather-info">
+                      <div class="weather-city">${cityName}</div>
+                      <div class="weather-main">
+                        <div class="weather-desc">${condition}</div>
+                        <div class="weather-temp">${temp}°${unit.toUpperCase()}</div>
+                      </div>
+                      <div class="weather-details">
+                        <span>湿度: ${humidity}%</span>
+                        <span>风向: ${windDir}</span>
+                        <span>风力: ${windScale}级</span>
+                      </div>
                     </div>
-                    <div class="weather-details">
-                      <span>湿度: ${humidity}%</span>
-                      <span>风向: ${windDir}</span>
-                      <span>风力: ${windScale}级</span>
-                    </div>
-                    ${forecastHtml}
-                  </div>
-                `;
-              })
-              .catch(error => {
-                console.error('Forecast API error:', error);
-                weatherWidget.innerHTML = `
-                  <div class="weather-info">
-                    <div class="weather-city">${cityName}</div>
-                    <div class="weather-main">
-                      <div class="weather-desc">${condition}</div>
-                      <div class="weather-temp">${temp}°${unit.toUpperCase()}</div>
-                    </div>
-                    <div class="weather-details">
-                      <span>湿度: ${humidity}%</span>
-                      <span>风向: ${windDir}</span>
-                      <span>风力: ${windScale}级</span>
-                    </div>
-                  </div>
-                `;
-              });
-          } else {
+                  `;
+                });
+            } else {
+              weatherWidget.innerHTML = `<div class="error">获取天气失败</div>`;
+            }
+          })
+          .catch(error => {
+            console.error('Weather API error:', error);
             weatherWidget.innerHTML = `<div class="error">获取天气失败</div>`;
+          });
+      }
+
+      function getDefaultWeather() {
+        const locationUrl = `https://my487tqyq4.re.qweatherapi.com/v7/location/search?gzip=n&keywords=${defaultCity}&key=${apiKey}`;
+
+        fetch(locationUrl)
+          .then(response => response.json())
+          .then(data => {
+            if (data.code === '200' && data.location && data.location.length > 0) {
+              const location = data.location[0];
+              const cityName = `${location.adm1}${location.adm2}${location.name}`;
+              getWeatherByLocation(location.lat, location.lon, cityName);
+            } else {
+              weatherWidget.innerHTML = `<div class="error">无法获取默认城市天气</div>`;
+            }
+          })
+          .catch(error => {
+            console.error('Location API error:', error);
+            weatherWidget.innerHTML = `<div class="error">获取默认城市天气失败</div>`;
+          });
+      }
+
+      if (navigator.geolocation) {
+        navigator.geolocation.getCurrentPosition(
+          function(position) {
+            const lat = position.coords.latitude;
+            const lon = position.coords.longitude;
+            const geoUrl = `https://my487tqyq4.re.qweatherapi.com/geo/v2/city/lookup?gzip=n&location=${lon},${lat}&key=${apiKey}`;
+
+            fetch(geoUrl)
+              .then(response => response.json())
+              .then(locationData => {
+                let cityName = defaultCity;
+                if (locationData.code === '200' && locationData.location && locationData.location.length > 0) {
+                  const location = locationData.location[0];
+                  cityName = `${location.adm1}${location.adm2}${location.name}`;
+                }
+                getWeatherByLocation(lat, lon, cityName);
+              })
+              .catch(() => {
+                getWeatherByLocation(lat, lon, defaultCity);
+              });
+          },
+          function() {
+            getDefaultWeather();
           }
-        })
-        .catch(error => {
-          console.error('Weather API error:', error);
-          weatherWidget.innerHTML = `<div class="error">获取天气失败</div>`;
-        });
-    }
-
-    function getDefaultWeather() {
-      const locationUrl = `https://my487tqyq4.re.qweatherapi.com/v7/location/search?gzip=n&keywords=${defaultCity}&key=${apiKey}`;
-
-      fetch(locationUrl)
-        .then(response => response.json())
-        .then(data => {
-          if (data.code === '200' && data.location && data.location.length > 0) {
-            const location = data.location[0];
-            const cityName = `${location.adm1}${location.adm2}${location.name}`;
-            getWeatherByLocation(location.lat, location.lon, cityName);
-          } else {
-            weatherWidget.innerHTML = `<div class="error">无法获取默认城市天气</div>`;
-          }
-        })
-        .catch(error => {
-          console.error('Location API error:', error);
-          weatherWidget.innerHTML = `<div class="error">获取默认城市天气失败</div>`;
-        });
-    }
-
-    if (navigator.geolocation) {
-      navigator.geolocation.getCurrentPosition(
-        function(position) {
-          const lat = position.coords.latitude;
-          const lon = position.coords.longitude;
-          const geoUrl = `https://my487tqyq4.re.qweatherapi.com/geo/v2/city/lookup?gzip=n&location=${lon},${lat}&key=${apiKey}`;
-
-          fetch(geoUrl)
-            .then(response => response.json())
-            .then(locationData => {
-              let cityName = defaultCity;
-              if (locationData.code === '200' && locationData.location && locationData.location.length > 0) {
-                const location = locationData.location[0];
-                cityName = `${location.adm1}${location.adm2}${location.name}`;
-              }
-              getWeatherByLocation(lat, lon, cityName);
-            })
-            .catch(() => {
-              getWeatherByLocation(lat, lon, defaultCity);
-            });
-        },
-        function() {
-          getDefaultWeather();
-        }
-      );
-    } else {
-      getDefaultWeather();
-    }
-  });
+        );
+      } else {
+        getDefaultWeather();
+      }
+    });
+  }
 </script>
 
 <style>
@@ -1225,6 +1230,13 @@ Python 批量重命名 &#x2F; 整理...</p></div><div class="meta cap"><span cla
   };
 </script>
 <script defer src="https://gcore.jsdelivr.net/npm/flying-pages@2/flying-pages.min.js"></script><script>
+    window.StellarPjaxConfig = {
+        selectors: ["title","#l_cover",".l_body"],
+        timeout: 10000,
+        cacheBust: false
+    };
+</script>
+<script src="/js/plugins/pjax.js" defer></script><script>
   ctx.fancybox = {
     selector: `.timenode p>img`,
     css: `https://gcore.jsdelivr.net/npm/@fancyapps/ui@5.0/dist/fancybox/fancybox.css`,
