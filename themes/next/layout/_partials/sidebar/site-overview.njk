@@ -1,55 +1,7 @@
 <div class="site-author animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
-  {%- if theme.avatar.url %}
-    <img class="site-author-image" itemprop="image" alt="{{ author }}"
-      src="{{ url_for(theme.avatar.url) }}">
-  {%- endif %}
+  <img class="site-author-image" itemprop="image" alt="{{ author }}" src="/images/avatar.jpg">
   <p class="site-author-name" itemprop="name">{{ author }}</p>
-  <div class="site-description" itemprop="description">{{ description }}</div>
 </div>
-
-{%- if theme.site_state %}
-<div class="site-state-wrap animated">
-  <nav class="site-state">
-    {%- if config.archive_dir != '/' and site.posts.length > 0 %}
-      <div class="site-state-item site-state-posts">
-        {%- set archive_dir = theme.menu.archives.split('||')[0] | trim if theme.menu.archives else config.archive_dir + '/' %}
-        <a href="{{ url_for(archive_dir) }}">
-          <span class="site-state-item-count">{{ site.posts.length }}</span>
-          <span class="site-state-item-name">{{ __('state.posts') }}</span>
-        </a>
-      </div>
-    {%- endif %}
-
-    {%- if site.categories.length > 0 %}
-      {%- set categoriesPageQuery = site.pages.find({type: 'categories'}, {lean: true}) %}
-      {%- set hasCategoriesPage = categoriesPageQuery.length > 0 %}
-      <div class="site-state-item site-state-categories">
-        {%- set category_dir = theme.menu.categories.split('||')[0] | trim if theme.menu.categories else config.category_dir + '/' %}
-        {%- if hasCategoriesPage %}
-          <a href="{{ url_for(category_dir) }}">
-        {%- endif %}
-        <span class="site-state-item-count">{{ site.categories.length }}</span>
-        <span class="site-state-item-name">{{ __('state.categories') }}</span>
-        {%- if hasCategoriesPage %}</a>{% endif %}
-      </div>
-    {%- endif %}
-
-    {%- if site.tags.length > 0 %}
-      {%- set tagsPageQuery = site.pages.find({type: 'tags'}, {lean: true}) %}
-      {%- set hasTagsPage = tagsPageQuery.length > 0 %}
-      <div class="site-state-item site-state-tags">
-        {%- set tag_dir = theme.menu.tags.split('||')[0] | trim if theme.menu.tags else config.tag_dir + '/' %}
-        {%- if hasTagsPage %}
-          <a href="{{ url_for(tag_dir) }}">
-        {%- endif %}
-        <span class="site-state-item-count">{{ site.tags.length }}</span>
-        <span class="site-state-item-name">{{ __('state.tags') }}</span>
-        {%- if hasTagsPage %}</a>{% endif %}
-      </div>
-    {%- endif %}
-  </nav>
-</div>
-{%- endif %}
 
 {%- if theme.chat.enable and (theme.chatra.enable or theme.tidio.enable) %}
   <div class="sidebar-button animated">
@@ -246,112 +198,214 @@
       }
     });
   </script>
-  <style>
-    .weather-widget {
-      margin-top: 20px;
-      padding: 15px;
-      background: rgba(255, 255, 255, 0.1);
-      border-radius: 8px;
-    }
-    .weather-title {
-      font-size: 16px;
-      font-weight: bold;
-      margin-bottom: 10px;
-      color: #333;
-    }
-    .weather-loading {
-      text-align: center;
-      padding: 20px 0;
-    }
-    .weather-error {
-      text-align: center;
-      padding: 20px 0;
-      color: #ff4d4f;
-    }
-    .weather-info {
-      text-align: center;
-    }
-    .weather-city {
-      font-size: 14px;
-      margin-bottom: 10px;
-      color: #666;
-    }
-    .weather-main {
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      margin-bottom: 10px;
-      text-align: center;
-    }
-    .weather-main img {
-      width: 50px;
-      height: 50px;
-      margin-right: 10px;
-    }
-    .weather-temp {
-      font-size: 24px;
-      font-weight: bold;
-      color: #333;
-      flex-shrink: 0;
-      margin-left: 10px;
-    }
-    .weather-desc {
-      font-size: 24px;
-      color: #333;
-      flex-shrink: 0;
-      margin-right:10px
-    }
-    .weather-details {
-      font-size: 12px;
-      color: #999;
-      line-height: 1.5;
-    }
-    .weather-details span {
-      display: block;
-    }
-    
-    .weather-forecast {
-      margin-top: 15px;
-      border-top: 1px solid rgba(255, 255, 255, 0.1);
-      padding-top: 15px;
-    }
-    
-    .forecast-item {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      padding: 8px 0;
-      border-bottom: 1px solid rgba(255, 255, 255, 0.05);
-    }
-    
-    .forecast-item:last-child {
-      border-bottom: none;
-    }
-    
-    .forecast-date {
-      width: 40px;
-      font-size: 12px;
-      color: #666;
-    }
-    
-    .forecast-condition {
-      flex: 1;
-      font-size: 12px;
-      color: #333;
-      text-align: center;
-    }
-    
-    .forecast-icon {
-      width: 24px;
-      height: 24px;
-      margin: 0 5px;
-    }
-    
-    .forecast-temp {
-      width: 70px;
-      font-size: 12px;
-      color: #666;
-      text-align: right;
-    }
-  </style>
 {%- endif %}
+
+<style>
+  /* 侧边栏整体样式 */
+  .sidebar {
+    background-color: #000;
+    border-radius: 8px;
+    padding: 20px;
+  }
+  
+  /* 作者信息样式 */
+  .site-author {
+    text-align: center;
+    padding: 15px 0;
+  }
+  
+  .site-author-image {
+    width: 70px;
+    height: 70px;
+    border-radius: 50%;
+    margin-bottom: 12px;
+    border: 3px solid #E6397C;
+    box-shadow: 0 0 10px rgba(230, 57, 124, 0.5);
+  }
+  
+  .site-author-name {
+    font-size: 16px;
+    font-weight: bold;
+    color: #E6397C;
+    margin-bottom: 8px;
+  }
+  
+  .site-description {
+    font-size: 13px;
+    color: #E6397C;
+    margin-bottom: 15px;
+  }
+  
+  /* 社交链接样式 */
+  .links-of-author {
+    margin-top: 15px;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 10px;
+    padding: 0 10px;
+  }
+  
+  .links-of-author-item {
+    display: flex;
+    justify-content: center;
+  }
+  
+  .links-of-author-item a {
+    color: #E6397C;
+    font-size: 12px;
+    transition: all 0.3s ease;
+    display: flex;
+    align-items: center;
+    white-space: nowrap;
+  }
+  
+  .links-of-author-item a:hover {
+    color: #fff;
+  }
+  
+  .links-of-author-item i {
+    margin-right: 5px;
+  }
+  
+  /* 天气组件样式 */
+  .weather-widget {
+    margin-top: 20px;
+    padding: 15px;
+    background: rgba(230, 57, 124, 0.1);
+    border-radius: 8px;
+    border: 1px solid rgba(230, 57, 124, 0.3);
+  }
+  
+  .weather-title {
+    font-size: 15px;
+    font-weight: bold;
+    margin-bottom: 12px;
+    color: #E6397C;
+  }
+  
+  .weather-loading {
+    text-align: center;
+    padding: 15px 0;
+    color: #E6397C;
+  }
+  
+  .weather-error {
+    text-align: center;
+    padding: 15px 0;
+    color: #E6397C;
+  }
+  
+  .weather-info {
+    text-align: center;
+  }
+  
+  .weather-city {
+    font-size: 13px;
+    margin-bottom: 12px;
+    color: #E6397C;
+  }
+  
+  .weather-main {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 10px;
+    text-align: center;
+  }
+  
+  .weather-temp {
+    font-size: 22px;
+    font-weight: bold;
+    color: #E6397C;
+    flex-shrink: 0;
+    margin-left: 10px;
+  }
+  
+  .weather-desc {
+    font-size: 22px;
+    color: #E6397C;
+    flex-shrink: 0;
+    margin-right: 10px;
+  }
+  
+  .weather-details {
+    font-size: 11px;
+    color: #E6397C;
+    line-height: 1.4;
+  }
+  
+  .weather-details span {
+    display: block;
+  }
+  
+  .weather-forecast {
+    margin-top: 12px;
+    border-top: 1px solid rgba(230, 57, 124, 0.2);
+    padding-top: 12px;
+  }
+  
+  .forecast-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 6px 0;
+    border-bottom: 1px solid rgba(230, 57, 124, 0.1);
+  }
+  
+  .forecast-item:last-child {
+    border-bottom: none;
+  }
+  
+  .forecast-date {
+    width: 40px;
+    font-size: 11px;
+    color: #E6397C;
+  }
+  
+  .forecast-condition {
+    flex: 1;
+    font-size: 11px;
+    color: #E6397C;
+    text-align: center;
+  }
+  
+  .forecast-icon {
+    width: 20px;
+    height: 20px;
+    margin: 0 5px;
+  }
+  
+  .forecast-temp {
+    width: 60px;
+    font-size: 11px;
+    color: #E6397C;
+    text-align: right;
+  }
+  
+  /* 侧边栏导航样式 */
+  .sidebar-nav {
+    margin-bottom: 20px;
+  }
+  
+  .sidebar-nav-item {
+    margin-bottom: 5px;
+  }
+  
+  .sidebar-nav-item a {
+    display: block;
+    padding: 8px 12px;
+    color: #E6397C;
+    text-decoration: none;
+    border-radius: 4px;
+    transition: all 0.3s ease;
+  }
+  
+  .sidebar-nav-item a:hover {
+    background-color: rgba(230, 57, 124, 0.2);
+  }
+  
+  .sidebar-nav-item.active a {
+    background-color: #E6397C;
+    color: #1A1A1D;
+  }
+</style>

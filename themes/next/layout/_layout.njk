@@ -14,6 +14,190 @@
   <noscript>
     <link rel="stylesheet" href="{{ url_for(theme.css) }}/noscript.css">
   </noscript>
+  <style>
+    /* 全局样式调整 */
+    body {
+      background-color: #1A1A1D;
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+      color: #fff;
+      line-height: 1.6;
+    }
+    
+    /* 导航栏样式 */
+    .site-nav {
+      margin: 0 auto;
+      text-align: center;
+    }
+    
+    .main-menu {
+      display: inline-block;
+      list-style: none;
+      padding: 0;
+      margin: 0;
+    }
+    
+    .menu-item {
+      display: inline-block;
+      margin: 0 10px;
+    }
+    
+    .menu-item a {
+      color: #fff;
+      text-decoration: none;
+      font-size: 14px;
+      padding: 5px 10px;
+      transition: all 0.3s ease;
+    }
+    
+    .menu-item a:hover {
+      color: #E6397C;
+      text-decoration: underline;
+    }
+    
+    /* 头部样式 */
+    .header {
+      padding: 40px 0;
+      border-bottom: 1px solid #333;
+    }
+    
+    /* 主要内容样式 */
+    .main-inner {
+      max-width: 800px;
+      margin: 0 auto;
+      padding: 60px 20px;
+    }
+    
+    /* 页脚样式 */
+    .footer {
+      margin-top: 60px;
+      padding: 40px 0;
+      border-top: 1px solid #333;
+      text-align: center;
+      font-size: 12px;
+      color: #999;
+    }
+    
+    /* 侧边栏样式 */
+    .sidebar {
+      background-color: #222;
+      border-radius: 8px;
+      padding: 20px;
+      margin-top: 40px;
+    }
+    
+    /* 天气组件样式 */
+    .weather-widget {
+      background-color: #222;
+      border-radius: 6px;
+      padding: 15px;
+      margin-top: 20px;
+      color: #fff;
+    }
+    
+    /* 文章样式 */
+    .post {
+      background-color: #222;
+      border-radius: 8px;
+      padding: 30px;
+      margin-bottom: 30px;
+      box-shadow: 0 2px 10px rgba(0, 0, 0, 0.3);
+    }
+    
+    .post-title {
+      font-size: 24px;
+      font-weight: 600;
+      color: #E6397C;
+      margin-bottom: 20px;
+    }
+    
+    .post-content {
+      font-size: 16px;
+      line-height: 1.8;
+      color: #ddd;
+    }
+    
+    /* 归档页面样式 */
+    .archive .collection-title {
+      text-align: center;
+      margin-bottom: 40px;
+    }
+    
+    .archive .collection-header {
+      font-size: 18px;
+      color: #E6397C;
+    }
+    
+    /* 首页样式 */
+    .home-content {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      min-height: 60vh;
+    }
+    
+    .home-header {
+      margin-bottom: 30px;
+    }
+    
+    .home-emoji {
+      font-size: 48px;
+      margin-bottom: 20px;
+    }
+    
+    .home-title {
+      font-size: 24px;
+      font-weight: 600;
+      color: #E6397C;
+    }
+    
+    .home-description {
+      font-size: 16px;
+      line-height: 1.6;
+      color: #ddd;
+      max-width: 600px;
+      margin-bottom: 40px;
+    }
+    
+    .home-links {
+      margin-top: 20px;
+    }
+    
+    .home-link {
+      display: inline-block;
+      padding: 10px 20px;
+      color: #fff;
+      text-decoration: none;
+      font-size: 14px;
+      border: 1px solid #E6397C;
+      border-radius: 4px;
+      transition: all 0.3s ease;
+    }
+    
+    .home-link:hover {
+      background-color: #E6397C;
+      border-color: #E6397C;
+    }
+    
+    /* 响应式设计 */
+    @media (max-width: 768px) {
+      .header {
+        padding: 30px 0;
+      }
+      
+      .main-inner {
+        padding: 40px 15px;
+      }
+      
+      .post {
+        padding: 20px;
+      }
+      
+      .post-title {
+        font-size: 20px;
+      }
+    }
+  </style>
 </head>
 
 <body itemscope itemtype="http://schema.org/WebPage"{% if theme.motion.enable %} class="use-motion"{% endif %}>
