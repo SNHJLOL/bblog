@@ -1,0 +1,1157 @@
+
+<!DOCTYPE html><html lang="zh-CN">
+
+<head>
+  <meta charset="utf-8">
+  <meta name="hexo-theme" content="https://github.com/xaoxuu/hexo-theme-stellar/tree/1.33.1" theme-name="Stellar" theme-version="1.33.1">
+  
+  
+  <meta name="generator" content="Hexo 7.3.0">
+  <meta http-equiv='x-dns-prefetch-control' content='on' />
+  
+  <meta name="renderer" content="webkit">
+  <meta name="force-rendering" content="webkit">
+  <meta http-equiv="X-UA-Compatible" content="IE=Edge,chrome=1">
+  <meta name="HandheldFriendly" content="True" >
+  <meta name="mobile-web-app-capable" content="yes">
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="theme-color" media="(prefers-color-scheme: dark)" content="#000">
+  <meta name="theme-color" content="#f9fafb">
+  <title>API接入AI大模型处理文本 - JLog</title>
+
+  
+    <meta name="description" content="AI大模型API接入，轻松实现文本总结与分类">
+<meta property="og:type" content="article">
+<meta property="og:title" content="API接入AI大模型处理文本">
+<meta property="og:url" content="http://example.com/2026/03/30/12.AI%E5%A4%A7%E6%A8%A1%E5%9E%8BAPI%E6%8E%A5%E5%85%A5%EF%BC%8C%E8%BD%BB%E6%9D%BE%E5%AE%9E%E7%8E%B0%E6%96%87%E6%9C%AC%E6%80%BB%E7%BB%93%E4%B8%8E%E5%88%86%E7%B1%BB/">
+<meta property="og:site_name" content="JLog">
+<meta property="og:description" content="AI大模型API接入，轻松实现文本总结与分类">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="http://example.com/images/blog_image/image-20260319180154580.png">
+<meta property="og:image" content="http://example.com/images/blog_image/image-20260319180212899.png">
+<meta property="og:image" content="http://example.com/images/blog_image/image-20260319165322896.png">
+<meta property="og:image" content="http://example.com/images/blog_image/image-20260319175849841.png">
+<meta property="article:published_time" content="2026-03-30T06:30:00.000Z">
+<meta property="article:modified_time" content="2025-03-30T06:30:00.000Z">
+<meta property="article:author" content="-喜-">
+<meta property="article:tag" content="ai">
+<meta property="article:tag" content="py">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:image" content="http://example.com/images/blog_image/image-20260319180154580.png">
+  
+  
+  
+  <meta name="keywords" content="ai,py">
+
+  <!-- feed -->
+  
+
+  <link rel="stylesheet" href="/css/main.css?v=1.33.1">
+  
+    <link rel="stylesheet" href="/css/custom.css">
+  
+  <!-- Font Awesome图标库 -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+  
+    <link rel="shortcut icon" href="/icon/favicon.ico">
+  
+
+  
+
+  <script type="application/ld+json">{"@context":"https://schema.org","@type":"BlogPosting","author":{"@type":"Person","name":"-喜-","sameAs":[]},"dateCreated":"2026-03-30T14:30:00+08:00","dateModified":"2025-03-30T14:30:00+08:00","datePublished":"2026-03-30T14:30:00+08:00","description":"AI大模型API接入，轻松实现文本总结与分类","headline":"API接入AI大模型处理文本","mainEntityOfPage":{"@type":"WebPage","@id":"http://example.com/2026/03/30/12.AI%E5%A4%A7%E6%A8%A1%E5%9E%8BAPI%E6%8E%A5%E5%85%A5%EF%BC%8C%E8%BD%BB%E6%9D%BE%E5%AE%9E%E7%8E%B0%E6%96%87%E6%9C%AC%E6%80%BB%E7%BB%93%E4%B8%8E%E5%88%86%E7%B1%BB/"},"publisher":{"@type":"Organization","name":"-喜-","sameAs":[]},"url":"http://example.com/2026/03/30/12.AI%E5%A4%A7%E6%A8%A1%E5%9E%8BAPI%E6%8E%A5%E5%85%A5%EF%BC%8C%E8%BD%BB%E6%9D%BE%E5%AE%9E%E7%8E%B0%E6%96%87%E6%9C%AC%E6%80%BB%E7%BB%93%E4%B8%8E%E5%88%86%E7%B1%BB/","keywords":"ai, py","thumbnailUrl":"./../images/blog_image/image-20260319180154580.png","image":1}</script>
+  
+</head>
+<body><div id="l_cover"></div><div class="l_body content" id="start" layout="post" type="tech" ><aside class="l_left"><div class="sidebg"></div><div class="leftbar-container">
+
+
+<header class="header"><div class="logo-wrap"><a class="avatar" href="/"><div class="bg" style="opacity:0;background-image:url(https://gcore.jsdelivr.net/gh/cdn-x/placeholder@1.0.12/avatar/round/rainbow64@3x.webp);"></div><img no-lazy class="avatar" src="/images/avatar.jpg" onerror="javascript:this.classList.add('error');this.src='https://gcore.jsdelivr.net/gh/cdn-x/placeholder@1.0.12/image/2659360.svg';"></a><a class="title" href="/"><div class="main">JLog</div></a></div></header>
+
+<div class="nav-area">
+
+<nav class="menu dis-select"><a class="nav-item" title="主页" href="/" style="color:#e6397c"><i class="fas fa-home"></i></a><a class="nav-item" title="标签" href="/tags/" style="color:#e6397c"><i class="fas fa-tags"></i></a><a class="nav-item" title="历史文章" href="/archives/" style="color:#e6397c"><i class="fas fa-archive"></i></a><a class="nav-item" title="关于我" href="/about/" style="color:#e6397c"><i class="fas fa-user"></i></a></nav>
+</div>
+<div class="widgets">
+<div class="search-wrapper" id="search-wrapper"><form class="search-form"><a class="search-button" onclick="document.getElementById(&quot;search-input&quot;).focus();"><svg t="1705074644177" viewBox="0 0 1025 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" p-id="1560" width="200" height="200"><path d="M1008.839137 935.96571L792.364903 719.491476a56.783488 56.783488 0 0 0-80.152866 0 358.53545 358.53545 0 1 1 100.857314-335.166073 362.840335 362.840335 0 0 1-3.689902 170.145468 51.248635 51.248635 0 1 0 99.217358 26.444296 462.057693 462.057693 0 1 0-158.255785 242.303546l185.930047 185.725053a51.248635 51.248635 0 0 0 72.568068 0 51.248635 51.248635 0 0 0 0-72.978056z" p-id="1561"></path><path d="M616.479587 615.969233a50.428657 50.428657 0 0 0-61.498362-5.534852 174.655348 174.655348 0 0 1-177.525271 3.484907 49.403684 49.403684 0 0 0-58.833433 6.76482l-3.074918 2.869923a49.403684 49.403684 0 0 0 8.609771 78.10292 277.767601 277.767601 0 0 0 286.992355-5.739847 49.403684 49.403684 0 0 0 8.404776-76.667958z" p-id="1562"></path></svg></a><input type="text" class="search-input" id="search-input" placeholder="站内搜索"></form><div id="search-result"></div><div class="search-no-result">没有找到内容！</div></div>
+
+
+
+<widget class="widget-wrapper recent post-list"><div class="widget-header dis-select"><span class="name">最近更新</span></div><div class="widget-body fs14"><a class="item title" href="/2026/04/10/AI+%E8%87%AA%E5%8A%A8%E5%8C%96%E5%AE%9E%E6%88%98%E7%B3%BB%E5%88%97%EF%BC%883%EF%BC%89%EF%BC%9AAI%E8%A7%A3%E6%9E%90Excel%E6%95%B0%E6%8D%AE+%E8%87%AA%E5%8A%A8%E7%94%9F%E6%88%90%E5%B7%A5%E4%BD%9C%E5%91%A8%E6%8A%A5%EF%BC%8C%E5%91%8A%E5%88%AB%E6%89%8B%E5%8A%A8%E5%86%99%E6%80%BB%E7%BB%93/"><span class="title">AI解析Excel数据+自动生成工作周报</span></a><a class="item title" href="/2026/03/05/js/"><span class="title">WPS 在线文档自动化</span></a><a class="item title" href="/2026/03/02/9.%E7%82%B9%E8%B5%9E%E5%92%8C%E8%AF%84%E8%AE%BA%E6%9C%BA%E5%99%A8%E4%BA%BA/"><span class="title">点赞评论机器人</span></a><a class="item title" href="/2026/02/01/3.%E5%8F%AF%E8%A7%86%E5%8C%96%E7%BE%8E%E5%8C%96%E5%B7%A5%E5%85%B7/"><span class="title">可视化操作界面的批量美化工具</span></a><a class="item title" href="/2026/02/01/2.Excel%E7%BE%8E%E5%8C%96/"><span class="title">Python自动化美化</span></a><a class="item title" href="/2026/01/28/1.Excel%E5%90%88%E5%B9%B6%E4%B8%8E%E6%95%B0%E6%8D%AE%E6%B8%85%E6%B4%97/"><span class="title">Excel 文件批量合并与数据清洗</span></a><a class="item title" href="/2026/01/10/7.RPA-%E6%8A%93%E5%8F%96%E5%90%84%E7%A7%8D%E6%95%B0%E6%8D%AE/"><span class="title">抓取并整合各种数据</span></a><a class="item title" href="/2025/12/30/test/"><span class="title">测试笔记</span></a><a class="item title" href="/2025/10/15/10.RPA%E2%80%94%E2%80%94%E6%89%8B%E6%9C%BA%E8%87%AA%E5%8A%A8%E5%8C%96%E5%B9%B6%E5%8F%91%E9%80%81%E6%8F%90%E7%A4%BA%E6%B6%88%E6%81%AF%E5%88%B0%E9%92%89%E9%92%89/"><span class="title">手机自动化并发送提示消息</span></a><a class="item title" href="/2025/06/01/6.RPA-%E8%87%AA%E5%8A%A8%E9%93%BA%E8%B4%A7/"><span class="title">自动铺货</span></a></div></widget>
+</div>
+
+</div></aside><div class="l_main" id="main">
+
+
+
+
+
+<div class="article banner top">
+  <div class="content">
+    <div class="top bread-nav footnote"><div class="left"><div class="flex-row" id="breadcrumb"><a class="cap breadcrumb" href="/">主页</a>
+<span class="sep"></span><a class="cap breadcrumb" href="/">文章</a><span class="sep"></span><a class="cap breadcrumb-link" href="/categories/%E5%B7%A5%E4%BD%9C/">工作</a></div>
+<div class="flex-row" id="post-meta"><span class="text created">发布于：<time datetime="2026-03-30T06:30:00.000Z">2026-03-30</time></span><span class="sep updated"></span><span class="text updated">更新于：<time datetime="2025-03-30T06:30:00.000Z">2025-03-30</time></span></div></div></div>
+    
+    <div class="bottom only-title">
+      
+      <div class="text-area">
+        <h1 class="text title"><span>API接入AI大模型处理文本</span></h1>
+        
+      </div>
+    </div>
+    
+  </div>
+  </div><article class="md-text content"><h1 id="AI大模型API接入，轻松实现文本总结与分类"><a href="#AI大模型API接入，轻松实现文本总结与分类" class="headerlink" title="AI大模型API接入，轻松实现文本总结与分类"></a>AI大模型API接入，轻松实现文本总结与分类</h1><p>在当下职场和技术场景里，<strong>重复的文本处理工作</strong>几乎占据了大部分人的日常：整理会议纪要提炼核心、批量归类文档内容、筛选用户反馈关键词……手动处理不仅效率低，还容易出错，而借助主流AI大模型API，零基础也能快速搭建自动化文本处理工具，彻底解放双手。</p>
+<p>作为AI+自动化系列第一篇，本篇全程实操落地，不讲晦涩理论，从API申请、接口调用、参数配置，到文本总结、文本分类的完整代码实现，再到常见问题排查，一步步带你搞定大模型API基础接入，适合程序员、产品、运营、职场效率爱好者学习，看完就能直接用到工作中。</p>
+<hr>
+<h2 id="一、为什么选大模型API做文本处理？"><a href="#一、为什么选大模型API做文本处理？" class="headerlink" title="一、为什么选大模型API做文本处理？"></a>一、为什么选大模型API做文本处理？</h2><p>相比于本地部署大模型（硬件要求高、部署繁琐），直接调用第三方大模型API是<strong>成本最低、上手最快、最轻量化</strong>的AI落地方式，核心优势很明显：</p>
+<ul>
+<li><p><strong>零硬件门槛</strong>：不需要高配显卡、大内存服务器，普通电脑就能调用，适合个人和小型团队</p>
+</li>
+<li><p><strong>开箱即用</strong>：无需训练模型、优化参数，直接调用成熟接口，几分钟就能出效果</p>
+</li>
+<li><p><strong>功能精准</strong>：针对文本总结、分类这类NLP任务，通用大模型API已经足够精准，满足日常办公需求</p>
+</li>
+<li><p><strong>易集成自动化</strong>：接口调用逻辑固定，后续可直接对接RPA、工作流工具，实现全流程自动化</p>
+</li>
+</ul>
+<p>本次实操选用主流开源&#x2F;商用大模型API（比如通义千问、文心一言、DeepSeek、GPT-3.5-turbo，任选其一即可），接口逻辑通用，学会一种就能举一反三适配其他平台。</p>
+<h2 id="二、前期准备：API密钥申请与环境配置"><a href="#二、前期准备：API密钥申请与环境配置" class="headerlink" title="二、前期准备：API密钥申请与环境配置"></a>二、前期准备：API密钥申请与环境配置</h2><h3 id="2-1-申请大模型API密钥"><a href="#2-1-申请大模型API密钥" class="headerlink" title="2.1 申请大模型API密钥"></a>2.1 申请大模型API密钥</h3><p>以国内常用的XX大模型平台为例（替换成你实际选用的平台），申请流程超简单：</p>
+<ol>
+<li><p>注册平台账号，完成实名认证（个人认证即可，免费额度足够日常测试）</p>
+</li>
+<li><p>进入控制台-API密钥管理，新建密钥，保存好<strong>API Key</strong>和<strong>Secret Key&#x2F;接口地址</strong>（apikey建议保存到环境变量，避免暴露）</p>
+</li>
+<li><p>查看平台API文档，确认文本对话接口的调用格式、参数要求、免费额度限制</p>
+</li>
+</ol>
+<p><img src="/./../images/blog_image/image-20260319180154580.png" alt="image-20260319180154580"></p>
+<p><img src="/./../images/blog_image/image-20260319180212899.png" alt="image-20260319180212899"></p>
+<p><strong>新手小贴士</strong>：优先选有免费调用额度的平台，初期测试完全够用，避免产生额外费用；密钥建议存放在环境变量中，不要直接硬编码到代码里。</p>
+<h3 id="2-2-本地开发环境配置"><a href="#2-2-本地开发环境配置" class="headerlink" title="2.2 本地开发环境配置"></a>2.2 本地开发环境配置</h3><p>本次用Python做实操（语法简洁、库丰富，最适合API快速开发），只需安装一个依赖库即可：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 安装requests库，用于发送HTTP请求</span></span><br><span class="line">pip install requests</span><br></pre></td></tr></table></figure>
+
+<p>编辑器推荐：VS Code、PyCharm，随便一款都能满足需求，不需要复杂配置。</p>
+<h2 id="三、核心知识点：API调用基础逻辑"><a href="#三、核心知识点：API调用基础逻辑" class="headerlink" title="三、核心知识点：API调用基础逻辑"></a>三、核心知识点：API调用基础逻辑</h2><p>大模型文本类API本质是<strong>HTTP接口调用</strong>，核心流程固定：</p>
+<ol>
+<li><p>构造请求头：携带API密钥做身份验证</p>
+</li>
+<li><p>构造请求体：传入指令（prompt）、待处理文本、模型参数（温度、最大长度等）</p>
+</li>
+<li><p>发送POST请求到接口地址</p>
+</li>
+<li><p>接收返回结果，解析提取需要的文本总结&#x2F;分类内容</p>
+</li>
+</ol>
+<p>针对文本总结和分类，我们只需要定制不同的prompt指令，就能让模型输出对应结果，不需要改动核心调用代码。</p>
+<h2 id="四、实战一：AI文本总结功能实现"><a href="#四、实战一：AI文本总结功能实现" class="headerlink" title="四、实战一：AI文本总结功能实现"></a>四、实战一：AI文本总结功能实现</h2><h3 id="4-1-功能需求"><a href="#4-1-功能需求" class="headerlink" title="4.1 功能需求"></a>4.1 功能需求</h3><p>系统支持对各类长文本（如用户评价、公告、文章、报告等）进行自动摘要提取，快速提炼核心内容、关键信息与主要观点，降低人工阅读成本，提高信息处理效率。</p>
+<h3 id="4-2-核心代码实现"><a href="#4-2-核心代码实现" class="headerlink" title="4.2 核心代码实现"></a>4.2 核心代码实现</h3><p>（使用DeepSeek）</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> requests</span><br><span class="line"><span class="keyword">import</span> os</span><br><span class="line"></span><br><span class="line"><span class="comment"># ===================== DeepSeek API 专属配置 =====================</span></span><br><span class="line"><span class="comment"># 从环境变量读取密钥，严禁硬编码，避免泄露被盗刷</span></span><br><span class="line"><span class="comment"># 本地测试可临时赋值，正式使用务必改用环境变量</span></span><br><span class="line">DEEPSEEK_API_KEY = os.getenv(<span class="string">&quot;DEEPSEEK_API_KEY&quot;</span>)</span><br><span class="line">DEEPSEEK_API_URL = <span class="string">&quot;https://api.deepseek.com/v1/chat/completions&quot;</span></span><br><span class="line"><span class="comment"># 选用DeepSeek轻量高效模型，适合文本总结，成本低响应快</span></span><br><span class="line">MODEL_NAME = <span class="string">&quot;deepseek-chat&quot;</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># ===================== 文本总结核心函数 =====================</span></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">text_summarize</span>(<span class="params">input_text, summary_type=<span class="string">&quot;简短&quot;</span></span>):</span><br><span class="line">    <span class="string">&quot;&quot;&quot;</span></span><br><span class="line"><span class="string">    调用DeepSeek API实现文本总结</span></span><br><span class="line"><span class="string">    :param input_text: 待总结的原始文本</span></span><br><span class="line"><span class="string">    :param summary_type: 总结类型，可选「简短/详细」</span></span><br><span class="line"><span class="string">    :return: 纯文本总结结果，异常返回错误提示</span></span><br><span class="line"><span class="string">    &quot;&quot;&quot;</span></span><br><span class="line">    <span class="comment"># DeepSeek专属优化Prompt，指令更精准，强制输出纯总结，无多余话术</span></span><br><span class="line">    prompt = <span class="string">f&quot;&quot;&quot;请你严格按照要求完成文本<span class="subst">&#123;summary_type&#125;</span>总结，仅保留核心信息、关键数据和核心结论，语言凝练通顺，无冗余修饰、无额外解释、无开头结尾话术，直接输出总结内容即可，不要添加任何无关文字。</span></span><br><span class="line"><span class="string">    待总结文本：<span class="subst">&#123;input_text&#125;</span></span></span><br><span class="line"><span class="string">    &quot;&quot;&quot;</span></span><br><span class="line"></span><br><span class="line">    <span class="comment"># 请求头配置，DeepSeek仅需API Key做Bearer认证，无需Secret Key</span></span><br><span class="line">    headers = &#123;</span><br><span class="line">        <span class="string">&quot;Content-Type&quot;</span>: <span class="string">&quot;application/json&quot;</span>,</span><br><span class="line">        <span class="string">&quot;Authorization&quot;</span>: <span class="string">f&quot;Bearer <span class="subst">&#123;DEEPSEEK_API_KEY&#125;</span>&quot;</span></span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment"># 请求体参数，适配DeepSeek官方接口规范</span></span><br><span class="line">    data = &#123;</span><br><span class="line">        <span class="string">&quot;model&quot;</span>: MODEL_NAME,</span><br><span class="line">        <span class="string">&quot;messages&quot;</span>: [</span><br><span class="line">            &#123;<span class="string">&quot;role&quot;</span>: <span class="string">&quot;system&quot;</span>, <span class="string">&quot;content&quot;</span>: <span class="string">&quot;你是专业的文本处理助手，擅长精准提炼文本核心内容，输出简洁规范的总结&quot;</span>&#125;,</span><br><span class="line">            &#123;<span class="string">&quot;role&quot;</span>: <span class="string">&quot;user&quot;</span>, <span class="string">&quot;content&quot;</span>: prompt&#125;</span><br><span class="line">        ],</span><br><span class="line">        <span class="comment"># 温度值设为0.1，结果更稳定精准，适合总结、分类等理性任务</span></span><br><span class="line">        <span class="string">&quot;temperature&quot;</span>: <span class="number">0.1</span>,</span><br><span class="line">        <span class="comment"># 最大输出token数，控制总结长度，避免过长冗余</span></span><br><span class="line">        <span class="string">&quot;max_tokens&quot;</span>: <span class="number">600</span>,</span><br><span class="line">        <span class="comment"># 禁止模型输出重复内容</span></span><br><span class="line">        <span class="string">&quot;frequency_penalty&quot;</span>: <span class="number">0.0</span></span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">try</span>:</span><br><span class="line">        <span class="comment"># 发送POST请求，设置30秒超时，避免程序卡死</span></span><br><span class="line">        response = requests.post(</span><br><span class="line">            DEEPSEEK_API_URL,</span><br><span class="line">            headers=headers,</span><br><span class="line">            json=data,</span><br><span class="line">            timeout=<span class="number">30</span></span><br><span class="line">        )</span><br><span class="line">        <span class="comment"># 主动抛出HTTP请求异常</span></span><br><span class="line">        response.raise_for_status()</span><br><span class="line">        result = response.json()</span><br><span class="line">        <span class="comment"># 解析DeepSeek返回结果，提取纯总结内容</span></span><br><span class="line">        summary_content = result[<span class="string">&quot;choices&quot;</span>][<span class="number">0</span>][<span class="string">&quot;message&quot;</span>][<span class="string">&quot;content&quot;</span>].strip()</span><br><span class="line">        <span class="keyword">return</span> summary_content</span><br><span class="line"></span><br><span class="line">    <span class="keyword">except</span> requests.exceptions.RequestException <span class="keyword">as</span> e:</span><br><span class="line">        <span class="keyword">return</span> <span class="string">f&quot;DeepSeek API调用失败，网络/请求错误：<span class="subst">&#123;<span class="built_in">str</span>(e)&#125;</span>&quot;</span></span><br><span class="line">    <span class="keyword">except</span> KeyError:</span><br><span class="line">        <span class="keyword">return</span> <span class="string">&quot;结果解析失败，请检查API密钥是否有效、额度是否充足&quot;</span></span><br><span class="line">    <span class="keyword">except</span> Exception <span class="keyword">as</span> e:</span><br><span class="line">        <span class="keyword">return</span> <span class="string">f&quot;文本总结异常：<span class="subst">&#123;<span class="built_in">str</span>(e)&#125;</span>&quot;</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># ==================== 测试示例 =====================</span></span><br><span class="line"><span class="keyword">if</span> __name__ == <span class="string">&quot;__main__&quot;</span>:</span><br><span class="line">    test_article = <span class="string">&quot;&quot;&quot;</span></span><br><span class="line"><span class="string">    上海广播电视局携“上海视听”精品亮相第30届香港国际影视展</span></span><br><span class="line"><span class="string">第30届香港国际影视展（FILMART）于3月17日至20日在香港会议展览中心盛大举行，全球影视产业目光聚焦香江。</span></span><br><span class="line"><span class="string">作为亚洲规模最大的影视娱乐交易平台，上海市广播电视局连续第三年组织上海联合展台，延续“双一百”参展规模，组织本市超百家影视机构、推介超百个优秀视听项目，</span></span><br><span class="line"><span class="string">精心组织本市包括柠萌影视、耀客文化、兴格传媒、西嘻影业、克顿影视、上象星作、海棠果影业等影视制作头部企业和爱奇艺、腾讯、哔哩哔哩等网络平台参展，</span></span><br><span class="line"><span class="string">通过系列推介活动，充分展示上海影视企业的出海实力与“上海视听”精品的国际传播能力，使香港国际影视展成为上海影视企业高效链接国际市场的“直通车”，</span></span><br><span class="line"><span class="string">通过参展及举办相关活动快速打通覆盖多个国家和地区的传播网络，向世界展示上海作为中国影视创作高地与产业枢纽的蓬勃活力与创新实力。</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">    &quot;&quot;&quot;</span></span><br><span class="line"></span><br><span class="line">    <span class="comment"># 执行总结，可选summary_type=&quot;详细&quot;获取完整版总结</span></span><br><span class="line">    final_summary = text_summarize(test_article, summary_type=<span class="string">&quot;简短&quot;</span>)</span><br><span class="line">    <span class="built_in">print</span>(<span class="string">&quot;=&quot;</span> * <span class="number">30</span>)</span><br><span class="line">    <span class="built_in">print</span>(<span class="string">&quot;DeepSeek 文本总结结果&quot;</span>)</span><br><span class="line">    <span class="built_in">print</span>(<span class="string">&quot;=&quot;</span> * <span class="number">30</span>)</span><br><span class="line">    <span class="built_in">print</span>(final_summary)</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<h3 id="4-3-代码说明与效果演示"><a href="#4-3-代码说明与效果演示" class="headerlink" title="4.3 代码说明与效果演示"></a>4.3 代码说明与效果演示</h3><p>代码中重点参数解析：</p>
+<ul>
+<li><p><strong>temperature</strong>：设为0.1-0.3，避免模型天马行空，保证总结精准客观</p>
+</li>
+<li><p><strong>prompt指令</strong>：明确要求“直接输出结果，不要额外解释”，减少无效内容</p>
+</li>
+<li><p><strong>异常处理</strong>：加入超时、请求失败捕获，避免程序直接崩溃</p>
+</li>
+</ul>
+<p>测试效果输出示例：</p>
+<p> <img src="/./../images/blog_image/image-20260319165322896.png" alt="image-20260319165322896"></p>
+<h2 id="五、实战二：AI文本分类功能实现"><a href="#五、实战二：AI文本分类功能实现" class="headerlink" title="五、实战二：AI文本分类功能实现"></a>五、实战二：AI文本分类功能实现</h2><h3 id="5-1-功能需求"><a href="#5-1-功能需求" class="headerlink" title="5.1 功能需求"></a>5.1 功能需求</h3><p>构建用户评价智能处理功能，实现评价自动情绪判定、问题归因分类，输出标准化回复话术；同时支持评价问题统计分析，形成数据总结，助力产品与服务优化，降低同类问题重复发生。</p>
+<h3 id="5-2核心代码实现"><a href="#5-2核心代码实现" class="headerlink" title="5.2核心代码实现"></a>5.2核心代码实现</h3><p>（使用阿里云通义千问）</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> requests</span><br><span class="line"><span class="keyword">import</span> os</span><br><span class="line"></span><br><span class="line"><span class="comment"># 通义千问需配置API Key，本地测试可临时赋值，正式用环境变量</span></span><br><span class="line">DASHSCOPE_API_KEY = os.getenv(<span class="string">&quot;DASHSCOPE_API_KEY&quot;</span>)</span><br><span class="line"><span class="comment"># 通义千问官方聊天接口地址，固定无需修改</span></span><br><span class="line">QWEN_API_URL = <span class="string">&quot;https://dashscope.aliyuncs.com/api/v1/services/aigc/text-generation/generation&quot;</span></span><br><span class="line"><span class="comment"># 选用通义千问轻量版，响应快、成本低，适合文本分类任务</span></span><br><span class="line">MODEL_NAME = <span class="string">&quot;qwen-turbo&quot;</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># ===================== 文本分类核心函数 =====================</span></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">text_classify</span>(<span class="params">input_text, classify_tags1, classify_tags2</span>):</span><br><span class="line">    <span class="string">&quot;&quot;&quot;</span></span><br><span class="line"><span class="string">    调用通义千问API实现精准文本分类</span></span><br><span class="line"><span class="string">    :param input_text: 待分类原始文本</span></span><br><span class="line"><span class="string">    :param classify_tags: 自定义分类标签，用逗号分隔</span></span><br><span class="line"><span class="string">    :return: 唯一分类标签，异常返回直白报错提示</span></span><br><span class="line"><span class="string">    &quot;&quot;&quot;</span></span><br><span class="line">    <span class="comment"># 通义千问专属优化Prompt，严格限定输出规则，杜绝歧义</span></span><br><span class="line">    prompt = <span class="string">f&quot;&quot;&quot;请你严格完成文本分类任务，遵守以下规则：</span></span><br><span class="line"><span class="string">    1. 只能从下方给定的分类标签1中选择一个，禁止自主新增标签</span></span><br><span class="line"><span class="string">    2. 可以从下方给定的分类标签2中选择一个或多个，禁止自主新增标签</span></span><br><span class="line"><span class="string">    2. 只输出最终分类标签，不添加任何解释、修饰、标点和无关文字</span></span><br><span class="line"><span class="string">    3. 分类结果精准唯一，不模糊归类</span></span><br><span class="line"><span class="string">    可选分类标签1：<span class="subst">&#123;classify_tags1&#125;</span></span></span><br><span class="line"><span class="string">    可选分类标签2：<span class="subst">&#123;classify_tags2&#125;</span></span></span><br><span class="line"><span class="string">    待分类文本：<span class="subst">&#123;input_text&#125;</span></span></span><br><span class="line"><span class="string">    &quot;&quot;&quot;</span></span><br><span class="line"></span><br><span class="line">    <span class="comment"># 通义千问专属请求头配置，携带API Key做身份校验</span></span><br><span class="line">    headers = &#123;</span><br><span class="line">        <span class="string">&quot;Content-Type&quot;</span>: <span class="string">&quot;application/json&quot;</span>,</span><br><span class="line">        <span class="string">&quot;Authorization&quot;</span>: <span class="string">f&quot;Bearer <span class="subst">&#123;DASHSCOPE_API_KEY&#125;</span>&quot;</span></span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment"># 通义千问专属请求体格式，严格适配官方规范</span></span><br><span class="line">    data = &#123;</span><br><span class="line">        <span class="string">&quot;model&quot;</span>: MODEL_NAME,</span><br><span class="line">        <span class="string">&quot;input&quot;</span>: &#123;</span><br><span class="line">            <span class="string">&quot;messages&quot;</span>: [</span><br><span class="line">                &#123;<span class="string">&quot;role&quot;</span>: <span class="string">&quot;system&quot;</span>, <span class="string">&quot;content&quot;</span>: <span class="string">&quot;你是专业的文本分类助手，分类精准、输出规范，严格按照指令执行&quot;</span>&#125;,</span><br><span class="line">                &#123;<span class="string">&quot;role&quot;</span>: <span class="string">&quot;user&quot;</span>, <span class="string">&quot;content&quot;</span>: prompt&#125;</span><br><span class="line">            ]</span><br><span class="line">        &#125;,</span><br><span class="line">        <span class="string">&quot;parameters&quot;</span>: &#123;</span><br><span class="line">            <span class="comment"># 温度设为0.1，结果稳定不跑偏，适合分类这类理性任务</span></span><br><span class="line">            <span class="string">&quot;temperature&quot;</span>: <span class="number">0.1</span>,</span><br><span class="line">            <span class="comment"># 限制最大输出长度，仅输出分类标签即可</span></span><br><span class="line">            <span class="string">&quot;max_tokens&quot;</span>: <span class="number">50</span>,</span><br><span class="line">            <span class="comment"># 关闭流式输出，直接返回完整结果</span></span><br><span class="line">            <span class="string">&quot;stream&quot;</span>: <span class="literal">False</span></span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">try</span>:</span><br><span class="line">        <span class="comment"># 发送请求，设置30秒超时，避免程序卡死</span></span><br><span class="line">        response = requests.post(</span><br><span class="line">            QWEN_API_URL,</span><br><span class="line">            headers=headers,</span><br><span class="line">            json=data,</span><br><span class="line">            timeout=<span class="number">30</span></span><br><span class="line">        )</span><br><span class="line">        response.raise_for_status()</span><br><span class="line">        result = response.json()</span><br><span class="line">        <span class="comment"># 解析通义千问专属返回格式，提取分类结果</span></span><br><span class="line">        classify_result = result[<span class="string">&quot;output&quot;</span>][<span class="string">&quot;text&quot;</span>].strip()</span><br><span class="line">        <span class="keyword">return</span> classify_result</span><br><span class="line"></span><br><span class="line">    <span class="keyword">except</span> requests.exceptions.RequestException <span class="keyword">as</span> e:</span><br><span class="line">        <span class="keyword">return</span> <span class="string">f&quot;通义千问API调用失败，网络/请求错误：<span class="subst">&#123;<span class="built_in">str</span>(e)&#125;</span>&quot;</span></span><br><span class="line">    <span class="keyword">except</span> KeyError:</span><br><span class="line">        <span class="keyword">return</span> <span class="string">&quot;分类结果解析失败，请检查API Key是否有效、模型权限是否开通、额度是否充足&quot;</span></span><br><span class="line">    <span class="keyword">except</span> Exception <span class="keyword">as</span> e:</span><br><span class="line">        <span class="keyword">return</span> <span class="string">f&quot;文本分类异常：<span class="subst">&#123;<span class="built_in">str</span>(e)&#125;</span>&quot;</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># ===================== 本地测试调用 =====================</span></span><br><span class="line"><span class="keyword">if</span> __name__ == <span class="string">&quot;__main__&quot;</span>:</span><br><span class="line">    <span class="comment"># 自定义分类标签，可根据业务场景修改</span></span><br><span class="line">    tags1 = <span class="string">&quot;正面,中性,负面&quot;</span></span><br><span class="line">    tags2 = <span class="string">&quot;产品质量,客服服务,价格活动,物流配送,描述不符,使用体验,其他&quot;</span></span><br><span class="line">    <span class="comment"># 测试文本，替换为实际待分类内容</span></span><br><span class="line">    test_content = <span class="string">&quot;鞋子穿了七天撕裂了，就这质量，商家还在狡辩，客服态度也不好，真是一次糟糕的购物体验！&quot;</span></span><br><span class="line">    <span class="comment"># 执行分类</span></span><br><span class="line">    final_result = text_classify(test_content, tags1, tags2)</span><br><span class="line">    <span class="built_in">print</span>(final_result)</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<h3 id="5-3-分类效果说明"><a href="#5-3-分类效果说明" class="headerlink" title="5.3 分类效果说明"></a>5.3 分类效果说明</h3><p>测试文本输出结果</p>
+<p><img src="/./../images/blog_image/image-20260319175849841.png" alt="image-20260319175849841"></p>
+<p>prompt的核心技巧：<strong>必须限定分类范围，禁止模型自主新增标签</strong>，同时要求直接输出结果，这样分类准确率极高，完全满足批量文本处理需求。</p>
+<h2 id="六、常见问题与避坑指南"><a href="#六、常见问题与避坑指南" class="headerlink" title="六、常见问题与避坑指南"></a>六、常见问题与避坑指南</h2><p><strong>高频问题解决方案</strong></p>
+<ul>
+<li><p>密钥报错&#x2F;无权限：检查密钥是否正确、是否开启API权限、实名认证是否完成</p>
+</li>
+<li><p>请求超时：更换网络，或增加timeout时长，部分境外平台需要特殊网络配置</p>
+</li>
+<li><p>结果不准确：优化prompt，更明确指令要求，降低temperature参数</p>
+</li>
+<li><p>额度耗尽：切换免费额度平台，或充值小额费用，日常办公调用成本极低</p>
+</li>
+<li><p>代码报错：核对接口请求格式，不同平台的请求体字段略有差异，严格对照官方文档</p>
+</li>
+</ul>
+</article>
+<div class="article-footer">
+    <section id="license">
+      <div class="header"><span>许可协议</span></div>
+      <div class="body"><p>本文采用 <a target="_blank" rel="noopener" href="https://creativecommons.org/licenses/by-nc-sa/4.0/">署名-非商业性使用-相同方式共享 4.0 国际</a> 许可协议，转载请注明出处。</p>
+</div>
+    </section>
+    
+
+
+    <section id="share">
+      <div class="header"><span>分享文章</span></div>
+      <div class="body">
+        <div class="link"><input class="copy-area" readonly="true" id="copy-link" value="http://example.com/2026/03/30/12.AI%E5%A4%A7%E6%A8%A1%E5%9E%8BAPI%E6%8E%A5%E5%85%A5%EF%BC%8C%E8%BD%BB%E6%9D%BE%E5%AE%9E%E7%8E%B0%E6%96%87%E6%9C%AC%E6%80%BB%E7%BB%93%E4%B8%8E%E5%88%86%E7%B1%BB/" /></div>
+        <div class="social-wrap dis-select"><a class="social share-item wechat" onclick="util.toggle(&quot;qrcode-wechat&quot;)"><img  src="https://gcore.jsdelivr.net/gh/cdn-x/placeholder@1.0.12/social/b32ef3da1162a.svg" /></a><a class="social share-item weibo" target="_blank" rel="external nofollow noopener noreferrer" href="https://service.weibo.com/share/share.php?url=http://example.com/2026/03/30/12.AI%E5%A4%A7%E6%A8%A1%E5%9E%8BAPI%E6%8E%A5%E5%85%A5%EF%BC%8C%E8%BD%BB%E6%9D%BE%E5%AE%9E%E7%8E%B0%E6%96%87%E6%9C%AC%E6%80%BB%E7%BB%93%E4%B8%8E%E5%88%86%E7%B1%BB/&title=API接入AI大模型处理文本 - JLog&pics=./../images/blog_image/image-20260319180154580.png&summary=AI大模型API接入，轻松实现文本总结与分类"><img  src="https://gcore.jsdelivr.net/gh/cdn-x/placeholder@1.0.12/social/80c07e4dbb303.svg" /></a><a class="social share-item email" href="mailto:?subject=API接入AI大模型处理文本 - JLog&amp;body=http://example.com/2026/03/30/12.AI%E5%A4%A7%E6%A8%A1%E5%9E%8BAPI%E6%8E%A5%E5%85%A5%EF%BC%8C%E8%BD%BB%E6%9D%BE%E5%AE%9E%E7%8E%B0%E6%96%87%E6%9C%AC%E6%80%BB%E7%BB%93%E4%B8%8E%E5%88%86%E7%B1%BB/"><img  src="https://gcore.jsdelivr.net/gh/cdn-x/placeholder@1.0.12/social/a1b00e20f425d.svg" /></a><a class="social share-item link" onclick="util.copy(&quot;copy-link&quot;, &quot;复制成功&quot;)"><img  src="https://gcore.jsdelivr.net/gh/cdn-x/placeholder@1.0.12/social/8411ed322ced6.svg" /></a></div>
+        
+        <div class="qrcode" id="qrcode-wechat" style="opacity:0;height:0">
+          <img src="https://api.qrserver.com/v1/create-qr-code/?size=256x256&data=http://example.com/2026/03/30/12.AI%E5%A4%A7%E6%A8%A1%E5%9E%8BAPI%E6%8E%A5%E5%85%A5%EF%BC%8C%E8%BD%BB%E6%9D%BE%E5%AE%9E%E7%8E%B0%E6%96%87%E6%9C%AC%E6%80%BB%E7%BB%93%E4%B8%8E%E5%88%86%E7%B1%BB/"/>
+        </div>
+        
+      </div>
+    </section>
+    </div>
+
+<div class="related-wrap" id="read-next"><section class="body"><div class="item" id="prev"><div class="note">较新文章</div><a href="/2026/04/10/AI+%E8%87%AA%E5%8A%A8%E5%8C%96%E5%AE%9E%E6%88%98%E7%B3%BB%E5%88%97%EF%BC%883%EF%BC%89%EF%BC%9AAI%E8%A7%A3%E6%9E%90Excel%E6%95%B0%E6%8D%AE+%E8%87%AA%E5%8A%A8%E7%94%9F%E6%88%90%E5%B7%A5%E4%BD%9C%E5%91%A8%E6%8A%A5%EF%BC%8C%E5%91%8A%E5%88%AB%E6%89%8B%E5%8A%A8%E5%86%99%E6%80%BB%E7%BB%93/">AI解析Excel数据+自动生成工作周报</a></div><div class="item" id="next"><div class="note">较早文章</div><a href="/2026/03/28/11.%E5%BA%94%E7%94%A8%E8%A7%A6%E5%8F%91%E5%99%A8/">应用触发器</a></div></section></div>
+
+
+
+
+
+
+<footer class="page-footer footnote"><hr><div class="text"><p>本站由 <a href="/">-喜-</a> 使用 <a target="_blank" rel="noopener" href="https://github.com/xaoxuu/hexo-theme-stellar/tree/1.33.1">Stellar 1.33.1</a> 主题创建。<br>本博客所有文章除特别声明外，均采用 <a target="_blank" rel="noopener" href="https://creativecommons.org/licenses/by-nc-sa/4.0/">CC BY-NC-SA 4.0</a> 许可协议，转载请注明出处。</p>
+</div></footer>
+<div class="main-mask" onclick="sidebar.dismiss()"></div></div><aside class="l_right"><div class="widgets">
+
+
+
+<widget class="widget-wrapper toc" id="data-toc" collapse="false"><div class="widget-header dis-select"><span class="name">本文目录</span><a class="cap-action" onclick="sidebar.toggleTOC()" ><svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24"><path fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6h11m-11 6h11m-11 6h11M4 6h1v4m-1 0h2m0 8H4c0-1 2-2 2-3s-1-1.5-2-1"/></svg></a></div><div class="widget-body"><ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#AI%E5%A4%A7%E6%A8%A1%E5%9E%8BAPI%E6%8E%A5%E5%85%A5%EF%BC%8C%E8%BD%BB%E6%9D%BE%E5%AE%9E%E7%8E%B0%E6%96%87%E6%9C%AC%E6%80%BB%E7%BB%93%E4%B8%8E%E5%88%86%E7%B1%BB"><span class="toc-text">AI大模型API接入，轻松实现文本总结与分类</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%B8%80%E3%80%81%E4%B8%BA%E4%BB%80%E4%B9%88%E9%80%89%E5%A4%A7%E6%A8%A1%E5%9E%8BAPI%E5%81%9A%E6%96%87%E6%9C%AC%E5%A4%84%E7%90%86%EF%BC%9F"><span class="toc-text">一、为什么选大模型API做文本处理？</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%BA%8C%E3%80%81%E5%89%8D%E6%9C%9F%E5%87%86%E5%A4%87%EF%BC%9AAPI%E5%AF%86%E9%92%A5%E7%94%B3%E8%AF%B7%E4%B8%8E%E7%8E%AF%E5%A2%83%E9%85%8D%E7%BD%AE"><span class="toc-text">二、前期准备：API密钥申请与环境配置</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#2-1-%E7%94%B3%E8%AF%B7%E5%A4%A7%E6%A8%A1%E5%9E%8BAPI%E5%AF%86%E9%92%A5"><span class="toc-text">2.1 申请大模型API密钥</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-2-%E6%9C%AC%E5%9C%B0%E5%BC%80%E5%8F%91%E7%8E%AF%E5%A2%83%E9%85%8D%E7%BD%AE"><span class="toc-text">2.2 本地开发环境配置</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%B8%89%E3%80%81%E6%A0%B8%E5%BF%83%E7%9F%A5%E8%AF%86%E7%82%B9%EF%BC%9AAPI%E8%B0%83%E7%94%A8%E5%9F%BA%E7%A1%80%E9%80%BB%E8%BE%91"><span class="toc-text">三、核心知识点：API调用基础逻辑</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%9B%9B%E3%80%81%E5%AE%9E%E6%88%98%E4%B8%80%EF%BC%9AAI%E6%96%87%E6%9C%AC%E6%80%BB%E7%BB%93%E5%8A%9F%E8%83%BD%E5%AE%9E%E7%8E%B0"><span class="toc-text">四、实战一：AI文本总结功能实现</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#4-1-%E5%8A%9F%E8%83%BD%E9%9C%80%E6%B1%82"><span class="toc-text">4.1 功能需求</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#4-2-%E6%A0%B8%E5%BF%83%E4%BB%A3%E7%A0%81%E5%AE%9E%E7%8E%B0"><span class="toc-text">4.2 核心代码实现</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#4-3-%E4%BB%A3%E7%A0%81%E8%AF%B4%E6%98%8E%E4%B8%8E%E6%95%88%E6%9E%9C%E6%BC%94%E7%A4%BA"><span class="toc-text">4.3 代码说明与效果演示</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%BA%94%E3%80%81%E5%AE%9E%E6%88%98%E4%BA%8C%EF%BC%9AAI%E6%96%87%E6%9C%AC%E5%88%86%E7%B1%BB%E5%8A%9F%E8%83%BD%E5%AE%9E%E7%8E%B0"><span class="toc-text">五、实战二：AI文本分类功能实现</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#5-1-%E5%8A%9F%E8%83%BD%E9%9C%80%E6%B1%82"><span class="toc-text">5.1 功能需求</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#5-2%E6%A0%B8%E5%BF%83%E4%BB%A3%E7%A0%81%E5%AE%9E%E7%8E%B0"><span class="toc-text">5.2核心代码实现</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#5-3-%E5%88%86%E7%B1%BB%E6%95%88%E6%9E%9C%E8%AF%B4%E6%98%8E"><span class="toc-text">5.3 分类效果说明</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%85%AD%E3%80%81%E5%B8%B8%E8%A7%81%E9%97%AE%E9%A2%98%E4%B8%8E%E9%81%BF%E5%9D%91%E6%8C%87%E5%8D%97"><span class="toc-text">六、常见问题与避坑指南</span></a></li></ol></li></ol></div><div class="widget-footer"><a class="top" onclick="util.scrollTop()"><svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24"><!-- Icon from Solar by 480 Design - https://creativecommons.org/licenses/by/4.0/ --><g fill="none" stroke="currentColor" stroke-linecap="round" stroke-width="1.5"><path stroke-linejoin="round" d="m9 15.5l3-3l3 3m-6-4l3-3l3 3"/><path d="M7 3.338A9.95 9.95 0 0 1 12 2c5.523 0 10 4.477 10 10s-4.477 10-10 10S2 17.523 2 12c0-1.821.487-3.53 1.338-5"/></g></svg><span>回到顶部</span></a></div></widget>
+</div></aside><div class='float-panel'>
+  <button type='button' style='display:none' class='laptop-only rightbar-toggle mobile' onclick='sidebar.rightbar()'>
+    <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24"><path fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6h11m-11 6h11m-11 6h11M4 6h1v4m-1 0h2m0 8H4c0-1 2-2 2-3s-1-1.5-2-1"/></svg>
+  </button>
+  <button type='button' style='display:none' class='mobile-only leftbar-toggle mobile' onclick='sidebar.leftbar()'>
+    <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="1.5"><path d="M2 11c0-3.771 0-5.657 1.172-6.828C4.343 3 6.229 3 10 3h4c3.771 0 5.657 0 6.828 1.172C22 5.343 22 7.229 22 11v2c0 3.771 0 5.657-1.172 6.828C19.657 21 17.771 21 14 21h-4c-3.771 0-5.657 0-6.828-1.172C2 18.657 2 16.771 2 13z"/><path id="sep" stroke-linecap="round" d="M5.5 10h6m-5 4h4m4.5 7V3"/></g></svg>
+  </button>
+</div>
+</div><div class="scripts">
+
+
+<script type="text/javascript">
+  window.canonical = {"closeEnable":true,"closeText":"关闭提示","originalHost":null,"officialHosts":["localhost"],"encoded":""};
+  window.canonical["param"] = {"permalink":"http://example.com/2026/03/30/12.AI%E5%A4%A7%E6%A8%A1%E5%9E%8BAPI%E6%8E%A5%E5%85%A5%EF%BC%8C%E8%BD%BB%E6%9D%BE%E5%AE%9E%E7%8E%B0%E6%96%87%E6%9C%AC%E6%80%BB%E7%BB%93%E4%B8%8E%E5%88%86%E7%B1%BB/","checklink":"/js/plugins/video.js"};
+  // Fix: Ensure page is at the correct top position on data load
+  if (history.scrollRestoration) {
+    history.scrollRestoration = 'auto';
+  }
+  (function() {
+    const scrollHandler = () => {
+      const wikiCover = document.querySelector('#l_cover .l_cover.wiki');
+      const startEl = document.getElementById('start');
+      if (wikiCover && startEl) {
+        window.scrollTo(0, startEl.offsetTop);
+      } else {
+        window.scrollTo(0, 0);
+      }
+    };
+    if (document.readyState !== 'loading') scrollHandler();
+    else document.addEventListener('DOMContentLoaded', scrollHandler);
+  })();
+  const ctx = {
+    date_suffix: {
+      just: `刚刚`,
+      min: `分钟前`,
+      hour: `小时前`,
+      day: `天前`,
+    },
+    root : `/`,
+    tag_plugins: {
+      chat: Object.assign({"api":"https://siteinfo.listentothewind.cn/api/v1"}),
+    }
+  };
+
+  // required plugins (only load if needs)
+  if (`local_search`) {
+    ctx.search = {};
+    ctx.search.service = `local_search`;
+    if (ctx.search.service == 'local_search') {
+      let service_obj = Object.assign({}, `{"field":"all","path":"/search.json","content":true,"skip_search":null,"sort":"-date"}`);
+      ctx.search[ctx.search.service] = service_obj;
+    }
+  }
+  const def = {
+    avatar: `https://gcore.jsdelivr.net/gh/cdn-x/placeholder@1.0.12/avatar/round/3442075.svg`,
+    cover: `https://gcore.jsdelivr.net/gh/cdn-x/placeholder@1.0.12/cover/76b86c0226ffd.svg`,
+    loading: `https://api.iconify.design/eos-icons:three-dots-loading.svg?color=%231cd0fd`,
+  };
+  const deps = {
+    jquery: `https://gcore.jsdelivr.net/npm/jquery@3.7/dist/jquery.min.js`,
+    marked: `https://gcore.jsdelivr.net/npm/marked@13.0/lib/marked.umd.min.js`,
+    lazyload: `/%5Bobject%20Object%5D`
+  }
+</script>
+
+<script type="text/javascript">
+  
+  function RunItem() {
+    this.list = []; // 存放回调函数
+    this.start = () => {
+      for (var i = 0; i < this.list.length; i++) {
+        this.list[i].run();
+      }
+    };
+    this.push = (fn, name, setRequestAnimationFrame = true) => {
+      let myfn = fn
+      if (setRequestAnimationFrame) {
+        myfn = () => {
+          utils.requestAnimationFrame(fn)
+        }
+      }
+      var f = new Item(myfn, name);
+      this.list.push(f);
+    };
+    this.remove = (name) => {
+      // 倒序遍历避免 splice 后的索引问题
+      for (let index = this.list.length - 1; index >= 0; index--) {
+        const e = this.list[index];
+        if (e.name === name) {
+          this.list.splice(index, 1);
+        }
+      }
+    }
+    // 构造一个可以run的对象
+    function Item(fn, name) {
+      // 函数名称
+      this.name = name || fn.name;
+      // run方法
+      this.run = () => {
+        try {
+          fn()
+        } catch (error) {
+          console.log(error);
+        }
+      };
+    }
+  }
+
+  const utils = {
+    // 已加载样式缓存
+    _loadedStyles: new Set(),
+
+    // 懒加载 css https://github.com/filamentgroup/loadCSS
+    css: (href, before, media, attributes) => {
+      // 如果样式已加载，直接返回 null
+      if (utils._loadedStyles.has(href)) {
+        return null;
+      }
+      var doc = window.document;
+      var ss = doc.createElement("link");
+      var ref;
+      if (before) {
+        ref = before;
+      } else {
+        var refs = (doc.body || doc.getElementsByTagName("head")[0]).childNodes;
+        ref = refs[refs.length - 1];
+      }
+      var sheets = doc.styleSheets;
+      if (attributes) {
+        for (var attributeName in attributes) {
+          if (attributes.hasOwnProperty(attributeName)) {
+            ss.setAttribute(attributeName, attributes[attributeName]);
+          }
+        }
+      }
+      ss.rel = "stylesheet";
+      ss.href = href;
+      ss.media = "only x";
+      // 标记样式为已加载 (在创建元素后立即标记，防止重复创建)
+      utils._loadedStyles.add(href);
+      function ready(cb) {
+        if (doc.body) {
+          return cb();
+        }
+        setTimeout(function () {
+          ready(cb);
+        });
+      }
+      ready(function () {
+        ref.parentNode.insertBefore(ss, before ? ref : ref.nextSibling);
+      });
+      var onloadcssdefined = function (cb) {
+        var resolvedHref = ss.href;
+        var i = sheets.length;
+        while (i--) {
+          if (sheets[i].href === resolvedHref) {
+            return cb();
+          }
+        }
+        setTimeout(function () {
+          onloadcssdefined(cb);
+        });
+      };
+      function loadCB() {
+        if (ss.addEventListener) {
+          ss.removeEventListener("load", loadCB);
+        }
+        ss.media = media || "all";
+      }
+      if (ss.addEventListener) {
+        ss.addEventListener("load", loadCB);
+      }
+      ss.onloadcssdefined = onloadcssdefined;
+      onloadcssdefined(loadCB);
+      return ss;
+    },
+
+    // 已加载脚本缓存
+    _loadedScripts: new Set(),
+
+    // 已加载元素缓存 (使用 WeakSet 追踪元素实例,避免 PJAX 导航时的状态混淆)
+    _loadedElements: new WeakSet(),
+
+    js: (src, opt) => new Promise((resolve, reject) => {
+      if (src.startsWith('/')) {
+        src = ctx.root + src.substring(1);
+      }
+      // 如果脚本已加载，直接返回
+      if (utils._loadedScripts.has(src)) {
+        resolve();
+        return;
+      }
+      var script = document.createElement('script');
+      script.src = src;
+      if (opt) {
+        for (let key of Object.keys(opt)) {
+          script[key] = opt[key]
+        }
+      } else {
+        // 默认异步，如果需要同步，第二个参数传入 {} 即可
+        script.async = true
+      }
+      script.onerror = reject
+      script.onload = script.onreadystatechange = function () {
+        const loadState = this.readyState
+        if (loadState && loadState !== 'loaded' && loadState !== 'complete') return
+        script.onload = script.onreadystatechange = null
+        utils._loadedScripts.add(src);
+        resolve()
+      }
+      document.head.appendChild(script)
+    }),
+
+    // PJAX 事件监听器管理
+    _pjaxListeners: new Set(),
+    
+    jq: (fn, pjax = true) => {
+      if (typeof jQuery === 'undefined') {
+        utils.js(deps.jquery).then(fn)
+      } else {
+        fn()
+      }
+      if (pjax && !fn._pjax_registered) {
+        document.addEventListener('pjax:complete', fn);
+        fn._pjax_registered = true;
+        utils._pjaxListeners.add(fn); // 追踪监听器以便清理
+      }
+    },
+    
+    // 清理所有 PJAX 事件监听器
+    cleanupPjaxListeners: () => {
+      utils._pjaxListeners.forEach(fn => {
+        document.removeEventListener('pjax:complete', fn);
+        fn._pjax_registered = false;
+      });
+      utils._pjaxListeners.clear();
+    },
+
+    onLoading: (el) => {
+      if (el) {
+        if ($(el).find('.loading-wrap').length === 0){
+          $(el).append('<div class="loading-wrap"><svg xmlns="http://www.w3.org/2000/svg" width="2em" height="2em" preserveAspectRatio="xMidYMid meet" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-linecap="round" stroke-width="2"><path stroke-dasharray="60" stroke-dashoffset="60" stroke-opacity=".3" d="M12 3C16.9706 3 21 7.02944 21 12C21 16.9706 16.9706 21 12 21C7.02944 21 3 16.9706 3 12C3 7.02944 7.02944 3 12 3Z"><animate fill="freeze" attributeName="stroke-dashoffset" dur="1.3s" values="60;0"/></path><path stroke-dasharray="15" stroke-dashoffset="15" d="M12 3C16.9706 3 21 7.02944 21 12"><animate fill="freeze" attributeName="stroke-dashoffset" dur="0.3s" values="15;0"/><animateTransform attributeName="transform" dur="1.5s" repeatCount="indefinite" type="rotate" values="0 12 12;360 12 12"/></path></g></svg></div>');
+        }
+      }
+    },
+    onLoadSuccess: (el) => {
+      if (el) {
+        $(el).find('.loading-wrap').remove();
+      }
+    },
+    onLoadFailure: (el) => {
+      if (el) {
+        $(el).find('.loading-wrap svg').remove();
+        $(el).find('.loading-wrap').append('<svg xmlns="http://www.w3.org/2000/svg" width="2em" height="2em" preserveAspectRatio="xMidYMid meet" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"><path stroke-dasharray="60" stroke-dashoffset="60" d="M12 3L21 20H3L12 3Z"><animate fill="freeze" attributeName="stroke-dashoffset" dur="0.5s" values="60;0"/></path><path stroke-dasharray="6" stroke-dashoffset="6" d="M12 10V14"><animate fill="freeze" attributeName="stroke-dashoffset" begin="0.6s" dur="0.2s" values="6;0"/></path></g><circle cx="12" cy="17" r="1" fill="currentColor" fill-opacity="0"><animate fill="freeze" attributeName="fill-opacity" begin="0.8s" dur="0.4s" values="0;1"/></circle></svg>');
+        $(el).find('.loading-wrap').addClass('error');
+      }
+    },
+    request: (el, url, callback, onFailure) => {
+      // 检查元素实例是否已加载 (而不是检查属性)
+      if (el && utils._loadedElements.has(el)) {
+        return;
+      }
+      const maxRetry = 3;
+      let retryCount = 0;
+
+      return new Promise((resolve, reject) => {
+        const load = () => {
+          utils.onLoading?.(el);
+
+          let timedOut = false;
+          const timeout = setTimeout(() => {
+            timedOut = true;
+            console.warn('[request] 超时:', url);
+
+            if (++retryCount >= maxRetry) {
+              utils.onLoadFailure?.(el);
+              onFailure?.();
+              reject('请求超时');
+            } else {
+              setTimeout(load, 1000);
+            }
+          }, 5000);
+
+          fetch(url).then(resp => {
+            if (timedOut) return;
+            clearTimeout(timeout);
+
+            if (!resp.ok) throw new Error('响应失败');
+            return resp;
+          }).then(data => {
+            if (timedOut) return;
+            // 标记元素实例为已加载
+            if (el) utils._loadedElements.add(el);
+            utils.onLoadSuccess?.(el);
+            callback(data);
+            resolve(data);
+          }).catch(err => {
+            clearTimeout(timeout);
+            console.warn('[request] 错误:', err);
+
+            if (++retryCount >= maxRetry) {
+              utils.onLoadFailure?.(el);
+              onFailure?.();
+              reject(err);
+            } else {
+              setTimeout(load, 1000);
+            }
+          });
+        };
+
+        load();
+      });
+    },
+    requestWithoutLoading: (url, options = {}, maxRetry = 2, timeout = 5000) => {
+      return new Promise((resolve, reject) => {
+        let retryCount = 0;
+
+        const tryRequest = () => {
+          let timedOut = false;
+          const timer = setTimeout(() => {
+            timedOut = true;
+            if (++retryCount > maxRetry) reject('timeout');
+            else tryRequest();
+          }, timeout);
+
+          fetch(url, options)
+            .then(resp => {
+              clearTimeout(timer);
+              if (!resp.ok) throw new Error('bad response');
+              resolve(resp);
+            })
+            .catch(err => {
+              clearTimeout(timer);
+              if (++retryCount > maxRetry) reject(err);
+              else setTimeout(tryRequest, 500);
+            });
+        };
+
+        tryRequest();
+      });
+    },
+    /********************** requestAnimationFrame ********************************/
+    // 1、requestAnimationFrame 会把每一帧中的所有 DOM 操作集中起来，在一次重绘或回流中就完成，并且重绘或回流的时间间隔紧紧跟随浏览器的刷新频率，一般来说，这个频率为每秒60帧。
+    // 2、在隐藏或不可见的元素中，requestAnimationFrame 将不会进行重绘或回流，这当然就意味着更少的的 cpu，gpu 和内存使用量。
+    requestAnimationFrame: (fn) => {
+      if (!window.requestAnimationFrame) {
+        window.requestAnimationFrame = window.requestAnimationFrame || window.mozRequestAnimationFrame || window.webkitRequestAnimationFrame;
+      }
+      window.requestAnimationFrame(fn)
+    },
+    dark: {},
+
+    // 插件初始化管理器 - 统一处理 DOMContentLoaded 和 pjax:complete 事件
+    _pluginInitializers: [],
+    _pluginCleanups: new Map(), // 存储每个插件的清理函数
+    
+    initPlugin: (initFn, name, options = {}) => {
+      if (!initFn || typeof initFn !== 'function') return;
+      
+      // 避免重复注册
+      const pluginName = name || initFn.name;
+      if (utils._pluginInitializers.some(p => p.name === pluginName)) return;
+      
+      // 包装初始化函数，添加防重复执行的保护
+      const wrappedInit = () => {
+        try {
+          // 在执行前先清理旧的资源
+          if (utils._pluginCleanups.has(pluginName)) {
+            const cleanup = utils._pluginCleanups.get(pluginName);
+            if (typeof cleanup === 'function') {
+              cleanup();
+            }
+          }
+          
+          // 执行初始化，可能返回清理函数
+          const cleanup = initFn();
+          
+          // 如果初始化函数返回了清理函数，保存它
+          if (typeof cleanup === 'function') {
+            utils._pluginCleanups.set(pluginName, cleanup);
+          }
+        } catch (error) {
+          console.error(`[Plugin ${pluginName}] 初始化失败:`, error);
+        }
+      };
+      
+      utils._pluginInitializers.push({ 
+        fn: wrappedInit, 
+        name: pluginName,
+        options: options 
+      });
+      
+      // 如果 DOM 已经加载完成，立即执行
+      if (document.readyState === 'complete' || document.readyState === 'interactive') {
+        wrappedInit();
+      } else {
+        // 否则等待 DOMContentLoaded
+        window.addEventListener('DOMContentLoaded', wrappedInit, { once: true });
+      }
+    },
+
+    // 重新初始化所有插件（用于 PJAX 等场景）
+    reinitPlugins: () => {
+      utils._pluginInitializers.forEach(plugin => {
+        // 跳过标记为不需要重新初始化的插件
+        if (plugin.options.skipReinit) return;
+        
+        try {
+          plugin.fn();
+        } catch (error) {
+          console.error(`[Plugin ${plugin.name}] 重新初始化失败:`, error);
+        }
+      });
+    },
+    
+    // 清理所有插件资源
+    cleanupPlugins: () => {
+      utils._pluginCleanups.forEach((cleanup, name) => {
+        try {
+          cleanup();
+        } catch (error) {
+          console.error(`[Plugin ${name}] 清理失败:`, error);
+        }
+      });
+      utils._pluginCleanups.clear();
+    },
+    
+    // 清理所有资源（用于页面卸载或重置）
+    cleanupAll: () => {
+      utils.cleanupPlugins();
+      utils.cleanupPjaxListeners();
+    },
+  };
+
+  // 自动处理 PJAX 事件
+  document.addEventListener('pjax:before', () => {
+    // 在导航前清理旧的 PJAX 监听器（如果需要重新注册）
+    // 注意：这里不清理，因为监听器应该是持久的
+    // utils.cleanupPjaxListeners();
+  });
+  
+  document.addEventListener('pjax:complete', () => {
+    utils.reinitPlugins();
+  });
+
+  // utils.dark.mode 当前模式 dark or light
+  // utils.dark.toggle() 暗黑模式触发器
+  // utils.dark.push(callBack[,"callBackName"]) 传入触发器回调函数
+  utils.dark.method = {
+    toggle: new RunItem(),
+  };
+  utils.dark = Object.assign(utils.dark, {
+    push: utils.dark.method.toggle.push,
+  });
+</script>
+<script>
+  const sidebar = {
+    leftbar: () => {
+      if (l_body) {
+        l_body.toggleAttribute('leftbar');
+        l_body.removeAttribute('rightbar');
+      }
+    },
+    rightbar: () => {
+      if (l_body) {
+        l_body.toggleAttribute('rightbar');
+        l_body.removeAttribute('leftbar');
+      }
+    },
+    dismiss: () => {
+      if (l_body) {
+        l_body.removeAttribute('leftbar');
+        l_body.removeAttribute('rightbar');
+      }
+    },
+    toggleTOC: () => {
+      document.querySelector('#data-toc').classList.toggle('collapse');
+    }
+  }
+</script>
+<script type="text/javascript">
+  (() => {
+    const tagSwitchers = document.querySelectorAll('.tag-subtree.parent-tag > a > .tag-switcher-wrapper')
+    for (const tagSwitcher of tagSwitchers) {
+      tagSwitcher.addEventListener('click', (e) => {
+        const parent = e.target.closest('.tag-subtree.parent-tag')
+        parent.classList.toggle('expanded')
+        e.preventDefault()
+      })
+    }
+
+    // Get active tag from query string, then activate it.
+    const urlParams = new URLSearchParams(window.location.search)
+    const activeTag = urlParams.get('tag')
+    if (activeTag) {
+      let tag = document.querySelector(`.tag-subtree[data-tag="${activeTag}"]`)
+      if (tag) {
+        tag.querySelector('a').classList.add('active')
+        
+        while (tag) {
+          tag.classList.add('expanded')
+          tag = tag.parentElement.closest('.tag-subtree.parent-tag')
+        }
+      }
+    }
+  })()
+</script>
+
+<script async src="https://gcore.jsdelivr.net/npm/vanilla-lazyload@19.1/dist/lazyload.min.js"></script>
+<script>
+  // https://www.npmjs.com/package/vanilla-lazyload
+  // Set the options globally
+  // to make LazyLoad self-initialize
+  window.lazyLoadOptions = {
+    elements_selector: ".lazy",
+    callback_loaded: (el) => {
+      el.classList.add('loaded');
+      const wrapper = el.closest('.lazy-box');
+      const icon = wrapper?.querySelector('.lazy-icon');
+      if (icon) icon.remove();
+    }
+  };
+  // Listen to the initialization event
+  // and get the instance of LazyLoad
+  window.addEventListener(
+    "LazyLoad::Initialized",
+    function (event) {
+      window.lazyLoadInstance = event.detail.instance;
+    },
+    false
+  );
+  document.addEventListener('DOMContentLoaded', function () {
+    window.lazyLoadInstance?.update();
+  });
+
+  window.wrapLazyloadImages = (container) => {
+    if (typeof container === 'string') {
+      container = document.querySelector(container);
+    }
+    if (!container) return;
+
+    const images = container.querySelectorAll('img');
+    images.forEach((img) => {
+      if (img.classList.contains('lazy')) return;
+
+      const src = img.getAttribute('src');
+      if (!src) return;
+
+      const wrapper = document.createElement('div');
+      wrapper.className = 'lazy-box';
+
+      const newImg = img.cloneNode();
+      newImg.removeAttribute('src');
+      newImg.setAttribute('data-src', src);
+      newImg.classList.add('lazy');
+
+      const icon = document.createElement('div');
+      icon.className = 'lazy-icon';
+      if (def.loading) {
+        icon.style.backgroundImage = `url("${def.loading}")`;
+      }
+
+      wrapper.appendChild(newImg);
+      wrapper.appendChild(icon);
+
+      img.replaceWith(wrapper);
+    });
+
+    // 通知 LazyLoad 更新
+    if (window.lazyLoadInstance?.update) {
+      window.lazyLoadInstance.update();
+    }
+  }
+
+</script>
+
+<!-- required -->
+<script src="/js/main.js?v=1.33.1" defer></script>
+
+<script type="text/javascript">
+  const applyTheme = (theme) => {
+    if (theme === 'auto') {
+      document.documentElement.removeAttribute('data-theme')
+    } else {
+      document.documentElement.setAttribute('data-theme', theme)
+    }
+
+    // applyThemeToGiscus(theme)
+  }
+
+  // FIXME: 这会导致无法使用 preferred_color_scheme 以外的主题
+  const applyThemeToGiscus = (theme) => {
+    // theme = theme === 'auto' ? 'preferred_color_scheme' : theme
+    const cmt = document.getElementById('giscus')
+    if (cmt) {
+      // This works before giscus load.
+      cmt.setAttribute('data-theme', theme)
+    }
+
+    const iframe = document.querySelector('#comments > section.giscus > iframe')
+    if (iframe) {
+      // This works after giscus loaded.
+      const src = iframe.src
+      const newSrc = src.replace(/theme=[\w]+/, `theme=${theme}`)
+      iframe.src = newSrc
+    }
+  }
+
+  const switchTheme = () => {
+    // light -> dark -> auto -> light -> ...
+    const currentTheme = document.documentElement.getAttribute('data-theme')
+    let newTheme;
+    switch (currentTheme) {
+      case 'light':
+        newTheme = 'dark'
+        break
+      case 'dark':
+        newTheme = 'auto'
+        break
+      default:
+        newTheme = 'light'
+    }
+    applyTheme(newTheme)
+    window.localStorage.setItem('Stellar.theme', newTheme)
+    utils.dark.mode = newTheme === 'auto' ? (window.matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light") : newTheme;
+    utils.dark.method.toggle.start();
+
+    const messages = {
+      light: `切换到浅色模式`,
+      dark: `切换到深色模式`,
+      auto: `切换到跟随系统配色`,
+    }
+    hud?.toast?.(messages[newTheme])
+  }
+
+  (() => {
+    // Apply user's preferred theme, if any.
+    const theme = window.localStorage.getItem('Stellar.theme')
+    if (theme !== null) {
+      applyTheme(theme)
+    } else {
+      utils.dark.mode = window.matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light";
+    }
+    utils.dark.method.toggle.start();
+  })()
+</script>
+
+
+<!-- optional -->
+
+
+
+<script defer>
+  const initServices = () => {
+    // 用于存储需要清理的资源
+    let timers = [];
+    
+    ctx.services = Object.assign({}, JSON.parse(`{"mdrender":{"js":"/js/services/mdrender.js"},"siteinfo":{"js":"/js/services/siteinfo.js","api":null},"ghinfo":{"js":"/js/services/ghinfo.js"},"rating":{"js":"/js/services/rating.js","api":"https://star-vote.xaox.cc/api/rating"},"vote":{"js":"/js/services/vote.js","api":"https://star-vote.xaox.cc/api/vote"},"sites":{"js":"/js/services/sites.js"},"friends":{"js":"/js/services/friends.js"},"friends_and_posts":{"js":"/js/services/friends_and_posts.js"},"timeline":{"js":"/js/services/timeline.js"},"fcircle":{"js":"/js/services/fcircle.js"},"weibo":{"js":"/js/services/weibo.js"},"memos":{"js":"/js/services/memos.js"},"voice":{"js":"/js/plugins/voice.js"},"video":{"js":"/js/plugins/video.js"},"download-file":{"js":"/js/plugins/download-file.js"},"twikoo":{"js":"/js/services/twikoo_latest_comment.js"},"waline":{"js":"/js/services/waline_latest_comment.js"},"artalk":{"js":"/js/services/artalk_latest_comment.js"},"giscus":{"js":"/js/services/giscus_latest_comment.js"},"contributors":{"edit_this_page":{"_posts/":null,"wiki/stellar/":"https://github.com/xaoxuu/hexo-theme-stellar-docs/blob/main/"},"js":"/js/services/contributors.js"},"rss":{"js":"/js/services/rss.js"}}`));
+    for (let id of Object.keys(ctx.services)) {
+      const js = ctx.services[id].js;
+      if (id == 'siteinfo') {
+        const cardlinks = document.querySelectorAll('a.link-card[cardlink]');
+        if (cardlinks?.length > 0) {
+          utils.js(js, { defer: true }).then(function () {
+            setCardLink(cardlinks);
+          });
+        }
+      } else if (id == 'ghinfo') {
+        const els = document.querySelectorAll('.ds-ghinfo');
+        if (els.length > 0) {
+          utils.js(js, { defer: true });
+        }
+      } else if (id == 'voice') {
+        const voiceAudios = document.querySelectorAll('.voice>audio');
+        if (voiceAudios?.length > 0) {
+          utils.js(js, { defer: true }).then(function () {
+            createVoiceDom(voiceAudios);
+          });
+        }
+      } else if (id == 'video') {
+        const videos = document.querySelectorAll('.video>video');
+        if (videos?.length > 0) {
+          utils.js(js, { defer: true }).then(function () {
+            videoEvents(videos);
+          });
+        }
+      } else if (id == 'download-file') {
+        const files = document.querySelectorAll('.chat-file');
+        if (files?.length > 0) {
+          utils.js(js, { defer: true }).then(function () {
+            downloadFileEvent(files);
+          });
+        }
+      } else {
+        const els = document.getElementsByClassName(`ds-${id}`);
+        if (els?.length > 0) {
+          utils.jq(() => {
+            if (id == 'timeline' || id == 'memos' || id == 'marked') {
+              utils.js(deps.marked).then(function () {
+                utils.js(js, { defer: true });
+              });
+            } else {
+              utils.js(js, { defer: true });
+            }
+          }, false);
+        }
+      }
+    }
+
+    // search
+    if (ctx.search && typeof searchFunc === 'function') {
+      const $inputArea = $("input#search-input");
+      if ($inputArea.length > 0 && !$inputArea[0]._searchInitialized) {
+        const path = ctx.search.path.startsWith('/') ? ctx.root + ctx.search.path.substring(1) : ctx.root + ctx.search.path;
+        const filter = $inputArea.attr('data-filter') || '';
+        searchFunc(path, filter, 'search-wrapper', 'search-input', 'search-result');
+        // 标记为已初始化，防止重复绑定
+        $inputArea[0]._searchInitialized = true;
+      }
+    }
+
+    // chat iphone time
+    let phoneTimes = document.querySelectorAll('.chat .status-bar .time');
+    let firstAdjustInterval = null;
+    let mainInterval = null;
+
+    if (phoneTimes.length > 0) {
+      NowTime();
+      const date = new Date();
+      const sec = date.getSeconds();
+      firstAdjustInterval = setInterval(firstAdjustTime, 1000 * (60 - sec));
+      timers.push(firstAdjustInterval);
+
+      function firstAdjustTime() {
+        NowTime();
+        if (firstAdjustInterval) {
+          clearInterval(firstAdjustInterval);
+          firstAdjustInterval = null;
+        }
+        mainInterval = setInterval(NowTime, 1000 * 60);
+        timers.push(mainInterval);
+      }
+
+      function NowTime() {
+        for (let i = 0; i < phoneTimes.length; ++i) {
+          const timeSpan = phoneTimes[i];
+          const date = new Date();
+          const hour = date.getHours();
+          const min = date.getMinutes();
+          timeSpan.innerHTML = check(hour) + ":" + check(min);
+        }
+      };
+
+      function check(val) {
+        if (val < 10) {
+          return ("0" + val);
+        }
+        return (val);
+      }
+    }
+
+    // chat quote - 存储事件监听器以便清理
+    const quoteClickHandlers = new Map();
+    const chat_quote_obverser = new IntersectionObserver((entries, observer) => {
+      entries.filter((entry) => { return entry.isIntersecting }).sort((a, b) => a.intersectionRect.y !== b.intersectionRect.y ? a.intersectionRect.y - b.intersectionRect.y : a.intersectionRect.x - b.intersectionRect.x).forEach((entry, index) => {
+          observer.unobserve(entry.target);
+          setTimeout(() => {
+            entry.target.classList.add('quote-blink');
+            setTimeout(() => {
+              entry.target.classList.remove('quote-blink');
+            }, 1000);
+          }, Math.max(100, 16) * (index + 1));
+        });
+    });
+
+    var chatQuotes = document.querySelectorAll(".chat .talk .quote");
+    chatQuotes.forEach((quote) => {
+      const handler = function () {
+        var chatCellDom = document.getElementById("quote-" + quote.getAttribute("quotedCellTag"));
+        if (chatCellDom) {
+          var chatDiv = chatCellDom.parentElement;
+          var mid = chatDiv.clientHeight / 2;
+          var offsetTop = chatCellDom.offsetTop;
+          if (offsetTop > mid - chatCellDom.clientHeight / 2) {
+            chatDiv.scrollTo({
+              top: chatCellDom.offsetTop - mid + chatCellDom.clientHeight / 2,
+              behavior: "smooth"
+            });
+          } else {
+            chatDiv.scrollTo({
+              top: 0,
+              behavior: "smooth"
+            });
+          }
+          chat_quote_obverser.observe(chatCellDom);
+        }
+      };
+      quote.addEventListener('click', handler);
+      quoteClickHandlers.set(quote, handler); // 保存处理器引用
+    });
+
+    // 返回清理函数，用于清理定时器和观察器
+    return () => {
+      // 清理所有定时器（包括可能未完成的 firstAdjustInterval）
+      timers.forEach(timer => {
+        if (timer) clearInterval(timer);
+      });
+      timers = [];
+      if (firstAdjustInterval) {
+        clearInterval(firstAdjustInterval);
+        firstAdjustInterval = null;
+      }
+      if (mainInterval) {
+        clearInterval(mainInterval);
+        mainInterval = null;
+      }
+      
+      // 断开观察器
+      if (chat_quote_obverser) {
+        chat_quote_obverser.disconnect();
+      }
+      
+      // 移除所有 click 事件监听器
+      quoteClickHandlers.forEach((handler, quote) => {
+        quote.removeEventListener('click', handler);
+      });
+      quoteClickHandlers.clear();
+    };
+  };
+
+  utils.initPlugin(initServices, 'services');
+</script>
+
+<script>
+  window.addEventListener('DOMContentLoaded', (event) => {
+    ctx.search = {
+      path: `/search.json`,
+    }
+    utils.js('/js/search/local-search.js', { defer: true });
+  });
+</script><script>
+  window.FPConfig = {
+    delay: 0,
+    ignoreKeywords: [],
+    maxRPS: 5,
+    hoverDelay: 25
+  };
+</script>
+<script defer src="https://gcore.jsdelivr.net/npm/flying-pages@2/flying-pages.min.js"></script><script>
+    window.StellarPjaxConfig = {
+        selectors: ["title","#l_cover",".l_body"],
+        timeout: 10000,
+        cacheBust: false
+    };
+</script>
+<script src="/js/plugins/pjax.js" defer></script><script>
+  ctx.fancybox = {
+    selector: `.timenode p>img`,
+    css: `https://gcore.jsdelivr.net/npm/@fancyapps/ui@5.0/dist/fancybox/fancybox.css`,
+    js: `https://gcore.jsdelivr.net/npm/@fancyapps/ui@5.0/dist/fancybox/fancybox.umd.js`
+  };
+  var selector = '[data-fancybox]:not(.error), .with-fancybox .atk-content img:not([atk-emoticon])';
+  if (ctx.fancybox.selector) {
+    selector += `, ${ctx.fancybox.selector}`
+  }
+  var needFancybox = document.querySelectorAll(selector).length !== 0;
+  if (!needFancybox) {
+    const memos = document.getElementsByClassName('ds-memos');
+    if (memos != undefined && memos.length > 0) {
+      needFancybox = true;
+    }
+    const fancybox = document.getElementsByClassName('with-fancybox');
+    if (fancybox != undefined && fancybox.length > 0) {
+      needFancybox = true;
+    }
+  }
+  if (needFancybox) {
+    utils.css(ctx.fancybox.css);
+    utils.js(ctx.fancybox.js, { defer: true }).then(function () {
+      Fancybox.bind(selector, {
+        hideScrollbar: false,
+        Thumbs: {
+          autoStart: false,
+        },
+        caption: (fancybox, slide) => {
+          return slide.triggerEl.alt || slide.triggerEl.dataset.caption || null
+        }
+      });
+    })
+  }
+</script>
+<script>
+  utils.initPlugin(() => {
+    const swiper_api = document.getElementById('swiper-api');
+    if (swiper_api != undefined) {
+      utils.css(`https://unpkg.com/swiper@10.3/swiper-bundle.min.css`);
+      utils.js(`https://unpkg.com/swiper@10.3/swiper-bundle.min.js`, { defer: true }).then(function () {
+        const effect = swiper_api.getAttribute('effect') || '';
+        var swiper = new Swiper('.swiper#swiper-api', {
+          slidesPerView: 'auto',
+          spaceBetween: 8,
+          centeredSlides: true,
+          effect: effect,
+          rewind: true,
+          pagination: {
+            el: '.swiper-pagination',
+            clickable: true,
+          },
+          navigation: {
+            nextEl: '.swiper-button-next',
+            prevEl: '.swiper-button-prev',
+          },
+        });
+      })
+    }
+  }, 'swiper');
+</script>
+<script>
+  utils.initPlugin(() => {
+    const codeElements = document.querySelectorAll('.code');
+    if (codeElements.length > 0) {
+      ctx.copycode = {
+        default_text: `Copy`,
+        success_text: `Copied`,
+        toast: `复制成功`,
+      };
+      utils.js('/js/plugins/copycode.js', { defer: true }).then(() => {
+        if (typeof createCopyButtons === 'function') {
+          createCopyButtons(codeElements);
+        }
+      });
+    }
+  }, 'copycode');
+</script>
+
+
+<!-- inject -->
+
+</div><div class="page-loading-bar"><img src="https://api.iconify.design/eos-icons:three-dots-loading.svg?color=%231cd0fd"></div></body></html>

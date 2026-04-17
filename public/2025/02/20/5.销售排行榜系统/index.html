@@ -1,0 +1,1240 @@
+
+<!DOCTYPE html><html lang="zh-CN">
+
+<head>
+  <meta charset="utf-8">
+  <meta name="hexo-theme" content="https://github.com/xaoxuu/hexo-theme-stellar/tree/1.33.1" theme-name="Stellar" theme-version="1.33.1">
+  
+  
+  <meta name="generator" content="Hexo 7.3.0">
+  <meta http-equiv='x-dns-prefetch-control' content='on' />
+  
+  <meta name="renderer" content="webkit">
+  <meta name="force-rendering" content="webkit">
+  <meta http-equiv="X-UA-Compatible" content="IE=Edge,chrome=1">
+  <meta name="HandheldFriendly" content="True" >
+  <meta name="mobile-web-app-capable" content="yes">
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="theme-color" media="(prefers-color-scheme: dark)" content="#000">
+  <meta name="theme-color" content="#f9fafb">
+  <title>店铺多平台销售排行榜分析系统 - JLog</title>
+
+  
+    <meta name="description" content="python flask、pandas、mysql">
+<meta property="og:type" content="article">
+<meta property="og:title" content="店铺多平台销售排行榜分析系统">
+<meta property="og:url" content="http://example.com/2025/02/20/5.%E9%94%80%E5%94%AE%E6%8E%92%E8%A1%8C%E6%A6%9C%E7%B3%BB%E7%BB%9F/">
+<meta property="og:site_name" content="JLog">
+<meta property="og:description" content="python flask、pandas、mysql">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="http://example.com/images/blog_image/image-20260306163012034.png">
+<meta property="og:image" content="http://example.com/images/blog_image/image-20260306162024334.png">
+<meta property="article:published_time" content="2025-02-20T08:30:00.000Z">
+<meta property="article:modified_time" content="2025-02-23T06:30:00.000Z">
+<meta property="article:author" content="-喜-">
+<meta property="article:tag" content="python">
+<meta property="article:tag" content="数据库">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:image" content="http://example.com/images/blog_image/image-20260306163012034.png">
+  
+  
+  
+  <meta name="keywords" content="python,数据库">
+
+  <!-- feed -->
+  
+
+  <link rel="stylesheet" href="/css/main.css?v=1.33.1">
+  
+    <link rel="stylesheet" href="/css/custom.css">
+  
+  <!-- Font Awesome图标库 -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+  
+    <link rel="shortcut icon" href="/icon/favicon.ico">
+  
+
+  
+
+  <script type="application/ld+json">{"@context":"https://schema.org","@type":"BlogPosting","author":{"@type":"Person","name":"-喜-","sameAs":[]},"dateCreated":"2025-02-20T16:30:00+08:00","dateModified":"2025-02-23T14:30:00+08:00","datePublished":"2025-02-20T16:30:00+08:00","description":"python flask、pandas、mysql","headline":"店铺多平台销售排行榜分析系统","mainEntityOfPage":{"@type":"WebPage","@id":"http://example.com/2025/02/20/5.%E9%94%80%E5%94%AE%E6%8E%92%E8%A1%8C%E6%A6%9C%E7%B3%BB%E7%BB%9F/"},"publisher":{"@type":"Organization","name":"-喜-","sameAs":[]},"url":"http://example.com/2025/02/20/5.%E9%94%80%E5%94%AE%E6%8E%92%E8%A1%8C%E6%A6%9C%E7%B3%BB%E7%BB%9F/","keywords":"python, 数据库","thumbnailUrl":"./../images/blog_image/image-20260306163012034.png","image":1}</script>
+  
+</head>
+<body><div id="l_cover"></div><div class="l_body content" id="start" layout="post" type="tech" ><aside class="l_left"><div class="sidebg"></div><div class="leftbar-container">
+
+
+<header class="header"><div class="logo-wrap"><a class="avatar" href="/"><div class="bg" style="opacity:0;background-image:url(https://gcore.jsdelivr.net/gh/cdn-x/placeholder@1.0.12/avatar/round/rainbow64@3x.webp);"></div><img no-lazy class="avatar" src="/images/avatar.jpg" onerror="javascript:this.classList.add('error');this.src='https://gcore.jsdelivr.net/gh/cdn-x/placeholder@1.0.12/image/2659360.svg';"></a><a class="title" href="/"><div class="main">JLog</div></a></div></header>
+
+<div class="nav-area">
+
+<nav class="menu dis-select"><a class="nav-item" title="主页" href="/" style="color:#e6397c"><i class="fas fa-home"></i></a><a class="nav-item" title="标签" href="/tags/" style="color:#e6397c"><i class="fas fa-tags"></i></a><a class="nav-item" title="历史文章" href="/archives/" style="color:#e6397c"><i class="fas fa-archive"></i></a><a class="nav-item" title="关于我" href="/about/" style="color:#e6397c"><i class="fas fa-user"></i></a></nav>
+</div>
+<div class="widgets">
+<div class="search-wrapper" id="search-wrapper"><form class="search-form"><a class="search-button" onclick="document.getElementById(&quot;search-input&quot;).focus();"><svg t="1705074644177" viewBox="0 0 1025 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" p-id="1560" width="200" height="200"><path d="M1008.839137 935.96571L792.364903 719.491476a56.783488 56.783488 0 0 0-80.152866 0 358.53545 358.53545 0 1 1 100.857314-335.166073 362.840335 362.840335 0 0 1-3.689902 170.145468 51.248635 51.248635 0 1 0 99.217358 26.444296 462.057693 462.057693 0 1 0-158.255785 242.303546l185.930047 185.725053a51.248635 51.248635 0 0 0 72.568068 0 51.248635 51.248635 0 0 0 0-72.978056z" p-id="1561"></path><path d="M616.479587 615.969233a50.428657 50.428657 0 0 0-61.498362-5.534852 174.655348 174.655348 0 0 1-177.525271 3.484907 49.403684 49.403684 0 0 0-58.833433 6.76482l-3.074918 2.869923a49.403684 49.403684 0 0 0 8.609771 78.10292 277.767601 277.767601 0 0 0 286.992355-5.739847 49.403684 49.403684 0 0 0 8.404776-76.667958z" p-id="1562"></path></svg></a><input type="text" class="search-input" id="search-input" placeholder="站内搜索"></form><div id="search-result"></div><div class="search-no-result">没有找到内容！</div></div>
+
+
+
+<widget class="widget-wrapper recent post-list"><div class="widget-header dis-select"><span class="name">最近更新</span></div><div class="widget-body fs14"><a class="item title" href="/2026/04/10/AI+%E8%87%AA%E5%8A%A8%E5%8C%96%E5%AE%9E%E6%88%98%E7%B3%BB%E5%88%97%EF%BC%883%EF%BC%89%EF%BC%9AAI%E8%A7%A3%E6%9E%90Excel%E6%95%B0%E6%8D%AE+%E8%87%AA%E5%8A%A8%E7%94%9F%E6%88%90%E5%B7%A5%E4%BD%9C%E5%91%A8%E6%8A%A5%EF%BC%8C%E5%91%8A%E5%88%AB%E6%89%8B%E5%8A%A8%E5%86%99%E6%80%BB%E7%BB%93/"><span class="title">AI解析Excel数据+自动生成工作周报</span></a><a class="item title" href="/2026/03/05/js/"><span class="title">WPS 在线文档自动化</span></a><a class="item title" href="/2026/03/02/9.%E7%82%B9%E8%B5%9E%E5%92%8C%E8%AF%84%E8%AE%BA%E6%9C%BA%E5%99%A8%E4%BA%BA/"><span class="title">点赞评论机器人</span></a><a class="item title" href="/2026/02/01/3.%E5%8F%AF%E8%A7%86%E5%8C%96%E7%BE%8E%E5%8C%96%E5%B7%A5%E5%85%B7/"><span class="title">可视化操作界面的批量美化工具</span></a><a class="item title" href="/2026/02/01/2.Excel%E7%BE%8E%E5%8C%96/"><span class="title">Python自动化美化</span></a><a class="item title" href="/2026/01/28/1.Excel%E5%90%88%E5%B9%B6%E4%B8%8E%E6%95%B0%E6%8D%AE%E6%B8%85%E6%B4%97/"><span class="title">Excel 文件批量合并与数据清洗</span></a><a class="item title" href="/2026/01/10/7.RPA-%E6%8A%93%E5%8F%96%E5%90%84%E7%A7%8D%E6%95%B0%E6%8D%AE/"><span class="title">抓取并整合各种数据</span></a><a class="item title" href="/2025/12/30/test/"><span class="title">测试笔记</span></a><a class="item title" href="/2025/10/15/10.RPA%E2%80%94%E2%80%94%E6%89%8B%E6%9C%BA%E8%87%AA%E5%8A%A8%E5%8C%96%E5%B9%B6%E5%8F%91%E9%80%81%E6%8F%90%E7%A4%BA%E6%B6%88%E6%81%AF%E5%88%B0%E9%92%89%E9%92%89/"><span class="title">手机自动化并发送提示消息</span></a><a class="item title" href="/2025/06/01/6.RPA-%E8%87%AA%E5%8A%A8%E9%93%BA%E8%B4%A7/"><span class="title">自动铺货</span></a></div></widget>
+</div>
+
+</div></aside><div class="l_main" id="main">
+
+
+
+
+
+<div class="article banner top">
+  <div class="content">
+    <div class="top bread-nav footnote"><div class="left"><div class="flex-row" id="breadcrumb"><a class="cap breadcrumb" href="/">主页</a>
+<span class="sep"></span><a class="cap breadcrumb" href="/">文章</a><span class="sep"></span><a class="cap breadcrumb-link" href="/categories/%E5%B7%A5%E4%BD%9C/">工作</a></div>
+<div class="flex-row" id="post-meta"><span class="text created">发布于：<time datetime="2025-02-20T08:30:00.000Z">2025-02-20</time></span><span class="sep updated"></span><span class="text updated">更新于：<time datetime="2025-02-23T06:30:00.000Z">2025-02-23</time></span></div></div></div>
+    
+    <div class="bottom only-title">
+      
+      <div class="text-area">
+        <h1 class="text title"><span>店铺多平台销售排行榜分析系统</span></h1>
+        
+      </div>
+    </div>
+    
+  </div>
+  </div><article class="md-text content"><h1 id="店铺多平台销售排行榜分析系统：从开发到落地的全流程解析"><a href="#店铺多平台销售排行榜分析系统：从开发到落地的全流程解析" class="headerlink" title="店铺多平台销售排行榜分析系统：从开发到落地的全流程解析"></a>店铺多平台销售排行榜分析系统：从开发到落地的全流程解析</h1><h2 id="项目背景"><a href="#项目背景" class="headerlink" title="项目背景"></a>项目背景</h2><p>在零售电商行业，实时掌握各店铺、各商品的销售数据是制定运营策略、优化库存管理的核心。传统的销售数据查看方式多依赖 Excel 报表或 BI 工具的固定模板，操作繁琐且无法快速响应个性化的数据分析需求。为此，我们开发了一套轻量化、可视化的店铺销售排行榜分析系统，旨在帮助运营人员快速筛选、查看、分析商品销售数据，提升数据驱动决策的效率。</p>
+<p>效果展示</p>
+<h2 id=""><a href="#" class="headerlink" title=""></a><img src="/./../images/blog_image/image-20260306163012034.png" alt="image-20260306163012034"></h2><h3 id="后端技术"><a href="#后端技术" class="headerlink" title="后端技术"></a>后端技术</h3><ul>
+<li><strong>框架</strong>：Flask（轻量级 Python Web 框架，快速开发 RESTful 接口，满足小型应用的灵活部署需求）</li>
+<li><strong>数据库</strong>：MySQL（关系型数据库，稳定存储销售数据、商品信息、访问统计等结构化数据）</li>
+<li><strong>数据处理</strong>：Pandas（高效处理大规模销售数据的分组、聚合、排序等操作）</li>
+</ul>
+<h3 id="前端技术"><a href="#前端技术" class="headerlink" title="前端技术"></a>前端技术</h3><ul>
+<li><strong>基础架构</strong>：HTML5 + CSS3（构建页面结构与原生样式）</li>
+<li><strong>样式优化</strong>：CSS 变量 + 响应式布局（适配 PC &#x2F; 移动端，支持黑夜模式切换）</li>
+<li><strong>交互逻辑</strong>：原生 JavaScript（实现日期验证、滚动控制、主题切换等交互）</li>
+<li><strong>模板引擎</strong>：Jinja2（Flask 内置模板引擎，实现后端数据与前端页面的动态渲染）</li>
+</ul>
+<h2 id="核心功能模块解析"><a href="#核心功能模块解析" class="headerlink" title="核心功能模块解析"></a>核心功能模块解析</h2><h3 id="1-数据接入与存储模块"><a href="#1-数据接入与存储模块" class="headerlink" title="1. 数据接入与存储模块"></a>1. 数据接入与存储模块</h3><h4 id="数据库设计"><a href="#数据库设计" class="headerlink" title="数据库设计"></a>数据库设计</h4><p>系统核心数据表包含 3 类：</p>
+<ul>
+<li><code>sales_data</code>：存储原始销售数据，字段包括日期、店铺名称、货号、净销售数量、销售数量、销售金额等；</li>
+<li><code>sku_info</code>：商品信息表，关联货号、新货号、分类、商品名称、图片路径等；</li>
+<li><code>visitor_stats</code>：访问统计表，记录设备 ID、访问日期、首次 &#x2F; 末次访问时间，用于统计每日访问量。</li>
+</ul>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">CREATE TABLE</span> `sales_data` (</span><br><span class="line">  `id` <span class="type">int</span> <span class="keyword">NOT NULL</span> AUTO_INCREMENT COMMENT <span class="string">&#x27;主键ID&#x27;</span>,</span><br><span class="line">  `<span class="type">date</span>` <span class="type">varchar</span>(<span class="number">255</span>) <span class="keyword">DEFAULT</span> <span class="keyword">NULL</span> COMMENT <span class="string">&#x27;日期&#x27;</span>,</span><br><span class="line">  `店铺名称` <span class="type">varchar</span>(<span class="number">255</span>) <span class="keyword">DEFAULT</span> <span class="keyword">NULL</span> COMMENT <span class="string">&#x27;店铺名称&#x27;</span>,</span><br><span class="line">  `货号` <span class="type">varchar</span>(<span class="number">255</span>) <span class="keyword">DEFAULT</span> <span class="keyword">NULL</span> COMMENT <span class="string">&#x27;货号&#x27;</span>,</span><br><span class="line">  `净销售数量` <span class="type">int</span> <span class="keyword">DEFAULT</span> <span class="keyword">NULL</span> COMMENT <span class="string">&#x27;净销售数量&#x27;</span>,</span><br><span class="line">  `销售数量` <span class="type">int</span> <span class="keyword">DEFAULT</span> <span class="keyword">NULL</span> COMMENT <span class="string">&#x27;销售数量&#x27;</span>,</span><br><span class="line">  `销售金额` <span class="type">decimal</span>(<span class="number">10</span>,<span class="number">2</span>) <span class="keyword">DEFAULT</span> <span class="keyword">NULL</span> COMMENT <span class="string">&#x27;销售金额&#x27;</span>,</span><br><span class="line">  <span class="keyword">PRIMARY KEY</span> (`id`)</span><br><span class="line">) ENGINE<span class="operator">=</span>InnoDB <span class="keyword">DEFAULT</span> CHARSET<span class="operator">=</span>utf8mb4 COMMENT<span class="operator">=</span><span class="string">&#x27;销售数据表&#x27;</span>;</span><br><span class="line"></span><br><span class="line"><span class="keyword">CREATE TABLE</span> `visitor_stats` (</span><br><span class="line">  `id` <span class="type">int</span> <span class="keyword">NOT NULL</span> AUTO_INCREMENT COMMENT <span class="string">&#x27;主键ID&#x27;</span>,</span><br><span class="line">  `visit_date` <span class="type">date</span> <span class="keyword">NOT NULL</span> COMMENT <span class="string">&#x27;访问日期&#x27;</span>,</span><br><span class="line">  `device_id` <span class="type">varchar</span>(<span class="number">255</span>) <span class="keyword">NOT NULL</span> COMMENT <span class="string">&#x27;设备唯一标识（IP+UA哈希）&#x27;</span>,</span><br><span class="line">  `first_visit_time` datetime <span class="keyword">NOT NULL</span> COMMENT <span class="string">&#x27;当日首次访问时间&#x27;</span>,</span><br><span class="line">  `last_visit_time` datetime <span class="keyword">NOT NULL</span> COMMENT <span class="string">&#x27;当日末次访问时间&#x27;</span>,</span><br><span class="line">  <span class="keyword">PRIMARY KEY</span> (`id`),</span><br><span class="line">  KEY `idx_visit_date` (`visit_date`) COMMENT <span class="string">&#x27;为visit_date建立普通索引，加速按日期查询访问量&#x27;</span></span><br><span class="line">) ENGINE<span class="operator">=</span>InnoDB <span class="keyword">DEFAULT</span> CHARSET<span class="operator">=</span>utf8mb4 COMMENT<span class="operator">=</span><span class="string">&#x27;访问统计表：记录每日设备访问情况&#x27;</span>;</span><br><span class="line"></span><br><span class="line"><span class="keyword">CREATE TABLE</span> `sku_info` (</span><br><span class="line">  `款式编码` <span class="type">varchar</span>(<span class="number">50</span>) <span class="keyword">DEFAULT</span> <span class="keyword">NULL</span> COMMENT <span class="string">&#x27;款式编码&#x27;</span>,</span><br><span class="line">  `商品编码` <span class="type">varchar</span>(<span class="number">50</span>) <span class="keyword">DEFAULT</span> <span class="keyword">NULL</span> COMMENT <span class="string">&#x27;商品编码&#x27;</span>,</span><br><span class="line">  `商品名称` mediumtext COMMENT <span class="string">&#x27;商品名称（较长文本）&#x27;</span>,</span><br><span class="line">  `颜色及规格` <span class="type">varchar</span>(<span class="number">50</span>) <span class="keyword">DEFAULT</span> <span class="keyword">NULL</span> COMMENT <span class="string">&#x27;颜色及规格组合&#x27;</span>,</span><br><span class="line">  `颜色` <span class="type">varchar</span>(<span class="number">50</span>) <span class="keyword">DEFAULT</span> <span class="keyword">NULL</span> COMMENT <span class="string">&#x27;颜色&#x27;</span>,</span><br><span class="line">  `规格` <span class="type">varchar</span>(<span class="number">50</span>) <span class="keyword">DEFAULT</span> <span class="keyword">NULL</span> COMMENT <span class="string">&#x27;规格（如尺码）&#x27;</span>,</span><br><span class="line">  `基本售价` <span class="type">int</span> <span class="keyword">DEFAULT</span> <span class="keyword">NULL</span> COMMENT <span class="string">&#x27;基本售价（整数）&#x27;</span>,</span><br><span class="line">  `市场<span class="operator">|</span>吊牌价` <span class="type">int</span> <span class="keyword">DEFAULT</span> <span class="keyword">NULL</span> COMMENT <span class="string">&#x27;市场/吊牌价（整数）&#x27;</span>,</span><br><span class="line">  `分类` <span class="type">varchar</span>(<span class="number">50</span>) <span class="keyword">DEFAULT</span> <span class="keyword">NULL</span> COMMENT <span class="string">&#x27;商品分类（如卫衣、裤子等）&#x27;</span>,</span><br><span class="line">  `新货号` <span class="type">varchar</span>(<span class="number">100</span>) <span class="keyword">NOT NULL</span> COMMENT <span class="string">&#x27;新货号（唯一标识SKU）&#x27;</span>,</span><br><span class="line">  <span class="keyword">PRIMARY KEY</span> (`新货号`) COMMENT <span class="string">&#x27;以新货号作为主键，保证唯一性&#x27;</span></span><br><span class="line">) ENGINE<span class="operator">=</span>InnoDB <span class="keyword">DEFAULT</span> CHARSET<span class="operator">=</span>utf8mb4 COMMENT<span class="operator">=</span><span class="string">&#x27;商品SKU信息表：存储商品基础属性与价格信息&#x27;</span>;</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+
+
+<h4 id="数据预处理"><a href="#数据预处理" class="headerlink" title="数据预处理"></a>数据预处理</h4><p>对接业务系统（聚水潭）的销售数据，定期同步至 MySQL 数据库，并完成数据清洗：</p>
+<ul>
+<li>过滤无效店铺（如测试店铺、废弃渠道）；</li>
+<li>统一商品货号格式，关联商品分类与图片信息；</li>
+<li>处理缺失值（如无图片商品标记 “暂无图片”）。</li>
+</ul>
+<h3 id="2-访问统计模块"><a href="#2-访问统计模块" class="headerlink" title="2. 访问统计模块"></a>2. 访问统计模块</h3><p>为了量化系统的使用效率，实现了基于设备指纹的访问统计功能：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">def</span> <span class="title function_">get_device_id</span>():</span><br><span class="line">    ip = request.remote_addr <span class="keyword">or</span> <span class="string">&#x27;unknown&#x27;</span></span><br><span class="line">    user_agent = request.user_agent.string <span class="keyword">or</span> <span class="string">&#x27;unknown&#x27;</span></span><br><span class="line">    <span class="keyword">return</span> hashlib.md5(<span class="string">f&quot;<span class="subst">&#123;ip&#125;</span>-<span class="subst">&#123;user_agent&#125;</span>&quot;</span>.encode()).hexdigest()</span><br><span class="line"></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">record_visit</span>():</span><br><span class="line">    device_id = get_device_id()</span><br><span class="line">    today = date.today()</span><br><span class="line">    now = datetime.now()</span><br><span class="line">    <span class="comment"># 检查设备今日是否已访问，避免重复统计</span></span><br><span class="line">    mycursor.execute(<span class="string">&quot;&quot;&quot;</span></span><br><span class="line"><span class="string">        SELECT id FROM visitor_stats </span></span><br><span class="line"><span class="string">        WHERE visit_date = %s AND device_id = %s</span></span><br><span class="line"><span class="string">    &quot;&quot;&quot;</span>, (today, device_id))</span><br><span class="line">    <span class="keyword">if</span> <span class="keyword">not</span> mycursor.fetchone():</span><br><span class="line">        <span class="comment"># 新设备插入记录</span></span><br><span class="line">        mycursor.execute(<span class="string">&quot;&quot;&quot;</span></span><br><span class="line"><span class="string">            INSERT INTO visitor_stats </span></span><br><span class="line"><span class="string">            (visit_date, device_id, first_visit_time, last_visit_time)</span></span><br><span class="line"><span class="string">            VALUES (%s, %s, %s, %s)</span></span><br><span class="line"><span class="string">        &quot;&quot;&quot;</span>, (today, device_id, now, now))</span><br><span class="line">    <span class="keyword">else</span>:</span><br><span class="line">        <span class="comment"># 老设备更新末次访问时间</span></span><br><span class="line">        mycursor.execute(<span class="string">&quot;&quot;&quot;</span></span><br><span class="line"><span class="string">            UPDATE visitor_stats </span></span><br><span class="line"><span class="string">            SET last_visit_time = %s </span></span><br><span class="line"><span class="string">            WHERE visit_date = %s AND device_id = %s</span></span><br><span class="line"><span class="string">        &quot;&quot;&quot;</span>, (now, today, device_id))</span><br><span class="line">    mydb.commit()</span><br></pre></td></tr></table></figure>
+
+<p>核心逻辑：通过 IP + 用户代理生成唯一设备 ID，每日仅统计同一设备的首次访问，保证访问量的准确性。</p>
+<h3 id="3-多维度筛选模块"><a href="#3-多维度筛选模块" class="headerlink" title="3. 多维度筛选模块"></a>3. 多维度筛选模块</h3><p>支持运营人员按<strong>日期范围</strong>、<strong>店铺</strong>、<strong>货号</strong>三大维度筛选数据：</p>
+<h4 id="日期筛选"><a href="#日期筛选" class="headerlink" title="日期筛选"></a>日期筛选</h4><ul>
+<li>自动获取数据库中销售数据的最小 &#x2F; 最大日期，限制日期选择范围；</li>
+<li>前端实时验证开始日期≤结束日期，避免无效查询：</li>
+</ul>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">function</span> <span class="title function_">validateDates</span>(<span class="params">input</span>) &#123;</span><br><span class="line">    <span class="keyword">const</span> startDateInput = <span class="variable language_">document</span>.<span class="title function_">getElementById</span>(<span class="string">&#x27;start_date&#x27;</span>);</span><br><span class="line">    <span class="keyword">const</span> endDateInput = <span class="variable language_">document</span>.<span class="title function_">getElementById</span>(<span class="string">&#x27;end_date&#x27;</span>);</span><br><span class="line">    <span class="keyword">const</span> startDate = <span class="keyword">new</span> <span class="title class_">Date</span>(startDateInput.<span class="property">value</span>);</span><br><span class="line">    <span class="keyword">const</span> endDate = <span class="keyword">new</span> <span class="title class_">Date</span>(endDateInput.<span class="property">value</span>);</span><br><span class="line">    <span class="keyword">if</span> (startDate &gt; endDate) &#123;</span><br><span class="line">        <span class="title function_">alert</span>(<span class="string">&#x27;开始日期不能大于结束日期，请重新选择。&#x27;</span>);</span><br><span class="line">        location.<span class="title function_">reload</span>();</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h4 id="店铺筛选"><a href="#店铺筛选" class="headerlink" title="店铺筛选"></a>店铺筛选</h4><ul>
+<li>支持 “单店铺” 和 “汇总店铺” 两种模式：<ul>
+<li>单店铺：展示原始店铺的销售数据（如  天猫）；</li>
+<li>汇总店铺：按业务维度聚合多个店铺数据（如 “电商成人（汇总）” 包含天猫、京东、得物等渠道）；</li>
+</ul>
+</li>
+<li>自定义店铺排序，优先展示核心业务店铺，提升操作效率：</li>
+</ul>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">custom_order = [</span><br><span class="line">    &quot;电商成人（汇总）&quot;,</span><br><span class="line">    &quot;xx成人-天猫&quot;,</span><br><span class="line">    &quot;xx成人-得物&quot;,</span><br><span class="line">    # ... 其他店铺</span><br><span class="line">]</span><br></pre></td></tr></table></figure>
+
+<h4 id="货号搜索"><a href="#货号搜索" class="headerlink" title="货号搜索"></a>货号搜索</h4><p>支持模糊搜索货号，快速定位目标商品，兼容原始货号与新货号两种检索维度。</p>
+<h3 id="4-数据可视化展示模块"><a href="#4-数据可视化展示模块" class="headerlink" title="4. 数据可视化展示模块"></a>4. 数据可视化展示模块</h3><h4 id="核心报表展示"><a href="#核心报表展示" class="headerlink" title="核心报表展示"></a>核心报表展示</h4><p>以表格形式展示销售商品，包含排名、货号、标签、图片、净销售数量、销售数量、销售金额等维度：</p>
+<ul>
+<li>商品标签：自动提取聚水潭的商品分类中的核心信息（如从 “xxx - 卫衣 - 男” 中提取 “卫衣”）；</li>
+<li>商品图片：无图片时显示 “暂无图片”，支持 hover 缩放效果；</li>
+<li>数据格式化：销售数量自动转为整数，金额保留原始精度，排名按销售金额降序排列。</li>
+</ul>
+<h4 id="辅助信息展示"><a href="#辅助信息展示" class="headerlink" title="辅助信息展示"></a>辅助信息展示</h4><ul>
+<li>数据日期与更新时间：明确数据维度与时效性；</li>
+<li>访问量统计：展示今日系统访问次数；</li>
+<li>数据总量与总销售额：快速掌握筛选结果的整体规模。</li>
+</ul>
+<h3 id="5-交互体验优化模块"><a href="#5-交互体验优化模块" class="headerlink" title="5. 交互体验优化模块"></a>5. 交互体验优化模块</h3><h4 id="主题切换"><a href="#主题切换" class="headerlink" title="主题切换"></a>主题切换</h4><p>支持 “白天 &#x2F; 黑夜模式” 切换，基于 CSS 变量实现样式全局替换，适配不同使用场景：</p>
+<figure class="highlight css"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="selector-pseudo">:root</span> &#123;</span><br><span class="line">    <span class="attr">--primary-color</span>: <span class="number">#2563eb</span>;</span><br><span class="line">    <span class="attr">--light-bg</span>: <span class="number">#f1f5f9</span>;</span><br><span class="line">    <span class="attr">--white</span>: <span class="number">#ffffff</span>;</span><br><span class="line">    <span class="comment">/* ... 其他变量 */</span></span><br><span class="line">&#125;</span><br><span class="line"><span class="selector-class">.dark-mode</span> &#123;</span><br><span class="line">    <span class="attr">--primary-color</span>: <span class="number">#3b82f6</span>;</span><br><span class="line">    <span class="attr">--light-bg</span>: <span class="number">#0f172a</span>;</span><br><span class="line">    <span class="attr">--white</span>: <span class="number">#1e293b</span>;</span><br><span class="line">    <span class="comment">/* ... 其他变量 */</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h4 id="快捷操作"><a href="#快捷操作" class="headerlink" title="快捷操作"></a>快捷操作</h4><ul>
+<li>滚动按钮：一键回到顶部 &#x2F; 底部，适配长表格操作；</li>
+<li>分享链接：支持生成当前筛选条件的分享链接（预留扩展接口）；</li>
+<li>响应式布局：适配移动端，自动调整表单、表格样式，保证小屏体验。</li>
+</ul>
+<h2 id="核心技术难点与解决方案"><a href="#核心技术难点与解决方案" class="headerlink" title="核心技术难点与解决方案"></a>核心技术难点与解决方案</h2><h3 id="1-汇总店铺数据聚合"><a href="#1-汇总店铺数据聚合" class="headerlink" title="1. 汇总店铺数据聚合"></a>1. 汇总店铺数据聚合</h3><p><strong>问题</strong>：汇总店铺需要动态聚合多个原始店铺的数据，SQL 查询需灵活拼接条件。</p>
+<p><strong>解决方案</strong>：</p>
+<ul>
+<li>定义汇总店铺配置表，映射 “汇总名称 - 原始店铺列表”；</li>
+<li>动态构建 SQL 的 IN 条件，实现多店铺数据聚合：</li>
+</ul>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">if selected_shop in summary_shops:</span><br><span class="line">    target_shops = summary_shops[selected_shop]</span><br><span class="line">    placeholders = &#x27;, &#x27;.join([&#x27;%s&#x27;] * len(target_shops))</span><br><span class="line">    where_clauses.append(f&quot;sales_data.店铺名称 IN (&#123;placeholders&#125;)&quot;)</span><br><span class="line">    params.extend(target_shops)</span><br></pre></td></tr></table></figure>
+
+<h3 id="2-数据性能优化"><a href="#2-数据性能优化" class="headerlink" title="2. 数据性能优化"></a>2. 数据性能优化</h3><p><strong>问题</strong>：大规模销售数据（百万级）的分组聚合查询耗时较长。</p>
+<p><strong>解决方案</strong>：</p>
+<ul>
+<li>数据库层面：为<code>sales_data</code>表的<code>date</code>、<code>店铺名称</code>、<code>货号</code>字段建立索引；</li>
+<li>应用层面：使用 Pandas 在内存中处理聚合后的结果，减少数据库查询次数；</li>
+<li>分页预留：预留了分页接口，支持大规模数据的分段加载。</li>
+</ul>
+<h3 id="3-跨设备体验一致性"><a href="#3-跨设备体验一致性" class="headerlink" title="3. 跨设备体验一致性"></a>3. 跨设备体验一致性</h3><p><strong>问题</strong>：不同设备（PC &#x2F; 手机 &#x2F; 平板）的显示效果差异大。</p>
+<p><strong>解决方案</strong>：</p>
+<ul>
+<li>使用 CSS 变量统一间距、圆角、阴影等样式；</li>
+<li>基于媒体查询（@media）适配不同屏幕尺寸：</li>
+</ul>
+<figure class="highlight css"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">@media</span> (<span class="attribute">max-width</span>: <span class="number">1000px</span>) &#123;</span><br><span class="line">    <span class="selector-class">.container</span> &#123;</span><br><span class="line">        <span class="attribute">padding</span>: <span class="built_in">var</span>(--spacing-lg) <span class="built_in">var</span>(--spacing-md);</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="selector-class">.form-control</span> &#123;</span><br><span class="line">        <span class="attribute">width</span>: <span class="number">100%</span>;</span><br><span class="line">        <span class="attribute">font-size</span>: <span class="number">14px</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="comment">/* ... 其他适配规则 */</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h2 id="项目部署与运行"><a href="#项目部署与运行" class="headerlink" title="项目部署与运行"></a>项目部署与运行</h2><h3 id="环境依赖"><a href="#环境依赖" class="headerlink" title="环境依赖"></a>环境依赖</h3><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"># 安装Python依赖</span><br><span class="line">pip install flask pandas mysql-connector-python</span><br></pre></td></tr></table></figure>
+
+<h3 id="运行步骤"><a href="#运行步骤" class="headerlink" title="运行步骤"></a>运行步骤</h3><ol>
+<li>配置 MySQL 数据库连接（主机、用户名、密码、数据库名）；</li>
+<li>导入销售数据、商品信息至对应数据表；</li>
+<li>启动 Flask 应用：</li>
+</ol>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">if __name__ == &#x27;__main__&#x27;:</span><br><span class="line">    app.run(host=&#x27;0.0.0.0&#x27;, port=5000, debug=True)</span><br></pre></td></tr></table></figure>
+
+<p>访问<code>http://localhost:5000</code>即可进入系统。</p>
+<h2 id="流程案例解析"><a href="#流程案例解析" class="headerlink" title="流程案例解析"></a>流程案例解析</h2><h3 id="1-用户输入操作"><a href="#1-用户输入操作" class="headerlink" title="1. 用户输入操作"></a>1. 用户输入操作</h3><p>用户在页面完成以下操作：</p>
+<ul>
+<li>日期选择器选择开始日期<code>2026-02-01</code>、结束日期<code>2026-02-28</code>；</li>
+<li>店铺下拉框选择<code>xxx成人-天猫</code>；</li>
+<li>货号搜索框留空（查询全量商品）；</li>
+<li>点击「查询」按钮触发提交。</li>
+</ul>
+<h3 id="2-前端参数校验（JavaScript）"><a href="#2-前端参数校验（JavaScript）" class="headerlink" title="2. 前端参数校验（JavaScript）"></a>2. 前端参数校验（JavaScript）</h3><p>系统先在浏览器端做基础校验，减少无效的后端请求：</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 1. 检查日期是否为空</span></span><br><span class="line"><span class="keyword">if</span> (!startDateInput.<span class="property">value</span> || !endDateInput.<span class="property">value</span>) &#123;</span><br><span class="line">    <span class="title function_">alert</span>(<span class="string">&#x27;请选择完整的日期范围！&#x27;</span>);</span><br><span class="line">    <span class="keyword">return</span> <span class="literal">false</span>;</span><br><span class="line">&#125;</span><br><span class="line"><span class="comment">// 2. 检查开始日期是否大于结束日期</span></span><br><span class="line"><span class="keyword">const</span> startDate = <span class="keyword">new</span> <span class="title class_">Date</span>(startDateInput.<span class="property">value</span>);</span><br><span class="line"><span class="keyword">const</span> endDate = <span class="keyword">new</span> <span class="title class_">Date</span>(endDateInput.<span class="property">value</span>);</span><br><span class="line"><span class="keyword">if</span> (startDate &gt; endDate) &#123;</span><br><span class="line">    <span class="title function_">alert</span>(<span class="string">&#x27;开始日期不能晚于结束日期！&#x27;</span>);</span><br><span class="line">    <span class="keyword">return</span> <span class="literal">false</span>;</span><br><span class="line">&#125;</span><br><span class="line"><span class="comment">// 3. 检查店铺是否选择</span></span><br><span class="line"><span class="keyword">if</span> (!shopSelect.<span class="property">value</span>) &#123;</span><br><span class="line">    <span class="title function_">alert</span>(<span class="string">&#x27;请选择要查询的店铺！&#x27;</span>);</span><br><span class="line">    <span class="keyword">return</span> <span class="literal">false</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>校验通过后，前端将参数（<code>start_date=2026-02-01</code>、<code>end_date=2026-02-28</code>、<code>shop=xxx成人-天猫</code>、<code>sku=</code>）通过<code>GET</code>&#x2F;<code>POST</code>请求发送至后端接口（如<code>/api/get_sales_data</code>）。</p>
+<h3 id="3、后端接收：参数解析与访问统计"><a href="#3、后端接收：参数解析与访问统计" class="headerlink" title="3、后端接收：参数解析与访问统计"></a>3、后端接收：参数解析与访问统计</h3><p>后端（Flask）接收到请求后，先解析参数，再完成访问统计，最后准备数据库查询。</p>
+<p>参数解析（Python&#x2F;Flask）</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@app.route(<span class="params"><span class="string">&#x27;/api/get_sales_data&#x27;</span>, methods=[<span class="string">&#x27;GET&#x27;</span>]</span>)</span></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">get_sales_data</span>():</span><br><span class="line">    <span class="comment"># 1. 解析前端传入的参数</span></span><br><span class="line">    start_date = request.args.get(<span class="string">&#x27;start_date&#x27;</span>)</span><br><span class="line">    end_date = request.args.get(<span class="string">&#x27;end_date&#x27;</span>)</span><br><span class="line">    selected_shop = request.args.get(<span class="string">&#x27;shop&#x27;</span>)</span><br><span class="line">    sku_keyword = request.args.get(<span class="string">&#x27;sku&#x27;</span>, <span class="string">&#x27;&#x27;</span>)  <span class="comment"># 货号关键词，默认空</span></span><br><span class="line">    </span><br><span class="line">    <span class="comment"># 2. 转换日期格式（确保与数据库字段匹配）</span></span><br><span class="line">    <span class="keyword">try</span>:</span><br><span class="line">        start_date = datetime.strptime(start_date, <span class="string">&#x27;%Y-%m-%d&#x27;</span>).date()</span><br><span class="line">        end_date = datetime.strptime(end_date, <span class="string">&#x27;%Y-%m-%d&#x27;</span>).date()</span><br><span class="line">    <span class="keyword">except</span> Exception <span class="keyword">as</span> e:</span><br><span class="line">        <span class="keyword">return</span> jsonify(&#123;<span class="string">&#x27;code&#x27;</span>: <span class="number">400</span>, <span class="string">&#x27;msg&#x27;</span>: <span class="string">&#x27;日期格式错误&#x27;</span>&#125;)</span><br><span class="line">    </span><br><span class="line">    <span class="comment"># 3. 记录访问（统计今日访问量）</span></span><br><span class="line">    record_visit()  <span class="comment"># 调用之前的访问统计函数</span></span><br></pre></td></tr></table></figure>
+
+<h3 id="4-访问统计逻辑"><a href="#4-访问统计逻辑" class="headerlink" title="4. 访问统计逻辑"></a>4. 访问统计逻辑</h3><p><code>record_visit()</code>函数会：</p>
+<ul>
+<li>生成设备唯一 ID（IP+User-Agent 哈希）；</li>
+<li>查询<code>visitor_stats</code>表，判断该设备今日是否已访问；</li>
+<li>未访问则插入新记录，已访问则更新末次访问时间；</li>
+<li>提交数据库事务，确保统计数据准确。</li>
+</ul>
+<h3 id="5-数据库查询：动态-SQL-构建与数据读取"><a href="#5-数据库查询：动态-SQL-构建与数据读取" class="headerlink" title="5. 数据库查询：动态 SQL 构建与数据读取"></a>5. 数据库查询：动态 SQL 构建与数据读取</h3><p>这是核心环节，系统会根据用户参数动态构建 SQL，从<code>sales_data</code>表中筛选数据。</p>
+<p>动态构建 SQL 查询语句</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line"># 1. 初始化SQL基础语句</span><br><span class="line">sql = &quot;&quot;&quot;</span><br><span class="line">    SELECT 货号, 净销售数量, 销售数量, 销售金额, 店铺名称</span><br><span class="line">    FROM sales_data</span><br><span class="line">    WHERE 1=1  # 占位符，方便拼接条件</span><br><span class="line">&quot;&quot;&quot;</span><br><span class="line">params = []  # SQL参数（防止SQL注入）</span><br><span class="line"></span><br><span class="line"># 2. 拼接日期条件</span><br><span class="line">sql += &quot; AND date &gt;= %s AND date &lt;= %s&quot;</span><br><span class="line">params.extend([start_date, end_date])</span><br><span class="line"></span><br><span class="line"># 3. 拼接店铺条件</span><br><span class="line">sql += &quot; AND 店铺名称 = %s&quot;</span><br><span class="line">params.append(selected_shop)</span><br><span class="line"></span><br><span class="line"># 4. 拼接货号模糊查询条件（如果有输入）</span><br><span class="line">if sku_keyword:</span><br><span class="line">    sql += &quot; AND 货号 LIKE %s&quot;</span><br><span class="line">    params.append(f&quot;%&#123;sku_keyword&#125;%&quot;)</span><br><span class="line"></span><br><span class="line"># 5. 按销售金额降序排序（取TOP20）</span><br><span class="line">sql += &quot; ORDER BY 销售金额 DESC LIMIT 20&quot;</span><br></pre></td></tr></table></figure>
+
+<h3 id="6-执行-SQL-并读取数据"><a href="#6-执行-SQL-并读取数据" class="headerlink" title="6. 执行 SQL 并读取数据"></a>6. 执行 SQL 并读取数据</h3><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 1. 连接数据库并执行查询</span></span><br><span class="line">mycursor = mydb.cursor(dictionary=<span class="literal">True</span>)  <span class="comment"># 返回字典格式结果</span></span><br><span class="line">mycursor.execute(sql, params)</span><br><span class="line">raw_data = mycursor.fetchall()  <span class="comment"># 获取查询结果（列表+字典）</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 2. 关闭游标（释放资源）</span></span><br><span class="line">mycursor.close()</span><br><span class="line"></span><br><span class="line"><span class="comment"># 3. 检查是否有数据</span></span><br><span class="line"><span class="keyword">if</span> <span class="keyword">not</span> raw_data:</span><br><span class="line">    <span class="keyword">return</span> jsonify(&#123;<span class="string">&#x27;code&#x27;</span>: <span class="number">200</span>, <span class="string">&#x27;msg&#x27;</span>: <span class="string">&#x27;暂无数据&#x27;</span>, <span class="string">&#x27;data&#x27;</span>: []&#125;)</span><br></pre></td></tr></table></figure>
+
+<p>⚠️ 关键注意点：使用<code>%s</code>占位符 + 参数列表的方式，避免 SQL 注入攻击，这是数据库操作的最佳实践。</p>
+<h3 id="7-数据加工：格式处理与辅助信息补充"><a href="#7-数据加工：格式处理与辅助信息补充" class="headerlink" title="7.数据加工：格式处理与辅助信息补充"></a>7.数据加工：格式处理与辅助信息补充</h3><p>原始数据库数据需加工后才能展示，核心是格式化数据、补充商品信息（如图片、标签）。</p>
+<p> 数据格式化</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 1. 初始化最终返回数据</span></span><br><span class="line">result_data = []</span><br><span class="line">total_sales = <span class="number">0</span>  <span class="comment"># 总销售额</span></span><br><span class="line">total_count = <span class="number">0</span>  <span class="comment"># 商品总数</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 2. 遍历原始数据，格式化并计算汇总值</span></span><br><span class="line"><span class="keyword">for</span> item <span class="keyword">in</span> raw_data:</span><br><span class="line">    <span class="comment"># 格式化数值（金额保留2位小数，数量转整数）</span></span><br><span class="line">    sales_amount = <span class="built_in">round</span>(<span class="built_in">float</span>(item[<span class="string">&#x27;销售金额&#x27;</span>]), <span class="number">2</span>)</span><br><span class="line">    net_sales_num = <span class="built_in">int</span>(item[<span class="string">&#x27;净销售数量&#x27;</span>])</span><br><span class="line">    sales_num = <span class="built_in">int</span>(item[<span class="string">&#x27;销售数量&#x27;</span>])</span><br><span class="line">    </span><br><span class="line">    <span class="comment"># 累加汇总值</span></span><br><span class="line">    total_sales += sales_amount</span><br><span class="line">    total_count += <span class="number">1</span></span><br><span class="line">    </span><br><span class="line">    <span class="comment"># 补充商品信息（从sku_info表查询图片、标签）</span></span><br><span class="line">    sku = item[<span class="string">&#x27;货号&#x27;</span>]</span><br><span class="line">    sku_info = get_sku_detail(sku)  <span class="comment"># 自定义函数：查询商品图片、标签</span></span><br><span class="line">    </span><br><span class="line">    <span class="comment"># 组装最终数据</span></span><br><span class="line">    result_data.append(&#123;</span><br><span class="line">        <span class="string">&#x27;rank&#x27;</span>: <span class="built_in">len</span>(result_data) + <span class="number">1</span>,  <span class="comment"># 排名（按销售金额降序）</span></span><br><span class="line">        <span class="string">&#x27;sku&#x27;</span>: sku,</span><br><span class="line">        <span class="string">&#x27;tag&#x27;</span>: sku_info.get(<span class="string">&#x27;tag&#x27;</span>, <span class="string">&#x27;无&#x27;</span>),  <span class="comment"># 商品标签（如卫衣、裤子）</span></span><br><span class="line">        <span class="string">&#x27;img_url&#x27;</span>: sku_info.get(<span class="string">&#x27;img_url&#x27;</span>, <span class="string">&#x27;/static/none.png&#x27;</span>),  <span class="comment"># 图片地址</span></span><br><span class="line">        <span class="string">&#x27;net_sales_num&#x27;</span>: net_sales_num,</span><br><span class="line">        <span class="string">&#x27;sales_num&#x27;</span>: sales_num,</span><br><span class="line">        <span class="string">&#x27;sales_amount&#x27;</span>: sales_amount</span><br><span class="line">    &#125;)</span><br></pre></td></tr></table></figure>
+
+<p>获取今日访问量</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 查询今日（当前日期）的访问量</span></span><br><span class="line">today = date.today()</span><br><span class="line">mycursor = mydb.cursor()</span><br><span class="line">mycursor.execute(<span class="string">&quot;SELECT COUNT(*) FROM visitor_stats WHERE visit_date = %s&quot;</span>, (today,))</span><br><span class="line">today_visits = mycursor.fetchone()[<span class="number">0</span>]</span><br><span class="line">mycursor.close()</span><br></pre></td></tr></table></figure>
+
+<h3 id="8-结果返回与前端渲染"><a href="#8-结果返回与前端渲染" class="headerlink" title="8.结果返回与前端渲染"></a>8.结果返回与前端渲染</h3><p>后端返回 JSON 数据</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 组装最终返回结果</span></span><br><span class="line">response = &#123;</span><br><span class="line">    <span class="string">&#x27;code&#x27;</span>: <span class="number">200</span>,</span><br><span class="line">    <span class="string">&#x27;msg&#x27;</span>: <span class="string">&#x27;查询成功&#x27;</span>,</span><br><span class="line">    <span class="string">&#x27;data&#x27;</span>: &#123;</span><br><span class="line">        <span class="string">&#x27;list&#x27;</span>: result_data,  <span class="comment"># TOP20商品数据</span></span><br><span class="line">        <span class="string">&#x27;total_count&#x27;</span>: total_count,  <span class="comment"># 商品总数</span></span><br><span class="line">        <span class="string">&#x27;total_sales&#x27;</span>: <span class="built_in">round</span>(total_sales, <span class="number">2</span>),  <span class="comment"># 总销售额</span></span><br><span class="line">        <span class="string">&#x27;today_visits&#x27;</span>: today_visits,  <span class="comment"># 今日访问量</span></span><br><span class="line">        <span class="string">&#x27;query_date&#x27;</span>: <span class="string">f&quot;<span class="subst">&#123;start_date&#125;</span> 至 <span class="subst">&#123;end_date&#125;</span>&quot;</span>,  <span class="comment"># 查询日期范围</span></span><br><span class="line">        <span class="string">&#x27;selected_shop&#x27;</span>: selected_shop  <span class="comment"># 选中的店铺</span></span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"><span class="keyword">return</span> jsonify(response)</span><br></pre></td></tr></table></figure>
+
+<p>前端渲染数据</p>
+<p>前端接收到 JSON 后，通过 JavaScript 动态生成表格：</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 1. 清空原有表格内容</span></span><br><span class="line"><span class="keyword">const</span> tableBody = <span class="variable language_">document</span>.<span class="title function_">getElementById</span>(<span class="string">&#x27;sales-table-body&#x27;</span>);</span><br><span class="line">tableBody.<span class="property">innerHTML</span> = <span class="string">&#x27;&#x27;</span>;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 2. 遍历数据，生成表格行</span></span><br><span class="line">data.<span class="property">list</span>.<span class="title function_">forEach</span>(<span class="function"><span class="params">item</span> =&gt;</span> &#123;</span><br><span class="line">    <span class="keyword">const</span> tr = <span class="variable language_">document</span>.<span class="title function_">createElement</span>(<span class="string">&#x27;tr&#x27;</span>);</span><br><span class="line">    tr.<span class="property">innerHTML</span> = <span class="string">`</span></span><br><span class="line"><span class="string">        &lt;td&gt;<span class="subst">$&#123;item.rank&#125;</span>&lt;/td&gt;</span></span><br><span class="line"><span class="string">        &lt;td&gt;<span class="subst">$&#123;item.sku&#125;</span>&lt;/td&gt;</span></span><br><span class="line"><span class="string">        &lt;td&gt;<span class="subst">$&#123;item.tag&#125;</span>&lt;/td&gt;</span></span><br><span class="line"><span class="string">        &lt;td&gt;&lt;img src=&quot;<span class="subst">$&#123;item.img_url&#125;</span>&quot; alt=&quot;商品图片&quot; class=&quot;sku-img&quot;&gt;&lt;/td&gt;</span></span><br><span class="line"><span class="string">        &lt;td&gt;<span class="subst">$&#123;item.net_sales_num&#125;</span>&lt;/td&gt;</span></span><br><span class="line"><span class="string">        &lt;td&gt;<span class="subst">$&#123;item.sales_num&#125;</span>&lt;/td&gt;</span></span><br><span class="line"><span class="string">        &lt;td&gt;¥<span class="subst">$&#123;item.sales_amount&#125;</span>&lt;/td&gt;</span></span><br><span class="line"><span class="string">    `</span>;</span><br><span class="line">    tableBody.<span class="title function_">appendChild</span>(tr);</span><br><span class="line">&#125;);</span><br><span class="line"></span><br><span class="line"><span class="comment">// 3. 渲染汇总信息</span></span><br><span class="line"><span class="variable language_">document</span>.<span class="title function_">getElementById</span>(<span class="string">&#x27;total-count&#x27;</span>).<span class="property">textContent</span> = data.<span class="property">total_count</span>;</span><br><span class="line"><span class="variable language_">document</span>.<span class="title function_">getElementById</span>(<span class="string">&#x27;total-sales&#x27;</span>).<span class="property">textContent</span> = data.<span class="property">total_sales</span>;</span><br><span class="line"><span class="variable language_">document</span>.<span class="title function_">getElementById</span>(<span class="string">&#x27;today-visits&#x27;</span>).<span class="property">textContent</span> = data.<span class="property">today_visits</span>;</span><br></pre></td></tr></table></figure>
+
+
+
+<p><img src="/./../images/blog_image/image-20260306162024334.png" alt="image-20260306162024334"></p>
+<h2 id="价值与扩展方向"><a href="#价值与扩展方向" class="headerlink" title="价值与扩展方向"></a>价值与扩展方向</h2><h3 id="核心价值"><a href="#核心价值" class="headerlink" title="核心价值"></a>核心价值</h3><ol>
+<li><strong>效率提升</strong>：运营人员无需依赖数据分析师，自主筛选数据，操作效率提升 80%；</li>
+<li><strong>数据透明</strong>：实时展示核心销售数据，缩短数据决策链路；</li>
+<li><strong>体验优化</strong>：轻量化设计，无需安装客户端，支持多终端访问。</li>
+</ol>
+<h3 id="扩展方向"><a href="#扩展方向" class="headerlink" title="扩展方向"></a>扩展方向</h3><ol>
+<li><strong>数据可视化升级</strong>：集成 ECharts，添加销售趋势图、品类占比饼图等；</li>
+<li><strong>数据导出</strong>：支持 Excel&#x2F;CSV 格式导出筛选结果；</li>
+<li><strong>权限管理</strong>：添加用户角色，限制不同人员的店铺 &#x2F; 数据查看权限；</li>
+<li><strong>定时推送</strong>：每日自动推送核心销售数据至企业微信 &#x2F; 钉钉；</li>
+<li><strong>数据预警</strong>：设置销售阈值，异常数据自动提醒。</li>
+<li><strong>实时刷新</strong>：调用聚水潭接口实现</li>
+</ol>
+<h2 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h2><p>本项目以 “轻量、高效、易用” 为核心设计理念，基于 Flask + MySQL + 原生前端技术栈，快速实现了销售数据的筛选、分析与可视化。从实际业务需求出发，解决了传统销售数据查看的痛点，同时预留了丰富的扩展接口，可根据业务发展持续迭代。该系统不仅适用于零售电商行业的销售数据分析，也可通过少量改造适配其他行业的数据分析场景，具备较强的通用性与落地性。</p>
+</article>
+<div class="article-footer">
+    <section id="license">
+      <div class="header"><span>许可协议</span></div>
+      <div class="body"><p>本文采用 <a target="_blank" rel="noopener" href="https://creativecommons.org/licenses/by-nc-sa/4.0/">署名-非商业性使用-相同方式共享 4.0 国际</a> 许可协议，转载请注明出处。</p>
+</div>
+    </section>
+    
+
+
+    <section id="share">
+      <div class="header"><span>分享文章</span></div>
+      <div class="body">
+        <div class="link"><input class="copy-area" readonly="true" id="copy-link" value="http://example.com/2025/02/20/5.%E9%94%80%E5%94%AE%E6%8E%92%E8%A1%8C%E6%A6%9C%E7%B3%BB%E7%BB%9F/" /></div>
+        <div class="social-wrap dis-select"><a class="social share-item wechat" onclick="util.toggle(&quot;qrcode-wechat&quot;)"><img  src="https://gcore.jsdelivr.net/gh/cdn-x/placeholder@1.0.12/social/b32ef3da1162a.svg" /></a><a class="social share-item weibo" target="_blank" rel="external nofollow noopener noreferrer" href="https://service.weibo.com/share/share.php?url=http://example.com/2025/02/20/5.%E9%94%80%E5%94%AE%E6%8E%92%E8%A1%8C%E6%A6%9C%E7%B3%BB%E7%BB%9F/&title=店铺多平台销售排行榜分析系统 - JLog&pics=./../images/blog_image/image-20260306163012034.png&summary=python flask、pandas、mysql"><img  src="https://gcore.jsdelivr.net/gh/cdn-x/placeholder@1.0.12/social/80c07e4dbb303.svg" /></a><a class="social share-item email" href="mailto:?subject=店铺多平台销售排行榜分析系统 - JLog&amp;body=http://example.com/2025/02/20/5.%E9%94%80%E5%94%AE%E6%8E%92%E8%A1%8C%E6%A6%9C%E7%B3%BB%E7%BB%9F/"><img  src="https://gcore.jsdelivr.net/gh/cdn-x/placeholder@1.0.12/social/a1b00e20f425d.svg" /></a><a class="social share-item link" onclick="util.copy(&quot;copy-link&quot;, &quot;复制成功&quot;)"><img  src="https://gcore.jsdelivr.net/gh/cdn-x/placeholder@1.0.12/social/8411ed322ced6.svg" /></a></div>
+        
+        <div class="qrcode" id="qrcode-wechat" style="opacity:0;height:0">
+          <img src="https://api.qrserver.com/v1/create-qr-code/?size=256x256&data=http://example.com/2025/02/20/5.%E9%94%80%E5%94%AE%E6%8E%92%E8%A1%8C%E6%A6%9C%E7%B3%BB%E7%BB%9F/"/>
+        </div>
+        
+      </div>
+    </section>
+    </div>
+
+<div class="related-wrap" id="read-next"><section class="body"><div class="item" id="prev"><div class="note">较新文章</div><a href="/2025/04/15/8.RPA-Excel%E5%A4%84%E7%90%86/">rpa处理excel</a></div><div class="item" id="next"></div></section></div>
+
+
+
+
+
+
+<footer class="page-footer footnote"><hr><div class="text"><p>本站由 <a href="/">-喜-</a> 使用 <a target="_blank" rel="noopener" href="https://github.com/xaoxuu/hexo-theme-stellar/tree/1.33.1">Stellar 1.33.1</a> 主题创建。<br>本博客所有文章除特别声明外，均采用 <a target="_blank" rel="noopener" href="https://creativecommons.org/licenses/by-nc-sa/4.0/">CC BY-NC-SA 4.0</a> 许可协议，转载请注明出处。</p>
+</div></footer>
+<div class="main-mask" onclick="sidebar.dismiss()"></div></div><aside class="l_right"><div class="widgets">
+
+
+
+<widget class="widget-wrapper toc" id="data-toc" collapse="false"><div class="widget-header dis-select"><span class="name">本文目录</span><a class="cap-action" onclick="sidebar.toggleTOC()" ><svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24"><path fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6h11m-11 6h11m-11 6h11M4 6h1v4m-1 0h2m0 8H4c0-1 2-2 2-3s-1-1.5-2-1"/></svg></a></div><div class="widget-body"><ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#%E5%BA%97%E9%93%BA%E5%A4%9A%E5%B9%B3%E5%8F%B0%E9%94%80%E5%94%AE%E6%8E%92%E8%A1%8C%E6%A6%9C%E5%88%86%E6%9E%90%E7%B3%BB%E7%BB%9F%EF%BC%9A%E4%BB%8E%E5%BC%80%E5%8F%91%E5%88%B0%E8%90%BD%E5%9C%B0%E7%9A%84%E5%85%A8%E6%B5%81%E7%A8%8B%E8%A7%A3%E6%9E%90"><span class="toc-text">店铺多平台销售排行榜分析系统：从开发到落地的全流程解析</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E9%A1%B9%E7%9B%AE%E8%83%8C%E6%99%AF"><span class="toc-text">项目背景</span></a></li><li class="toc-item toc-level-2"><a class="toc-link"><span class="toc-text"></span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%90%8E%E7%AB%AF%E6%8A%80%E6%9C%AF"><span class="toc-text">后端技术</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%89%8D%E7%AB%AF%E6%8A%80%E6%9C%AF"><span class="toc-text">前端技术</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%A0%B8%E5%BF%83%E5%8A%9F%E8%83%BD%E6%A8%A1%E5%9D%97%E8%A7%A3%E6%9E%90"><span class="toc-text">核心功能模块解析</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#1-%E6%95%B0%E6%8D%AE%E6%8E%A5%E5%85%A5%E4%B8%8E%E5%AD%98%E5%82%A8%E6%A8%A1%E5%9D%97"><span class="toc-text">1. 数据接入与存储模块</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%E6%95%B0%E6%8D%AE%E5%BA%93%E8%AE%BE%E8%AE%A1"><span class="toc-text">数据库设计</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E6%95%B0%E6%8D%AE%E9%A2%84%E5%A4%84%E7%90%86"><span class="toc-text">数据预处理</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-%E8%AE%BF%E9%97%AE%E7%BB%9F%E8%AE%A1%E6%A8%A1%E5%9D%97"><span class="toc-text">2. 访问统计模块</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#3-%E5%A4%9A%E7%BB%B4%E5%BA%A6%E7%AD%9B%E9%80%89%E6%A8%A1%E5%9D%97"><span class="toc-text">3. 多维度筛选模块</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%E6%97%A5%E6%9C%9F%E7%AD%9B%E9%80%89"><span class="toc-text">日期筛选</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%BA%97%E9%93%BA%E7%AD%9B%E9%80%89"><span class="toc-text">店铺筛选</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E8%B4%A7%E5%8F%B7%E6%90%9C%E7%B4%A2"><span class="toc-text">货号搜索</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#4-%E6%95%B0%E6%8D%AE%E5%8F%AF%E8%A7%86%E5%8C%96%E5%B1%95%E7%A4%BA%E6%A8%A1%E5%9D%97"><span class="toc-text">4. 数据可视化展示模块</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%E6%A0%B8%E5%BF%83%E6%8A%A5%E8%A1%A8%E5%B1%95%E7%A4%BA"><span class="toc-text">核心报表展示</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E8%BE%85%E5%8A%A9%E4%BF%A1%E6%81%AF%E5%B1%95%E7%A4%BA"><span class="toc-text">辅助信息展示</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#5-%E4%BA%A4%E4%BA%92%E4%BD%93%E9%AA%8C%E4%BC%98%E5%8C%96%E6%A8%A1%E5%9D%97"><span class="toc-text">5. 交互体验优化模块</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%E4%B8%BB%E9%A2%98%E5%88%87%E6%8D%A2"><span class="toc-text">主题切换</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%BF%AB%E6%8D%B7%E6%93%8D%E4%BD%9C"><span class="toc-text">快捷操作</span></a></li></ol></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%A0%B8%E5%BF%83%E6%8A%80%E6%9C%AF%E9%9A%BE%E7%82%B9%E4%B8%8E%E8%A7%A3%E5%86%B3%E6%96%B9%E6%A1%88"><span class="toc-text">核心技术难点与解决方案</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#1-%E6%B1%87%E6%80%BB%E5%BA%97%E9%93%BA%E6%95%B0%E6%8D%AE%E8%81%9A%E5%90%88"><span class="toc-text">1. 汇总店铺数据聚合</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-%E6%95%B0%E6%8D%AE%E6%80%A7%E8%83%BD%E4%BC%98%E5%8C%96"><span class="toc-text">2. 数据性能优化</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#3-%E8%B7%A8%E8%AE%BE%E5%A4%87%E4%BD%93%E9%AA%8C%E4%B8%80%E8%87%B4%E6%80%A7"><span class="toc-text">3. 跨设备体验一致性</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E9%A1%B9%E7%9B%AE%E9%83%A8%E7%BD%B2%E4%B8%8E%E8%BF%90%E8%A1%8C"><span class="toc-text">项目部署与运行</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E7%8E%AF%E5%A2%83%E4%BE%9D%E8%B5%96"><span class="toc-text">环境依赖</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E8%BF%90%E8%A1%8C%E6%AD%A5%E9%AA%A4"><span class="toc-text">运行步骤</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%B5%81%E7%A8%8B%E6%A1%88%E4%BE%8B%E8%A7%A3%E6%9E%90"><span class="toc-text">流程案例解析</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#1-%E7%94%A8%E6%88%B7%E8%BE%93%E5%85%A5%E6%93%8D%E4%BD%9C"><span class="toc-text">1. 用户输入操作</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-%E5%89%8D%E7%AB%AF%E5%8F%82%E6%95%B0%E6%A0%A1%E9%AA%8C%EF%BC%88JavaScript%EF%BC%89"><span class="toc-text">2. 前端参数校验（JavaScript）</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#3%E3%80%81%E5%90%8E%E7%AB%AF%E6%8E%A5%E6%94%B6%EF%BC%9A%E5%8F%82%E6%95%B0%E8%A7%A3%E6%9E%90%E4%B8%8E%E8%AE%BF%E9%97%AE%E7%BB%9F%E8%AE%A1"><span class="toc-text">3、后端接收：参数解析与访问统计</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#4-%E8%AE%BF%E9%97%AE%E7%BB%9F%E8%AE%A1%E9%80%BB%E8%BE%91"><span class="toc-text">4. 访问统计逻辑</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#5-%E6%95%B0%E6%8D%AE%E5%BA%93%E6%9F%A5%E8%AF%A2%EF%BC%9A%E5%8A%A8%E6%80%81-SQL-%E6%9E%84%E5%BB%BA%E4%B8%8E%E6%95%B0%E6%8D%AE%E8%AF%BB%E5%8F%96"><span class="toc-text">5. 数据库查询：动态 SQL 构建与数据读取</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#6-%E6%89%A7%E8%A1%8C-SQL-%E5%B9%B6%E8%AF%BB%E5%8F%96%E6%95%B0%E6%8D%AE"><span class="toc-text">6. 执行 SQL 并读取数据</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#7-%E6%95%B0%E6%8D%AE%E5%8A%A0%E5%B7%A5%EF%BC%9A%E6%A0%BC%E5%BC%8F%E5%A4%84%E7%90%86%E4%B8%8E%E8%BE%85%E5%8A%A9%E4%BF%A1%E6%81%AF%E8%A1%A5%E5%85%85"><span class="toc-text">7.数据加工：格式处理与辅助信息补充</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#8-%E7%BB%93%E6%9E%9C%E8%BF%94%E5%9B%9E%E4%B8%8E%E5%89%8D%E7%AB%AF%E6%B8%B2%E6%9F%93"><span class="toc-text">8.结果返回与前端渲染</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%BB%B7%E5%80%BC%E4%B8%8E%E6%89%A9%E5%B1%95%E6%96%B9%E5%90%91"><span class="toc-text">价值与扩展方向</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%A0%B8%E5%BF%83%E4%BB%B7%E5%80%BC"><span class="toc-text">核心价值</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%89%A9%E5%B1%95%E6%96%B9%E5%90%91"><span class="toc-text">扩展方向</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%80%BB%E7%BB%93"><span class="toc-text">总结</span></a></li></ol></li></ol></div><div class="widget-footer"><a class="top" onclick="util.scrollTop()"><svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24"><!-- Icon from Solar by 480 Design - https://creativecommons.org/licenses/by/4.0/ --><g fill="none" stroke="currentColor" stroke-linecap="round" stroke-width="1.5"><path stroke-linejoin="round" d="m9 15.5l3-3l3 3m-6-4l3-3l3 3"/><path d="M7 3.338A9.95 9.95 0 0 1 12 2c5.523 0 10 4.477 10 10s-4.477 10-10 10S2 17.523 2 12c0-1.821.487-3.53 1.338-5"/></g></svg><span>回到顶部</span></a></div></widget>
+</div></aside><div class='float-panel'>
+  <button type='button' style='display:none' class='laptop-only rightbar-toggle mobile' onclick='sidebar.rightbar()'>
+    <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24"><path fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6h11m-11 6h11m-11 6h11M4 6h1v4m-1 0h2m0 8H4c0-1 2-2 2-3s-1-1.5-2-1"/></svg>
+  </button>
+  <button type='button' style='display:none' class='mobile-only leftbar-toggle mobile' onclick='sidebar.leftbar()'>
+    <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="1.5"><path d="M2 11c0-3.771 0-5.657 1.172-6.828C4.343 3 6.229 3 10 3h4c3.771 0 5.657 0 6.828 1.172C22 5.343 22 7.229 22 11v2c0 3.771 0 5.657-1.172 6.828C19.657 21 17.771 21 14 21h-4c-3.771 0-5.657 0-6.828-1.172C2 18.657 2 16.771 2 13z"/><path id="sep" stroke-linecap="round" d="M5.5 10h6m-5 4h4m4.5 7V3"/></g></svg>
+  </button>
+</div>
+</div><div class="scripts">
+
+
+<script type="text/javascript">
+  window.canonical = {"closeEnable":true,"closeText":"关闭提示","originalHost":null,"officialHosts":["localhost"],"encoded":""};
+  window.canonical["param"] = {"permalink":"http://example.com/2025/02/20/5.%E9%94%80%E5%94%AE%E6%8E%92%E8%A1%8C%E6%A6%9C%E7%B3%BB%E7%BB%9F/","checklink":"/js/plugins/video.js"};
+  // Fix: Ensure page is at the correct top position on data load
+  if (history.scrollRestoration) {
+    history.scrollRestoration = 'auto';
+  }
+  (function() {
+    const scrollHandler = () => {
+      const wikiCover = document.querySelector('#l_cover .l_cover.wiki');
+      const startEl = document.getElementById('start');
+      if (wikiCover && startEl) {
+        window.scrollTo(0, startEl.offsetTop);
+      } else {
+        window.scrollTo(0, 0);
+      }
+    };
+    if (document.readyState !== 'loading') scrollHandler();
+    else document.addEventListener('DOMContentLoaded', scrollHandler);
+  })();
+  const ctx = {
+    date_suffix: {
+      just: `刚刚`,
+      min: `分钟前`,
+      hour: `小时前`,
+      day: `天前`,
+    },
+    root : `/`,
+    tag_plugins: {
+      chat: Object.assign({"api":"https://siteinfo.listentothewind.cn/api/v1"}),
+    }
+  };
+
+  // required plugins (only load if needs)
+  if (`local_search`) {
+    ctx.search = {};
+    ctx.search.service = `local_search`;
+    if (ctx.search.service == 'local_search') {
+      let service_obj = Object.assign({}, `{"field":"all","path":"/search.json","content":true,"skip_search":null,"sort":"-date"}`);
+      ctx.search[ctx.search.service] = service_obj;
+    }
+  }
+  const def = {
+    avatar: `https://gcore.jsdelivr.net/gh/cdn-x/placeholder@1.0.12/avatar/round/3442075.svg`,
+    cover: `https://gcore.jsdelivr.net/gh/cdn-x/placeholder@1.0.12/cover/76b86c0226ffd.svg`,
+    loading: `https://api.iconify.design/eos-icons:three-dots-loading.svg?color=%231cd0fd`,
+  };
+  const deps = {
+    jquery: `https://gcore.jsdelivr.net/npm/jquery@3.7/dist/jquery.min.js`,
+    marked: `https://gcore.jsdelivr.net/npm/marked@13.0/lib/marked.umd.min.js`,
+    lazyload: `/%5Bobject%20Object%5D`
+  }
+</script>
+
+<script type="text/javascript">
+  
+  function RunItem() {
+    this.list = []; // 存放回调函数
+    this.start = () => {
+      for (var i = 0; i < this.list.length; i++) {
+        this.list[i].run();
+      }
+    };
+    this.push = (fn, name, setRequestAnimationFrame = true) => {
+      let myfn = fn
+      if (setRequestAnimationFrame) {
+        myfn = () => {
+          utils.requestAnimationFrame(fn)
+        }
+      }
+      var f = new Item(myfn, name);
+      this.list.push(f);
+    };
+    this.remove = (name) => {
+      // 倒序遍历避免 splice 后的索引问题
+      for (let index = this.list.length - 1; index >= 0; index--) {
+        const e = this.list[index];
+        if (e.name === name) {
+          this.list.splice(index, 1);
+        }
+      }
+    }
+    // 构造一个可以run的对象
+    function Item(fn, name) {
+      // 函数名称
+      this.name = name || fn.name;
+      // run方法
+      this.run = () => {
+        try {
+          fn()
+        } catch (error) {
+          console.log(error);
+        }
+      };
+    }
+  }
+
+  const utils = {
+    // 已加载样式缓存
+    _loadedStyles: new Set(),
+
+    // 懒加载 css https://github.com/filamentgroup/loadCSS
+    css: (href, before, media, attributes) => {
+      // 如果样式已加载，直接返回 null
+      if (utils._loadedStyles.has(href)) {
+        return null;
+      }
+      var doc = window.document;
+      var ss = doc.createElement("link");
+      var ref;
+      if (before) {
+        ref = before;
+      } else {
+        var refs = (doc.body || doc.getElementsByTagName("head")[0]).childNodes;
+        ref = refs[refs.length - 1];
+      }
+      var sheets = doc.styleSheets;
+      if (attributes) {
+        for (var attributeName in attributes) {
+          if (attributes.hasOwnProperty(attributeName)) {
+            ss.setAttribute(attributeName, attributes[attributeName]);
+          }
+        }
+      }
+      ss.rel = "stylesheet";
+      ss.href = href;
+      ss.media = "only x";
+      // 标记样式为已加载 (在创建元素后立即标记，防止重复创建)
+      utils._loadedStyles.add(href);
+      function ready(cb) {
+        if (doc.body) {
+          return cb();
+        }
+        setTimeout(function () {
+          ready(cb);
+        });
+      }
+      ready(function () {
+        ref.parentNode.insertBefore(ss, before ? ref : ref.nextSibling);
+      });
+      var onloadcssdefined = function (cb) {
+        var resolvedHref = ss.href;
+        var i = sheets.length;
+        while (i--) {
+          if (sheets[i].href === resolvedHref) {
+            return cb();
+          }
+        }
+        setTimeout(function () {
+          onloadcssdefined(cb);
+        });
+      };
+      function loadCB() {
+        if (ss.addEventListener) {
+          ss.removeEventListener("load", loadCB);
+        }
+        ss.media = media || "all";
+      }
+      if (ss.addEventListener) {
+        ss.addEventListener("load", loadCB);
+      }
+      ss.onloadcssdefined = onloadcssdefined;
+      onloadcssdefined(loadCB);
+      return ss;
+    },
+
+    // 已加载脚本缓存
+    _loadedScripts: new Set(),
+
+    // 已加载元素缓存 (使用 WeakSet 追踪元素实例,避免 PJAX 导航时的状态混淆)
+    _loadedElements: new WeakSet(),
+
+    js: (src, opt) => new Promise((resolve, reject) => {
+      if (src.startsWith('/')) {
+        src = ctx.root + src.substring(1);
+      }
+      // 如果脚本已加载，直接返回
+      if (utils._loadedScripts.has(src)) {
+        resolve();
+        return;
+      }
+      var script = document.createElement('script');
+      script.src = src;
+      if (opt) {
+        for (let key of Object.keys(opt)) {
+          script[key] = opt[key]
+        }
+      } else {
+        // 默认异步，如果需要同步，第二个参数传入 {} 即可
+        script.async = true
+      }
+      script.onerror = reject
+      script.onload = script.onreadystatechange = function () {
+        const loadState = this.readyState
+        if (loadState && loadState !== 'loaded' && loadState !== 'complete') return
+        script.onload = script.onreadystatechange = null
+        utils._loadedScripts.add(src);
+        resolve()
+      }
+      document.head.appendChild(script)
+    }),
+
+    // PJAX 事件监听器管理
+    _pjaxListeners: new Set(),
+    
+    jq: (fn, pjax = true) => {
+      if (typeof jQuery === 'undefined') {
+        utils.js(deps.jquery).then(fn)
+      } else {
+        fn()
+      }
+      if (pjax && !fn._pjax_registered) {
+        document.addEventListener('pjax:complete', fn);
+        fn._pjax_registered = true;
+        utils._pjaxListeners.add(fn); // 追踪监听器以便清理
+      }
+    },
+    
+    // 清理所有 PJAX 事件监听器
+    cleanupPjaxListeners: () => {
+      utils._pjaxListeners.forEach(fn => {
+        document.removeEventListener('pjax:complete', fn);
+        fn._pjax_registered = false;
+      });
+      utils._pjaxListeners.clear();
+    },
+
+    onLoading: (el) => {
+      if (el) {
+        if ($(el).find('.loading-wrap').length === 0){
+          $(el).append('<div class="loading-wrap"><svg xmlns="http://www.w3.org/2000/svg" width="2em" height="2em" preserveAspectRatio="xMidYMid meet" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-linecap="round" stroke-width="2"><path stroke-dasharray="60" stroke-dashoffset="60" stroke-opacity=".3" d="M12 3C16.9706 3 21 7.02944 21 12C21 16.9706 16.9706 21 12 21C7.02944 21 3 16.9706 3 12C3 7.02944 7.02944 3 12 3Z"><animate fill="freeze" attributeName="stroke-dashoffset" dur="1.3s" values="60;0"/></path><path stroke-dasharray="15" stroke-dashoffset="15" d="M12 3C16.9706 3 21 7.02944 21 12"><animate fill="freeze" attributeName="stroke-dashoffset" dur="0.3s" values="15;0"/><animateTransform attributeName="transform" dur="1.5s" repeatCount="indefinite" type="rotate" values="0 12 12;360 12 12"/></path></g></svg></div>');
+        }
+      }
+    },
+    onLoadSuccess: (el) => {
+      if (el) {
+        $(el).find('.loading-wrap').remove();
+      }
+    },
+    onLoadFailure: (el) => {
+      if (el) {
+        $(el).find('.loading-wrap svg').remove();
+        $(el).find('.loading-wrap').append('<svg xmlns="http://www.w3.org/2000/svg" width="2em" height="2em" preserveAspectRatio="xMidYMid meet" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"><path stroke-dasharray="60" stroke-dashoffset="60" d="M12 3L21 20H3L12 3Z"><animate fill="freeze" attributeName="stroke-dashoffset" dur="0.5s" values="60;0"/></path><path stroke-dasharray="6" stroke-dashoffset="6" d="M12 10V14"><animate fill="freeze" attributeName="stroke-dashoffset" begin="0.6s" dur="0.2s" values="6;0"/></path></g><circle cx="12" cy="17" r="1" fill="currentColor" fill-opacity="0"><animate fill="freeze" attributeName="fill-opacity" begin="0.8s" dur="0.4s" values="0;1"/></circle></svg>');
+        $(el).find('.loading-wrap').addClass('error');
+      }
+    },
+    request: (el, url, callback, onFailure) => {
+      // 检查元素实例是否已加载 (而不是检查属性)
+      if (el && utils._loadedElements.has(el)) {
+        return;
+      }
+      const maxRetry = 3;
+      let retryCount = 0;
+
+      return new Promise((resolve, reject) => {
+        const load = () => {
+          utils.onLoading?.(el);
+
+          let timedOut = false;
+          const timeout = setTimeout(() => {
+            timedOut = true;
+            console.warn('[request] 超时:', url);
+
+            if (++retryCount >= maxRetry) {
+              utils.onLoadFailure?.(el);
+              onFailure?.();
+              reject('请求超时');
+            } else {
+              setTimeout(load, 1000);
+            }
+          }, 5000);
+
+          fetch(url).then(resp => {
+            if (timedOut) return;
+            clearTimeout(timeout);
+
+            if (!resp.ok) throw new Error('响应失败');
+            return resp;
+          }).then(data => {
+            if (timedOut) return;
+            // 标记元素实例为已加载
+            if (el) utils._loadedElements.add(el);
+            utils.onLoadSuccess?.(el);
+            callback(data);
+            resolve(data);
+          }).catch(err => {
+            clearTimeout(timeout);
+            console.warn('[request] 错误:', err);
+
+            if (++retryCount >= maxRetry) {
+              utils.onLoadFailure?.(el);
+              onFailure?.();
+              reject(err);
+            } else {
+              setTimeout(load, 1000);
+            }
+          });
+        };
+
+        load();
+      });
+    },
+    requestWithoutLoading: (url, options = {}, maxRetry = 2, timeout = 5000) => {
+      return new Promise((resolve, reject) => {
+        let retryCount = 0;
+
+        const tryRequest = () => {
+          let timedOut = false;
+          const timer = setTimeout(() => {
+            timedOut = true;
+            if (++retryCount > maxRetry) reject('timeout');
+            else tryRequest();
+          }, timeout);
+
+          fetch(url, options)
+            .then(resp => {
+              clearTimeout(timer);
+              if (!resp.ok) throw new Error('bad response');
+              resolve(resp);
+            })
+            .catch(err => {
+              clearTimeout(timer);
+              if (++retryCount > maxRetry) reject(err);
+              else setTimeout(tryRequest, 500);
+            });
+        };
+
+        tryRequest();
+      });
+    },
+    /********************** requestAnimationFrame ********************************/
+    // 1、requestAnimationFrame 会把每一帧中的所有 DOM 操作集中起来，在一次重绘或回流中就完成，并且重绘或回流的时间间隔紧紧跟随浏览器的刷新频率，一般来说，这个频率为每秒60帧。
+    // 2、在隐藏或不可见的元素中，requestAnimationFrame 将不会进行重绘或回流，这当然就意味着更少的的 cpu，gpu 和内存使用量。
+    requestAnimationFrame: (fn) => {
+      if (!window.requestAnimationFrame) {
+        window.requestAnimationFrame = window.requestAnimationFrame || window.mozRequestAnimationFrame || window.webkitRequestAnimationFrame;
+      }
+      window.requestAnimationFrame(fn)
+    },
+    dark: {},
+
+    // 插件初始化管理器 - 统一处理 DOMContentLoaded 和 pjax:complete 事件
+    _pluginInitializers: [],
+    _pluginCleanups: new Map(), // 存储每个插件的清理函数
+    
+    initPlugin: (initFn, name, options = {}) => {
+      if (!initFn || typeof initFn !== 'function') return;
+      
+      // 避免重复注册
+      const pluginName = name || initFn.name;
+      if (utils._pluginInitializers.some(p => p.name === pluginName)) return;
+      
+      // 包装初始化函数，添加防重复执行的保护
+      const wrappedInit = () => {
+        try {
+          // 在执行前先清理旧的资源
+          if (utils._pluginCleanups.has(pluginName)) {
+            const cleanup = utils._pluginCleanups.get(pluginName);
+            if (typeof cleanup === 'function') {
+              cleanup();
+            }
+          }
+          
+          // 执行初始化，可能返回清理函数
+          const cleanup = initFn();
+          
+          // 如果初始化函数返回了清理函数，保存它
+          if (typeof cleanup === 'function') {
+            utils._pluginCleanups.set(pluginName, cleanup);
+          }
+        } catch (error) {
+          console.error(`[Plugin ${pluginName}] 初始化失败:`, error);
+        }
+      };
+      
+      utils._pluginInitializers.push({ 
+        fn: wrappedInit, 
+        name: pluginName,
+        options: options 
+      });
+      
+      // 如果 DOM 已经加载完成，立即执行
+      if (document.readyState === 'complete' || document.readyState === 'interactive') {
+        wrappedInit();
+      } else {
+        // 否则等待 DOMContentLoaded
+        window.addEventListener('DOMContentLoaded', wrappedInit, { once: true });
+      }
+    },
+
+    // 重新初始化所有插件（用于 PJAX 等场景）
+    reinitPlugins: () => {
+      utils._pluginInitializers.forEach(plugin => {
+        // 跳过标记为不需要重新初始化的插件
+        if (plugin.options.skipReinit) return;
+        
+        try {
+          plugin.fn();
+        } catch (error) {
+          console.error(`[Plugin ${plugin.name}] 重新初始化失败:`, error);
+        }
+      });
+    },
+    
+    // 清理所有插件资源
+    cleanupPlugins: () => {
+      utils._pluginCleanups.forEach((cleanup, name) => {
+        try {
+          cleanup();
+        } catch (error) {
+          console.error(`[Plugin ${name}] 清理失败:`, error);
+        }
+      });
+      utils._pluginCleanups.clear();
+    },
+    
+    // 清理所有资源（用于页面卸载或重置）
+    cleanupAll: () => {
+      utils.cleanupPlugins();
+      utils.cleanupPjaxListeners();
+    },
+  };
+
+  // 自动处理 PJAX 事件
+  document.addEventListener('pjax:before', () => {
+    // 在导航前清理旧的 PJAX 监听器（如果需要重新注册）
+    // 注意：这里不清理，因为监听器应该是持久的
+    // utils.cleanupPjaxListeners();
+  });
+  
+  document.addEventListener('pjax:complete', () => {
+    utils.reinitPlugins();
+  });
+
+  // utils.dark.mode 当前模式 dark or light
+  // utils.dark.toggle() 暗黑模式触发器
+  // utils.dark.push(callBack[,"callBackName"]) 传入触发器回调函数
+  utils.dark.method = {
+    toggle: new RunItem(),
+  };
+  utils.dark = Object.assign(utils.dark, {
+    push: utils.dark.method.toggle.push,
+  });
+</script>
+<script>
+  const sidebar = {
+    leftbar: () => {
+      if (l_body) {
+        l_body.toggleAttribute('leftbar');
+        l_body.removeAttribute('rightbar');
+      }
+    },
+    rightbar: () => {
+      if (l_body) {
+        l_body.toggleAttribute('rightbar');
+        l_body.removeAttribute('leftbar');
+      }
+    },
+    dismiss: () => {
+      if (l_body) {
+        l_body.removeAttribute('leftbar');
+        l_body.removeAttribute('rightbar');
+      }
+    },
+    toggleTOC: () => {
+      document.querySelector('#data-toc').classList.toggle('collapse');
+    }
+  }
+</script>
+<script type="text/javascript">
+  (() => {
+    const tagSwitchers = document.querySelectorAll('.tag-subtree.parent-tag > a > .tag-switcher-wrapper')
+    for (const tagSwitcher of tagSwitchers) {
+      tagSwitcher.addEventListener('click', (e) => {
+        const parent = e.target.closest('.tag-subtree.parent-tag')
+        parent.classList.toggle('expanded')
+        e.preventDefault()
+      })
+    }
+
+    // Get active tag from query string, then activate it.
+    const urlParams = new URLSearchParams(window.location.search)
+    const activeTag = urlParams.get('tag')
+    if (activeTag) {
+      let tag = document.querySelector(`.tag-subtree[data-tag="${activeTag}"]`)
+      if (tag) {
+        tag.querySelector('a').classList.add('active')
+        
+        while (tag) {
+          tag.classList.add('expanded')
+          tag = tag.parentElement.closest('.tag-subtree.parent-tag')
+        }
+      }
+    }
+  })()
+</script>
+
+<script async src="https://gcore.jsdelivr.net/npm/vanilla-lazyload@19.1/dist/lazyload.min.js"></script>
+<script>
+  // https://www.npmjs.com/package/vanilla-lazyload
+  // Set the options globally
+  // to make LazyLoad self-initialize
+  window.lazyLoadOptions = {
+    elements_selector: ".lazy",
+    callback_loaded: (el) => {
+      el.classList.add('loaded');
+      const wrapper = el.closest('.lazy-box');
+      const icon = wrapper?.querySelector('.lazy-icon');
+      if (icon) icon.remove();
+    }
+  };
+  // Listen to the initialization event
+  // and get the instance of LazyLoad
+  window.addEventListener(
+    "LazyLoad::Initialized",
+    function (event) {
+      window.lazyLoadInstance = event.detail.instance;
+    },
+    false
+  );
+  document.addEventListener('DOMContentLoaded', function () {
+    window.lazyLoadInstance?.update();
+  });
+
+  window.wrapLazyloadImages = (container) => {
+    if (typeof container === 'string') {
+      container = document.querySelector(container);
+    }
+    if (!container) return;
+
+    const images = container.querySelectorAll('img');
+    images.forEach((img) => {
+      if (img.classList.contains('lazy')) return;
+
+      const src = img.getAttribute('src');
+      if (!src) return;
+
+      const wrapper = document.createElement('div');
+      wrapper.className = 'lazy-box';
+
+      const newImg = img.cloneNode();
+      newImg.removeAttribute('src');
+      newImg.setAttribute('data-src', src);
+      newImg.classList.add('lazy');
+
+      const icon = document.createElement('div');
+      icon.className = 'lazy-icon';
+      if (def.loading) {
+        icon.style.backgroundImage = `url("${def.loading}")`;
+      }
+
+      wrapper.appendChild(newImg);
+      wrapper.appendChild(icon);
+
+      img.replaceWith(wrapper);
+    });
+
+    // 通知 LazyLoad 更新
+    if (window.lazyLoadInstance?.update) {
+      window.lazyLoadInstance.update();
+    }
+  }
+
+</script>
+
+<!-- required -->
+<script src="/js/main.js?v=1.33.1" defer></script>
+
+<script type="text/javascript">
+  const applyTheme = (theme) => {
+    if (theme === 'auto') {
+      document.documentElement.removeAttribute('data-theme')
+    } else {
+      document.documentElement.setAttribute('data-theme', theme)
+    }
+
+    // applyThemeToGiscus(theme)
+  }
+
+  // FIXME: 这会导致无法使用 preferred_color_scheme 以外的主题
+  const applyThemeToGiscus = (theme) => {
+    // theme = theme === 'auto' ? 'preferred_color_scheme' : theme
+    const cmt = document.getElementById('giscus')
+    if (cmt) {
+      // This works before giscus load.
+      cmt.setAttribute('data-theme', theme)
+    }
+
+    const iframe = document.querySelector('#comments > section.giscus > iframe')
+    if (iframe) {
+      // This works after giscus loaded.
+      const src = iframe.src
+      const newSrc = src.replace(/theme=[\w]+/, `theme=${theme}`)
+      iframe.src = newSrc
+    }
+  }
+
+  const switchTheme = () => {
+    // light -> dark -> auto -> light -> ...
+    const currentTheme = document.documentElement.getAttribute('data-theme')
+    let newTheme;
+    switch (currentTheme) {
+      case 'light':
+        newTheme = 'dark'
+        break
+      case 'dark':
+        newTheme = 'auto'
+        break
+      default:
+        newTheme = 'light'
+    }
+    applyTheme(newTheme)
+    window.localStorage.setItem('Stellar.theme', newTheme)
+    utils.dark.mode = newTheme === 'auto' ? (window.matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light") : newTheme;
+    utils.dark.method.toggle.start();
+
+    const messages = {
+      light: `切换到浅色模式`,
+      dark: `切换到深色模式`,
+      auto: `切换到跟随系统配色`,
+    }
+    hud?.toast?.(messages[newTheme])
+  }
+
+  (() => {
+    // Apply user's preferred theme, if any.
+    const theme = window.localStorage.getItem('Stellar.theme')
+    if (theme !== null) {
+      applyTheme(theme)
+    } else {
+      utils.dark.mode = window.matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light";
+    }
+    utils.dark.method.toggle.start();
+  })()
+</script>
+
+
+<!-- optional -->
+
+
+
+<script defer>
+  const initServices = () => {
+    // 用于存储需要清理的资源
+    let timers = [];
+    
+    ctx.services = Object.assign({}, JSON.parse(`{"mdrender":{"js":"/js/services/mdrender.js"},"siteinfo":{"js":"/js/services/siteinfo.js","api":null},"ghinfo":{"js":"/js/services/ghinfo.js"},"rating":{"js":"/js/services/rating.js","api":"https://star-vote.xaox.cc/api/rating"},"vote":{"js":"/js/services/vote.js","api":"https://star-vote.xaox.cc/api/vote"},"sites":{"js":"/js/services/sites.js"},"friends":{"js":"/js/services/friends.js"},"friends_and_posts":{"js":"/js/services/friends_and_posts.js"},"timeline":{"js":"/js/services/timeline.js"},"fcircle":{"js":"/js/services/fcircle.js"},"weibo":{"js":"/js/services/weibo.js"},"memos":{"js":"/js/services/memos.js"},"voice":{"js":"/js/plugins/voice.js"},"video":{"js":"/js/plugins/video.js"},"download-file":{"js":"/js/plugins/download-file.js"},"twikoo":{"js":"/js/services/twikoo_latest_comment.js"},"waline":{"js":"/js/services/waline_latest_comment.js"},"artalk":{"js":"/js/services/artalk_latest_comment.js"},"giscus":{"js":"/js/services/giscus_latest_comment.js"},"contributors":{"edit_this_page":{"_posts/":null,"wiki/stellar/":"https://github.com/xaoxuu/hexo-theme-stellar-docs/blob/main/"},"js":"/js/services/contributors.js"},"rss":{"js":"/js/services/rss.js"}}`));
+    for (let id of Object.keys(ctx.services)) {
+      const js = ctx.services[id].js;
+      if (id == 'siteinfo') {
+        const cardlinks = document.querySelectorAll('a.link-card[cardlink]');
+        if (cardlinks?.length > 0) {
+          utils.js(js, { defer: true }).then(function () {
+            setCardLink(cardlinks);
+          });
+        }
+      } else if (id == 'ghinfo') {
+        const els = document.querySelectorAll('.ds-ghinfo');
+        if (els.length > 0) {
+          utils.js(js, { defer: true });
+        }
+      } else if (id == 'voice') {
+        const voiceAudios = document.querySelectorAll('.voice>audio');
+        if (voiceAudios?.length > 0) {
+          utils.js(js, { defer: true }).then(function () {
+            createVoiceDom(voiceAudios);
+          });
+        }
+      } else if (id == 'video') {
+        const videos = document.querySelectorAll('.video>video');
+        if (videos?.length > 0) {
+          utils.js(js, { defer: true }).then(function () {
+            videoEvents(videos);
+          });
+        }
+      } else if (id == 'download-file') {
+        const files = document.querySelectorAll('.chat-file');
+        if (files?.length > 0) {
+          utils.js(js, { defer: true }).then(function () {
+            downloadFileEvent(files);
+          });
+        }
+      } else {
+        const els = document.getElementsByClassName(`ds-${id}`);
+        if (els?.length > 0) {
+          utils.jq(() => {
+            if (id == 'timeline' || id == 'memos' || id == 'marked') {
+              utils.js(deps.marked).then(function () {
+                utils.js(js, { defer: true });
+              });
+            } else {
+              utils.js(js, { defer: true });
+            }
+          }, false);
+        }
+      }
+    }
+
+    // search
+    if (ctx.search && typeof searchFunc === 'function') {
+      const $inputArea = $("input#search-input");
+      if ($inputArea.length > 0 && !$inputArea[0]._searchInitialized) {
+        const path = ctx.search.path.startsWith('/') ? ctx.root + ctx.search.path.substring(1) : ctx.root + ctx.search.path;
+        const filter = $inputArea.attr('data-filter') || '';
+        searchFunc(path, filter, 'search-wrapper', 'search-input', 'search-result');
+        // 标记为已初始化，防止重复绑定
+        $inputArea[0]._searchInitialized = true;
+      }
+    }
+
+    // chat iphone time
+    let phoneTimes = document.querySelectorAll('.chat .status-bar .time');
+    let firstAdjustInterval = null;
+    let mainInterval = null;
+
+    if (phoneTimes.length > 0) {
+      NowTime();
+      const date = new Date();
+      const sec = date.getSeconds();
+      firstAdjustInterval = setInterval(firstAdjustTime, 1000 * (60 - sec));
+      timers.push(firstAdjustInterval);
+
+      function firstAdjustTime() {
+        NowTime();
+        if (firstAdjustInterval) {
+          clearInterval(firstAdjustInterval);
+          firstAdjustInterval = null;
+        }
+        mainInterval = setInterval(NowTime, 1000 * 60);
+        timers.push(mainInterval);
+      }
+
+      function NowTime() {
+        for (let i = 0; i < phoneTimes.length; ++i) {
+          const timeSpan = phoneTimes[i];
+          const date = new Date();
+          const hour = date.getHours();
+          const min = date.getMinutes();
+          timeSpan.innerHTML = check(hour) + ":" + check(min);
+        }
+      };
+
+      function check(val) {
+        if (val < 10) {
+          return ("0" + val);
+        }
+        return (val);
+      }
+    }
+
+    // chat quote - 存储事件监听器以便清理
+    const quoteClickHandlers = new Map();
+    const chat_quote_obverser = new IntersectionObserver((entries, observer) => {
+      entries.filter((entry) => { return entry.isIntersecting }).sort((a, b) => a.intersectionRect.y !== b.intersectionRect.y ? a.intersectionRect.y - b.intersectionRect.y : a.intersectionRect.x - b.intersectionRect.x).forEach((entry, index) => {
+          observer.unobserve(entry.target);
+          setTimeout(() => {
+            entry.target.classList.add('quote-blink');
+            setTimeout(() => {
+              entry.target.classList.remove('quote-blink');
+            }, 1000);
+          }, Math.max(100, 16) * (index + 1));
+        });
+    });
+
+    var chatQuotes = document.querySelectorAll(".chat .talk .quote");
+    chatQuotes.forEach((quote) => {
+      const handler = function () {
+        var chatCellDom = document.getElementById("quote-" + quote.getAttribute("quotedCellTag"));
+        if (chatCellDom) {
+          var chatDiv = chatCellDom.parentElement;
+          var mid = chatDiv.clientHeight / 2;
+          var offsetTop = chatCellDom.offsetTop;
+          if (offsetTop > mid - chatCellDom.clientHeight / 2) {
+            chatDiv.scrollTo({
+              top: chatCellDom.offsetTop - mid + chatCellDom.clientHeight / 2,
+              behavior: "smooth"
+            });
+          } else {
+            chatDiv.scrollTo({
+              top: 0,
+              behavior: "smooth"
+            });
+          }
+          chat_quote_obverser.observe(chatCellDom);
+        }
+      };
+      quote.addEventListener('click', handler);
+      quoteClickHandlers.set(quote, handler); // 保存处理器引用
+    });
+
+    // 返回清理函数，用于清理定时器和观察器
+    return () => {
+      // 清理所有定时器（包括可能未完成的 firstAdjustInterval）
+      timers.forEach(timer => {
+        if (timer) clearInterval(timer);
+      });
+      timers = [];
+      if (firstAdjustInterval) {
+        clearInterval(firstAdjustInterval);
+        firstAdjustInterval = null;
+      }
+      if (mainInterval) {
+        clearInterval(mainInterval);
+        mainInterval = null;
+      }
+      
+      // 断开观察器
+      if (chat_quote_obverser) {
+        chat_quote_obverser.disconnect();
+      }
+      
+      // 移除所有 click 事件监听器
+      quoteClickHandlers.forEach((handler, quote) => {
+        quote.removeEventListener('click', handler);
+      });
+      quoteClickHandlers.clear();
+    };
+  };
+
+  utils.initPlugin(initServices, 'services');
+</script>
+
+<script>
+  window.addEventListener('DOMContentLoaded', (event) => {
+    ctx.search = {
+      path: `/search.json`,
+    }
+    utils.js('/js/search/local-search.js', { defer: true });
+  });
+</script><script>
+  window.FPConfig = {
+    delay: 0,
+    ignoreKeywords: [],
+    maxRPS: 5,
+    hoverDelay: 25
+  };
+</script>
+<script defer src="https://gcore.jsdelivr.net/npm/flying-pages@2/flying-pages.min.js"></script><script>
+    window.StellarPjaxConfig = {
+        selectors: ["title","#l_cover",".l_body"],
+        timeout: 10000,
+        cacheBust: false
+    };
+</script>
+<script src="/js/plugins/pjax.js" defer></script><script>
+  ctx.fancybox = {
+    selector: `.timenode p>img`,
+    css: `https://gcore.jsdelivr.net/npm/@fancyapps/ui@5.0/dist/fancybox/fancybox.css`,
+    js: `https://gcore.jsdelivr.net/npm/@fancyapps/ui@5.0/dist/fancybox/fancybox.umd.js`
+  };
+  var selector = '[data-fancybox]:not(.error), .with-fancybox .atk-content img:not([atk-emoticon])';
+  if (ctx.fancybox.selector) {
+    selector += `, ${ctx.fancybox.selector}`
+  }
+  var needFancybox = document.querySelectorAll(selector).length !== 0;
+  if (!needFancybox) {
+    const memos = document.getElementsByClassName('ds-memos');
+    if (memos != undefined && memos.length > 0) {
+      needFancybox = true;
+    }
+    const fancybox = document.getElementsByClassName('with-fancybox');
+    if (fancybox != undefined && fancybox.length > 0) {
+      needFancybox = true;
+    }
+  }
+  if (needFancybox) {
+    utils.css(ctx.fancybox.css);
+    utils.js(ctx.fancybox.js, { defer: true }).then(function () {
+      Fancybox.bind(selector, {
+        hideScrollbar: false,
+        Thumbs: {
+          autoStart: false,
+        },
+        caption: (fancybox, slide) => {
+          return slide.triggerEl.alt || slide.triggerEl.dataset.caption || null
+        }
+      });
+    })
+  }
+</script>
+<script>
+  utils.initPlugin(() => {
+    const swiper_api = document.getElementById('swiper-api');
+    if (swiper_api != undefined) {
+      utils.css(`https://unpkg.com/swiper@10.3/swiper-bundle.min.css`);
+      utils.js(`https://unpkg.com/swiper@10.3/swiper-bundle.min.js`, { defer: true }).then(function () {
+        const effect = swiper_api.getAttribute('effect') || '';
+        var swiper = new Swiper('.swiper#swiper-api', {
+          slidesPerView: 'auto',
+          spaceBetween: 8,
+          centeredSlides: true,
+          effect: effect,
+          rewind: true,
+          pagination: {
+            el: '.swiper-pagination',
+            clickable: true,
+          },
+          navigation: {
+            nextEl: '.swiper-button-next',
+            prevEl: '.swiper-button-prev',
+          },
+        });
+      })
+    }
+  }, 'swiper');
+</script>
+<script>
+  utils.initPlugin(() => {
+    const codeElements = document.querySelectorAll('.code');
+    if (codeElements.length > 0) {
+      ctx.copycode = {
+        default_text: `Copy`,
+        success_text: `Copied`,
+        toast: `复制成功`,
+      };
+      utils.js('/js/plugins/copycode.js', { defer: true }).then(() => {
+        if (typeof createCopyButtons === 'function') {
+          createCopyButtons(codeElements);
+        }
+      });
+    }
+  }, 'copycode');
+</script>
+
+
+<!-- inject -->
+
+</div><div class="page-loading-bar"><img src="https://api.iconify.design/eos-icons:three-dots-loading.svg?color=%231cd0fd"></div></body></html>

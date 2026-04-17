@@ -5,159 +5,132 @@
   </div>
   <div class="widget-content">
     <div id="weather-widget" class="weather-content">
-      <div class="loading">
-        <i class="fas fa-spinner fa-spin"></i> 加载中...
-      </div>
+      <div class="loading">加载中...</div>
     </div>
   </div>
 </div>
 
 <script>
-  // 全局变量，标记天气组件是否已经加载
-  if (!window.weatherWidgetLoaded) {
-    window.weatherWidgetLoaded = true;
+  // 天气组件初始化函数
+  function initWeatherWidget() {
+    const weatherWidget = document.getElementById('weather-widget');
+    if (!weatherWidget) return;
     
-    document.addEventListener('DOMContentLoaded', function() {
-      const weatherWidget = document.getElementById('weather-widget');
-      const apiKey = 'cd2881ae1f584ba2a11b77136fb610ec';
-      const defaultCity = 'Beijing';
-      const unit = 'c';
-
-      function getWeatherByLocation(lat, lon, cityName) {
-        weatherWidget.innerHTML = `
+    // 硬编码配置值，确保组件能正常显示
+    const apiKey = 'cd2881ae1f584ba2a11b77136fb610ec';
+    const defaultCity = 'Beijing';
+    const temperatureUnit = 'c';
+    
+    // 获取天气数据
+    function getWeatherData(city, cityName = '') {
+      weatherWidget.innerHTML = '<div class="loading">加载中...</div>';
+      
+      // 并行获取当前天气和未来天气预报
+      const nowUrl = `https://my487tqyq4.re.qweatherapi.com/v7/weather/now?key=${apiKey}&location=${city}&lang=zh`;
+      const forecastUrl = `https://my487tqyq4.re.qweatherapi.com/v7/weather/7d?key=${apiKey}&location=${city}&lang=zh`;
+      
+      Promise.all([
+        fetch(nowUrl).then(response => response.json()),
+        fetch(forecastUrl).then(response => response.json())
+      ])
+      .then(([nowData, forecastData]) => {
+        if (nowData.code === '200' && forecastData.code === '200') {
+          renderWeather(nowData, forecastData, cityName);
+        } else {
+          weatherWidget.innerHTML = '<div class="error">天气数据获取失败</div>';
+        }
+      })
+      .catch(error => {
+        console.error('Error fetching weather data:', error);
+        weatherWidget.innerHTML = '<div class="error">天气数据获取失败</div>';
+      });
+    }
+    
+    // 渲染天气信息
+    function renderWeather(nowData, forecastData, cityName) {
+      const now = nowData.now;
+      const forecast = forecastData.daily.slice(0, 3); // 只取今天、明天、后天
+      
+      // 格式化日期
+      function formatDate(dateStr) {
+        const date = new Date(dateStr);
+        const today = new Date();
+        const tomorrow = new Date(today);
+        tomorrow.setDate(tomorrow.getDate() + 1);
+        
+        if (date.toDateString() === today.toDateString()) {
+          return '今天';
+        } else if (date.toDateString() === tomorrow.toDateString()) {
+          return '明天';
+        } else {
+          return `${date.getMonth() + 1}/${date.getDate()}`;
+        }
+      }
+      
+      const weatherHtml = `
+        <div class="weather-main">
+          ${cityName ? `<div class="city-name">${cityName}</div>` : ''}
+          <div class="current-temp">${now.temp}°${temperatureUnit === 'c' ? 'C' : 'F'}</div>
+          <div class="weather-desc">${now.text}</div>
           <div class="weather-info">
-            <div class="weather-city">${cityName}</div>
-            <div class="loading">
-              <i class="fas fa-spinner fa-spin"></i> 获取天气信息中...
-            </div>
+            <span>湿度: ${now.humidity}%</span>
+            <span>风速: ${now.windSpeed}km/h</span>
           </div>
-        `;
-
-        const weatherUrl = `https://my487tqyq4.re.qweatherapi.com/v7/weather/now?gzip=n&location=${lon},${lat}&key=${apiKey}`;
-
-        fetch(weatherUrl)
-          .then(response => response.json())
-          .then(weatherData => {
-            if (weatherData.code === '200' && weatherData.now) {
-              const weather = weatherData.now;
-              const temp = weather.temp;
-              const condition = weather.text;
-              const humidity = weather.humidity;
-              const windDir = weather.windDir;
-              const windScale = weather.windScale;
-
-              fetch(`https://my487tqyq4.re.qweatherapi.com/v7/weather/3d?gzip=n&location=${lon},${lat}&key=${apiKey}`)
-                .then(response => response.json())
-                .then(forecastData => {
-                  let forecastHtml = '';
-                  if (forecastData.code === '200' && forecastData.daily) {
-                    const threeDayForecast = forecastData.daily.slice(0, 3);
-                    forecastHtml = `
-                      <div class="weather-forecast">
-                        ${threeDayForecast.map(day => `
-                          <div class="forecast-item">
-                            <div class="forecast-date">${day.fxDate.substring(5)}</div>
-                            <div class="forecast-condition">${day.textDay}</div>
-                            <div class="forecast-temp">${day.tempMin}°/${day.tempMax}°</div>
-                          </div>
-                        `).join('')}
-                      </div>
-                    `;
-                  }
-
-                  weatherWidget.innerHTML = `
-                    <div class="weather-info">
-                      <div class="weather-city">${cityName}</div>
-                      <div class="weather-main">
-                        <div class="weather-desc">${condition}</div>
-                        <div class="weather-temp">${temp}°${unit.toUpperCase()}</div>
-                      </div>
-                      <div class="weather-details">
-                        <span>湿度: ${humidity}%</span>
-                        <span>风向: ${windDir}</span>
-                        <span>风力: ${windScale}级</span>
-                      </div>
-                      ${forecastHtml}
-                    </div>
-                  `;
-                })
-                .catch(error => {
-                  console.error('Forecast API error:', error);
-                  weatherWidget.innerHTML = `
-                    <div class="weather-info">
-                      <div class="weather-city">${cityName}</div>
-                      <div class="weather-main">
-                        <div class="weather-desc">${condition}</div>
-                        <div class="weather-temp">${temp}°${unit.toUpperCase()}</div>
-                      </div>
-                      <div class="weather-details">
-                        <span>湿度: ${humidity}%</span>
-                        <span>风向: ${windDir}</span>
-                        <span>风力: ${windScale}级</span>
-                      </div>
-                    </div>
-                  `;
-                });
-            } else {
-              weatherWidget.innerHTML = `<div class="error">获取天气失败</div>`;
-            }
-          })
-          .catch(error => {
-            console.error('Weather API error:', error);
-            weatherWidget.innerHTML = `<div class="error">获取天气失败</div>`;
-          });
-      }
-
-      function getDefaultWeather() {
-        const locationUrl = `https://my487tqyq4.re.qweatherapi.com/v7/location/search?gzip=n&keywords=${defaultCity}&key=${apiKey}`;
-
-        fetch(locationUrl)
-          .then(response => response.json())
-          .then(data => {
-            if (data.code === '200' && data.location && data.location.length > 0) {
-              const location = data.location[0];
-              const cityName = `${location.adm1}${location.adm2}${location.name}`;
-              getWeatherByLocation(location.lat, location.lon, cityName);
-            } else {
-              weatherWidget.innerHTML = `<div class="error">无法获取默认城市天气</div>`;
-            }
-          })
-          .catch(error => {
-            console.error('Location API error:', error);
-            weatherWidget.innerHTML = `<div class="error">获取默认城市天气失败</div>`;
-          });
-      }
-
-      if (navigator.geolocation) {
-        navigator.geolocation.getCurrentPosition(
-          function(position) {
-            const lat = position.coords.latitude;
-            const lon = position.coords.longitude;
-            const geoUrl = `https://my487tqyq4.re.qweatherapi.com/geo/v2/city/lookup?gzip=n&location=${lon},${lat}&key=${apiKey}`;
-
-            fetch(geoUrl)
-              .then(response => response.json())
-              .then(locationData => {
-                let cityName = defaultCity;
-                if (locationData.code === '200' && locationData.location && locationData.location.length > 0) {
-                  const location = locationData.location[0];
-                  cityName = `${location.adm1}${location.adm2}${location.name}`;
-                }
-                getWeatherByLocation(lat, lon, cityName);
-              })
-              .catch(() => {
-                getWeatherByLocation(lat, lon, defaultCity);
-              });
-          },
-          function() {
-            getDefaultWeather();
-          }
-        );
-      } else {
-        getDefaultWeather();
-      }
-    });
+        </div>
+        <div class="weather-forecast">
+          ${forecast.map(day => `
+            <div class="forecast-day">
+              <div class="forecast-date">${formatDate(day.fxDate)}</div>
+              <div class="forecast-text">${day.textDay}</div>
+              <div class="forecast-temp">
+                <span class="temp-max">${day.tempMax}°</span>
+                <span class="temp-min">${day.tempMin}°</span>
+              </div>
+            </div>
+          `).join('')}
+        </div>
+      `;
+      weatherWidget.innerHTML = weatherHtml;
+    }
+    
+    // 优先使用地理位置
+    if (navigator.geolocation) {
+      navigator.geolocation.getCurrentPosition(
+        function(position) {
+          const lat = position.coords.latitude;
+          const lon = position.coords.longitude;
+          const geoUrl = `https://my487tqyq4.re.qweatherapi.com/geo/v2/city/lookup?key=${apiKey}&location=${lon},${lat}`;
+          fetch(geoUrl)
+            .then(response => response.json())
+            .then(data => {
+              if (data.code === '200' && data.location.length > 0) {
+                getWeatherData(data.location[0].id, data.location[0].name);
+              } else {
+                getWeatherData(defaultCity, '北京');
+              }
+            })
+            .catch(() => {
+              getWeatherData(defaultCity, '北京');
+            });
+        },
+        function() {
+          getWeatherData(defaultCity, '北京');
+        }
+      );
+    } else {
+      getWeatherData(defaultCity, '北京');
+    }
   }
+  
+  // 当DOM加载完成时初始化
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', initWeatherWidget);
+  } else {
+    initWeatherWidget();
+  }
+  
+  // 当PJAX完成时重新初始化，确保每次切换标签都刷新天气
+  document.addEventListener('pjax:complete', initWeatherWidget);
 </script>
 
 <style>
@@ -168,7 +141,7 @@
     padding: 20px !important;
     margin-bottom: 20px !important;
   }
-
+  
   .weather .widget-title {
     color: var(--primary-color) !important;
     font-size: 1rem !important;
@@ -178,98 +151,99 @@
     align-items: center !important;
     gap: 8px !important;
   }
-
+  
   .weather .widget-title i {
     color: var(--primary-color) !important;
   }
-
+  
   .weather-content {
     text-align: center !important;
   }
-
+  
+  .weather-main {
+    padding: 10px 0 !important;
+  }
+  
+  .current-temp {
+    color: var(--primary-color) !important;
+    font-size: 2rem !important;
+    font-weight: bold !important;
+    margin-bottom: 8px !important;
+  }
+  
+  .weather-desc {
+    color: var(--text-primary) !important;
+    font-size: 1rem !important;
+    margin-bottom: 10px !important;
+  }
+  
+  .weather-info {
+    display: flex !important;
+    justify-content: space-around !important;
+    margin-top: 10px !important;
+  }
+  
+  .weather-info span {
+    color: var(--text-secondary) !important;
+    font-size: 0.85rem !important;
+  }
+  
   .loading, .error {
     color: var(--text-secondary) !important;
     padding: 20px 0 !important;
-  }
-
-  .weather-info {
     text-align: center !important;
   }
-
-  .weather-city {
-    font-size: 0.9rem !important;
-    color: var(--primary-color) !important;
-    margin-bottom: 12px !important;
-    font-weight: 500 !important;
-  }
-
-  .weather-main {
-    display: flex !important;
-    align-items: center !important;
-    justify-content: center !important;
-    margin-bottom: 10px !important;
-  }
-
-  .weather-temp {
-    font-size: 1.8rem !important;
-    font-weight: bold !important;
-    color: var(--primary-color) !important;
-    margin-left: 10px !important;
-  }
-
-  .weather-desc {
-    font-size: 1.2rem !important;
+  
+  .city-name {
     color: var(--text-primary) !important;
-    margin-right: 10px !important;
-  }
-
-  .weather-details {
-    font-size: 0.75rem !important;
-    color: var(--text-secondary) !important;
-    line-height: 1.6 !important;
+    font-size: 1.1rem !important;
+    font-weight: bold !important;
     margin-bottom: 10px !important;
   }
-
-  .weather-details span {
-    display: block !important;
-  }
-
+  
   .weather-forecast {
-    margin-top: 12px !important;
+    margin-top: 20px !important;
     border-top: 1px solid var(--border-color) !important;
-    padding-top: 12px !important;
+    padding-top: 15px !important;
   }
-
-  .forecast-item {
+  
+  .forecast-day {
     display: flex !important;
     justify-content: space-between !important;
     align-items: center !important;
-    padding: 6px 0 !important;
-    border-bottom: 1px solid rgba(230, 57, 124, 0.1) !important;
+    padding: 8px 0 !important;
+    border-bottom: 1px solid var(--border-color) !important;
   }
-
-  .forecast-item:last-child {
+  
+  .forecast-day:last-child {
     border-bottom: none !important;
   }
-
+  
   .forecast-date {
-    width: 45px !important;
-    font-size: 0.75rem !important;
     color: var(--text-secondary) !important;
-    text-align: left !important;
+    font-size: 0.85rem !important;
+    width: 60px !important;
   }
-
-  .forecast-condition {
-    flex: 1 !important;
-    font-size: 0.75rem !important;
+  
+  .forecast-text {
     color: var(--text-primary) !important;
+    font-size: 0.9rem !important;
+    flex: 1 !important;
     text-align: center !important;
   }
-
+  
   .forecast-temp {
-    width: 60px !important;
-    font-size: 0.75rem !important;
+    display: flex !important;
+    gap: 8px !important;
+    font-size: 0.85rem !important;
+  }
+  
+  .temp-max {
     color: var(--primary-color) !important;
-    text-align: right !important;
+    font-weight: bold !important;
+  }
+  
+  .temp-min {
+    color: var(--text-secondary) !important;
   }
 </style>
