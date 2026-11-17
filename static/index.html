@@ -979,7 +979,7 @@ const DATA = {
     {
       "company": "弗睿网络科技（广州）有限公司",
       "role": "RPA 开发工程师",
-      "period": "2026.05 — 2026.08",
+      "period": "2026.05 — 至今",
       "type": "work",
       "highlight": "交付 10+ 套跨境流程",
       "bullets": [
@@ -1490,7 +1490,7 @@ const DATA = {
     <article class="tl-item rv">
       <div class="tl-when">
         <div class="p">${esc(t.period)}</div>
-        <div class="t">${t.type === 'edu' ? 'Education' : 'Full-time'}</div>
+        <div class="t">${t.type === 'edu' ? 'Education' : (String(t.period).includes('至今') ? 'Current' : 'Full-time')}</div>
       </div>
       <div class="tl-body">
         <div class="tl-head">
